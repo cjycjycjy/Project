@@ -1,0 +1,5 @@
+package ddoraemi.detailediteminfo.view;
+
+public interface DetailedItemInfo_InfoView_Interface {
+
+}

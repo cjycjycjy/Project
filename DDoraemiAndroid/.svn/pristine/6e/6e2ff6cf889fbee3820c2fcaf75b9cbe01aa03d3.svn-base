@@ -1,0 +1,7 @@
+package ddoraemi.detailediteminfo.presenter;
+
+public interface DetailedItemInfo_Presenter_Interface {
+	public void createGroup();
+	public void showMap();
+	
+}

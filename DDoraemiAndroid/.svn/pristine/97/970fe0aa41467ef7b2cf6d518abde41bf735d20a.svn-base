@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ddoraemi.start"
+    android:versionCode="6"
+    android:versionName="1.6" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_OWNER_DATA" />
+    <uses-permission android:name="android.permission.READ_OWNER_DATA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="ddoraemi.start.permission.C2D_MESSAGE"></permission>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    
+
+    <application
+        android:name="ddoraemi.appcontroller.AppController"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.NoTitleBar" >
+        <receiver
+            android:name="com.google.android.gcm.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="ddoraemi.start" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".GCMIntentService" />
+
+        <activity
+            android:name="ddoraemi.start.LoginActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ddoraemi.join.JoinView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.home.view.HomeView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.detailediteminfo.view.DetailedItemInfo_View"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="SplashActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.joining.view.JoinActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.creategroup.view.CreateGroup_View"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.programlist.view.Programlist_location_list_view"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.programlist.view.Programlist_type_list_view"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.joining.view.FindPasswordAcitivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.joining.view.FindPasswordDoneAcitvity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.detailediteminfo.view.DetailedAfterword_reply_view"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.detailedgroupinfo.view.DetailedGroupInfo_View"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.detailedgroupinfo.view.DetailedQnA_reply_View"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.detailediteminfo.view.DetailedItemInfo_PictureView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.detailediteminfo.view.DetailedItemInfo_PopupImage_View"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.detailedgroupinfo.view.DetailedGroupInfo_PictureView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.applyadmin.view.Apply_Admin_View"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.detailedgroupinfo.view.JoinGroupView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.myinfopage.view.Write_AfterwordView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.myinfopage.view.CustomGallery_View"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="ddoraemi.ACTION_PICK" />
+                <action android:name="ddoraemi.ACTION_MULTIPLE_PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ddoraemi.myinfopage.view.MyPage_AccountSettingView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.myinfopage.view.Modify_AfterWordView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.adminmodehome.view.AdminHomeView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.myinfopage.view.MyPage_PasswdSettingView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.myinfopage.view.Mypage_Profileimg_View"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.detailedgroupinfo.view.JoinPersonListView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="ddoraemi.myinfopage.view.MyPage_AlarmSettingView"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name="ddoraemi.detailediteminfo.view.Activity_BigTmap" >
+        </activity>
+        <activity android:name="ddoraemi.search.view.SearchView" >
+        </activity>
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+    </application>
+
+</manifest>

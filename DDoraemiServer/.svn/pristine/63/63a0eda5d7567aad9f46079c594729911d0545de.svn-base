@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.AfterwordMapper">
+
+	<resultMap id="afterwordMap" type="java.util.HashMap">
+		<id property="a_id" column="a_id" />
+		<result property="g_id" column="g_id" />
+		<result property="u_id" column="u_id" />
+		<result property="u_photo_url" column="u_photo_url"/>
+		<result property="a_content" column="a_content" />
+		<result property="a_grade" column="a_grade" />
+		<result property="a_year" column="a_year" />
+		<result property="a_month" column="a_month" />
+		<result property="a_day" column="a_day" />
+		<result property="a_r_num" column="a_r_num" />
+	</resultMap>
+
+	<select id="selectAllofAfterword" resultMap="afterwordMap">
+		SELECT afterword.*, user.u_photo_url FROM afterword, user, program, gathering 
+		WHERE program.p_id=gathering.p_id and
+			  user.u_id=afterword.u_id and 
+			  program.p_id = #{p_id} and
+			  gathering.g_id=afterword.g_id
+		ORDER BY afterword.a_id desc
+	</select>
+	
+	<resultMap id="afterwordPhotoUrlMap" type="java.util.HashMap">
+		<result property="a_photo_url" column="a_photo_url" />
+	</resultMap>
+	
+	
+
+	<update id="updateAfterwordReplyNumAdd">
+		update afterword set
+		a_r_num = a_r_num+1
+		where a_id = #{a_id}
+	</update>
+	
+	<update id="updateAfterwordReplyNumSub">
+		update afterword set
+		a_r_num = a_r_num-1
+		where a_id = #{a_id}
+	</update>
+	
+	<select id="selectAfterwordPhotoUrl" resultMap="afterwordPhotoUrlMap">
+		SELECT a_photo_url 
+		FROM afterword_photo, afterword
+		WHERE afterword_photo.a_id=afterword.a_id and
+			  afterword.a_id=#{a_id}
+	</select>
+	
+	<insert id="insertAfterword" parameterType="AfterwordVo">
+		insert into afterword
+		values(null, #{u_id}, #{g_id},
+		#{a_content}, #{a_grade},
+		#{a_year}, #{a_month},
+		#{a_day}, 0)
+		<selectKey keyProperty="a_id" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<insert id="insertAfterwordPhoto">
+		insert into afterword_photo
+		values(null, #{a_id}, #{a_photo_url})
+	</insert>
+	
+	<update id="updateAfterword" parameterType="AfterwordVo">
+		update afterword
+		set a_content=#{a_content}, a_grade=#{a_grade}
+		where a_id=#{a_id}
+	</update>
+	
+	<update id="updateAfterwordPhoto">
+		update afterword_photo
+		set a_photo_url=#{a_photo_url}
+		where a_id=#{a_id}
+	</update>
+	
+	<delete id="deleteAfterword">
+		delete from afterword where a_id=#{a_id}
+	</delete>
+	
+	<delete id="deleteAfterwordPhoto">
+		delete from afterword_photo where a_id=#{a_id}
+	</delete>
+	
+	<select id="selectAVGofProgram" resultType="float">
+		select avg(a_grade) from program natural join gathering
+								 natural join afterword where p_id=(select p_id from gathering where g_id=#{g_id})
+	</select>
+
+</mapper>

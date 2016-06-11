@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.CheerfulMapper">
+
+
+	<resultMap type="com.fuck.hangang.vo.CheerfulVo" id="cheerfulMap">
+		<id property="ch_num" column="c_num" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="ch_content" column="c_content" />
+		<result property="ch_photourl" column="c_photourl" />
+		<result property="ch_time" column="c_time" />
+		<result property="t_name" column="t_name" />
+	</resultMap>
+
+	<resultMap id="userMap" type="com.fuck.hangang.vo.UserVo">
+		<id property="u_id" column="u_id" />
+		<result property="u_passwd" column="u_passwd"/>
+		<result property="u_name" column="u_name" />
+		<result property="u_email" column="u_email" />
+		<result property="u_permission" column="u_permission"/>
+		<result property="push" column="push"/>
+		<result property="u_photo" column="u_photo"/>
+		<result property="u_registrationid" column="u_registrationid"/>
+	</resultMap>
+	
+	<select id="getteamcheerful" resultMap="cheerfulMap">
+		select cheerful.*, team.t_name from cheerful inner join team
+		where cheerful.t_num = team.t_num and team.t_num = #{t_num} and
+		cheerful.t_num = #{t_num} order by c_time DESC Limit
+		#{lastnum},#{count}
+	</select>
+	<select id="gettotalcheerful" resultMap="cheerfulMap">
+	select cheerful.*, team.t_name from cheerful inner join team 
+	where cheerful.t_num = team.t_num order by c_time DESC Limit #{lastnum},#{count}
+	</select>
+	<select id="getcheerfulcommentnum" resultType="int">
+		select count(c_num) from cheerful_reply where c_num = #{c_num}
+	</select>
+	<select id="getcheerfuluserinfo" resultMap="userMap">
+		select * from user where u_id = #{u_id}
+	</select>
+	<insert id="registcheerful">
+		insert into cheerful values(null,#{u_id},#{t_num},#{ch_contents},null,null)
+	</insert>
+	
+	
+</mapper>

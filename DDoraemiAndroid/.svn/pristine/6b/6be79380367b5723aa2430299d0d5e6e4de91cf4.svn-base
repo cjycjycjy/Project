@@ -1,0 +1,9 @@
+package ddoraemi.myinfopage.view;
+
+import java.util.ArrayList;
+
+import ddoraemi.home.model.Group;
+
+public interface MyPage_PastViewInterface {
+	public void notifyWritenAfterword(ArrayList<Group> items);
+}

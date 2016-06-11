@@ -1,0 +1,37 @@
+package ddoraemi.home;
+
+public class Home_MainViewChallengeListAdapter extends ArrayAdapter<ProgramData> {
+    ArrayList<ProgramData> items;
+    Context context;
+    public Home_MainViewChallengeListAdapter(Context context, int resource, ArrayList<ProgramData> objects) {
+        super(context, resource, objects);
+        this.context = context;
+        items = objects;
+    }
+
+    public View getView(int position,View convertView, ViewGroup parent){
+        View v = convertView;
+        if(v==null){
+            LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
+            v = vi.inflate(R.layout.item_challengelist,null);
+        }
+        ProgramData p = items.get(position);
+        if(p!=null){
+            TextView challenge_name = (TextView) v.findViewById(R.id.challenge_name);
+            TextView challenge_place = (TextView) v.findViewById(R.id.challenge_place);
+            TextView challenge_price = (TextView) v.findViewById(R.id.challenge_price);
+           
+            if(challenge_name!=null){
+            	challenge_name.setText(p.getP_name());
+            }
+            if(challenge_place!=null){
+            	challenge_place.setText(getP_addr_1()+getP_addr_2()+getP_addr_3()+getP_addr_4()+getP_addr_5()+getP_addr_6());
+            }
+            if(challenge_price!=null){
+            	challenge_price.setText(getCost()+"¿ø");
+            }
+        }
+        return v;
+    }
+
+}

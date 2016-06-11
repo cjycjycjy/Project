@@ -1,0 +1,13 @@
+package com.fuck.hangang.mapper;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.fuck.hangang.vo.AdminBoardVo;
+
+@Repository
+public interface AdminMapper {
+
+	public void registadminboard(AdminBoardVo adminboardVo);
+	public void registadminboardphoto(@Param("a_num") int a_num, @Param("a_index") int a_index, @Param("a_photo_url") String a_photo_url);
+}

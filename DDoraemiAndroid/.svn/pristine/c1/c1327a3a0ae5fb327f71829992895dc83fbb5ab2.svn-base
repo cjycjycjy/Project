@@ -1,0 +1,7 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+import com.google.gson.JsonArray;
+
+public interface OnDetailedQnA_reply_FinishedListener {
+	public void onDataSetSuccess(JsonArray result);
+}

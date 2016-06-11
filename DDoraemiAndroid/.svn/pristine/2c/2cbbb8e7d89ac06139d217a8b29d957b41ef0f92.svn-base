@@ -1,0 +1,281 @@
+package ddoraemi.dialog;
+
+import java.net.URL;
+import java.util.ArrayList;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
+import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
+import ddoraemi.joining.view.Fragment_JoinTwo;
+import ddoraemi.start.R;
+
+public class Dialog_AddressSelect extends Dialog implements
+		android.view.View.OnClickListener {
+	private Context mContext = null;
+	private ImageView mBtn_ok, mBtn_cancel = null;
+	private TextView text;
+	private GridView location_grid;
+	private ImageView city, country, town;
+	private String key = "SLw%2FRnFffKct0qsOvz6iDZLgBCbOleeJDdBHCAwz4ixBmSVuHYHWoRaMF0PV3F33cS0ErqWrAUmNEFjCW96afQ%3D%3D";
+	private int level;
+	private String str_city, str_country, str_town;
+	private ArrayList<CountryInfo> CityArray, CountryArray, TownArray;
+	private Adapter_Dialog_AddressGrid adapter;
+	private CountryInfo cityInfo, countryInfo, townInfo;
+	Fragment_JoinTwo fragment;
+	private int lastposition;
+
+	public Dialog_AddressSelect(Context context, Fragment_JoinTwo fragment) {
+		super(context);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.dialog_addressselect);
+		getWindow().setBackgroundDrawable(
+				new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		this.setCanceledOnTouchOutside(false); // 다이알로그 바깥영역 터치시, 다이알로그 닫히지 않기
+		this.setCancelable(true); // 백키로 다이알로그 닫기
+		mContext = context;
+		this.fragment = fragment;
+		initComponent();
+	}
+
+	private void initComponent() {
+		lastposition = -1;
+		level = 0;
+		city = (ImageView) findViewById(R.id.dialog_addressselect_cityimg);
+		country = (ImageView) findViewById(R.id.dialog_addressselect_countryimg);
+		town = (ImageView) findViewById(R.id.dialog_addressselect_townimg);
+		mBtn_cancel = (ImageView) findViewById(R.id.dialog_address_cancel);
+		mBtn_ok = (ImageView) findViewById(R.id.dialog_address_ok);
+		mBtn_ok.setOnClickListener(this); // 클릭 이벤트 등록
+		mBtn_cancel.setOnClickListener(this);
+		location_grid = (GridView) findViewById(R.id.dialog_address_LocationGrid);
+		CityArray = new ArrayList<CountryInfo>();
+		CountryArray = new ArrayList<CountryInfo>();
+		TownArray = new ArrayList<CountryInfo>();
+		// ////////////////////////////////////////////////////
+		CountryInfo info1 = new CountryInfo();
+		info1.setCode("서울");
+		info1.setName("서울");
+		CountryInfo info2 = new CountryInfo();
+		info2.setCode("경기");
+		info2.setName("경기");
+		CountryInfo info3 = new CountryInfo();
+		info3.setCode("충청도");
+		info3.setName("충청도");
+		CountryInfo info4 = new CountryInfo();
+		info3.setCode("경상도");
+		info3.setName("경상도");
+		CityArray.add(info1);
+		CityArray.add(info2);
+		CityArray.add(info3);
+		CityArray.add(info4);
+
+		CountryInfo info5 = new CountryInfo();
+		info5.setCode("안산");
+		info5.setName("안산");
+		CountryInfo info6 = new CountryInfo();
+		info6.setCode("시발");
+		info6.setName("시발");
+		CountryArray.add(info5);
+		CountryArray.add(info6);
+		CountryInfo info7 = new CountryInfo();
+		info7.setCode("집");
+		info7.setName("집");
+		CountryInfo info8 = new CountryInfo();
+		info8.setCode("가자");
+		info8.setName("가자");
+		TownArray.add(info7);
+		TownArray.add(info8);
+		// //////////////////////////////////////////////
+		adapter = new Adapter_Dialog_AddressGrid(mContext, CityArray);
+		location_grid.setAdapter(adapter);
+		location_grid.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (level == 0) {
+					level = 1;
+					cityInfo = adapter.getItem(position);
+					adapter.setData(CountryArray);
+					adapter.notifyDataSetChanged();
+					showCountry();
+				} else if (level == 1) {
+					level = 2;
+					countryInfo = adapter.getItem(position);
+					adapter.setData(TownArray);
+					adapter.notifyDataSetChanged();
+					showTown();
+				} else {
+					level = 3;
+					if (lastposition != -1) {
+						parent.getChildAt(lastposition).setBackgroundColor(
+								Color.parseColor("#ffffff"));
+					}
+					view.setBackgroundColor(Color.parseColor("#c8c8c8"));
+					lastposition = position;
+					townInfo = adapter.getItem(position);
+				}
+
+			}
+		});
+
+	}
+
+	@Override
+	public void show() {
+		super.show();
+	}
+
+	@Override
+	public void dismiss() {
+		super.dismiss();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (level == 0) {
+			super.onBackPressed();
+		} else if (level == 1) {
+			level = 0;
+			adapter.setData(CityArray);
+			adapter.notifyDataSetChanged();
+			showCity();
+		} else if (level == 2) {
+
+			level = 1;
+			adapter.setData(CountryArray);
+			adapter.notifyDataSetChanged();
+			showCountry();
+		} else {
+			level = 1;
+			adapter.setData(CountryArray);
+			adapter.notifyDataSetChanged();
+			View gridChild = location_grid.getChildAt(lastposition);
+			gridChild.setBackgroundColor(Color.parseColor("#FFFFFF"));
+			showCountry();
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.dialog_address_ok) {
+			if (level > 2) {
+				fragment.setAddress(cityInfo.getName(), countryInfo.getName(),
+						townInfo.getName());
+				dismiss();
+			} else {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(getContext(),
+						"주소를 전부 선택해주세요.");
+				dialog.show();
+			}
+		} else if (v.getId() == R.id.dialog_address_cancel) {
+			this.dismiss();
+		}
+
+	}
+
+	public void getCity() {
+
+	}
+
+	public void getCountry() {
+
+	}
+
+	public void getTown() {
+
+	}
+
+	public void showCity() {
+		city.setVisibility(View.VISIBLE);
+		town.setVisibility(View.INVISIBLE);
+		country.setVisibility(View.INVISIBLE);
+	}
+
+	public void showCountry() {
+
+		city.setVisibility(View.INVISIBLE);
+		town.setVisibility(View.INVISIBLE);
+		country.setVisibility(View.VISIBLE);
+	}
+
+	public void showTown() {
+
+		city.setVisibility(View.INVISIBLE);
+		town.setVisibility(View.VISIBLE);
+		country.setVisibility(View.INVISIBLE);
+	}
+
+	class GetCityTask extends AsyncTask<Void, Void, Void> {
+		@Override
+		protected void onPostExecute(Void s) {
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			String url = "http://openapi.epost.go.kr/postal/retrieveLotNumberAdressAreaCdService/retrieveLotNumberAdressAreaCdService/getBorodCityList?ServiceKey="
+					+ key;
+			XmlPullParserFactory factory;
+			XmlPullParser parser;
+			URL xmlUrl;
+			try {
+				xmlUrl = new URL(url);
+				xmlUrl.openConnection().getInputStream();
+				factory = XmlPullParserFactory.newInstance();
+				parser = factory.newPullParser();
+
+				String TAG_NAME = "";
+
+				CountryInfo City = new CountryInfo();
+
+				parser.setInput(xmlUrl.openStream(), "utf-8");
+				int eventType = parser.getEventType();
+				while (eventType != XmlPullParser.END_DOCUMENT) {
+					if (eventType == XmlPullParser.START_DOCUMENT) {
+					} else if (eventType == XmlPullParser.START_TAG) {
+						TAG_NAME = parser.getName();
+					} else if (eventType == XmlPullParser.END_TAG) {
+						if (parser.getName().equals("borodCity")) {
+							CityArray.add(City);
+							City = new CountryInfo();
+						}
+						TAG_NAME = "";
+					} else if (eventType == XmlPullParser.TEXT) {
+						switch (TAG_NAME) {
+						case "brtcCd":
+							if (parser.getText() != null) {
+								City.setCode(parser.getText());
+							}
+							break;
+						case "brtcNm":
+							if (parser.getText() != null) {
+								City.setName(parser.getText());
+							}
+						}
+						break;
+
+					}
+					eventType = parser.next();
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
+
+}

@@ -1,0 +1,216 @@
+package ddoraemi.joining.view;
+
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.android.gcm.GCMRegistrar;
+
+import ddoraemi.start.R;
+
+public class JoinActivity extends FragmentActivity implements OnClickListener {
+	TextView title;
+	ImageView back;
+	String id,passwd,phone;
+	char parentsex;
+	String city,country,town;
+	int parentage;
+	String childsex;
+	int childage;
+	String[] interest;
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_join);
+		interest=new String[2];
+		init();
+	}
+
+	public void init() {
+		title = (TextView) findViewById(R.id.join_tv_titlebars);
+		back = (ImageView) findViewById(R.id.JoinActivity_ImgBack);
+		back.setOnClickListener(this);
+		registerDevice();
+	}
+
+	public void setTitleOne() {
+		title.setText("계정정보 (1/3)");
+	}
+
+	public void setTitleTwo() {
+		title.setText("계정정보 (2/3)");
+	}
+
+	public void setTitleThree() {
+		title.setText("계정정보 (3/3)");
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if (v.getId() == R.id.JoinActivity_ImgBack) {
+			FragmentManager manager = getSupportFragmentManager();
+
+			if (manager != null) {
+				if (manager.getBackStackEntryCount() == 0) {
+					finish();
+				} else if (manager.getBackStackEntryCount() == 1) {
+					setTitleOne();
+					FragmentManager fragmentmanager = getSupportFragmentManager();
+					FragmentTransaction fragmenttransaction = fragmentmanager
+							.beginTransaction();
+					fragmentmanager.popBackStack();
+					FragmentTransaction ft = getSupportFragmentManager()
+							.beginTransaction();
+					ft.commit();
+
+				} else {
+					setTitleTwo();
+					FragmentManager fragmentmanager = getSupportFragmentManager();
+					FragmentTransaction fragmenttransaction = fragmentmanager
+							.beginTransaction();
+					fragmentmanager.popBackStack();
+					FragmentTransaction ft = getSupportFragmentManager()
+							.beginTransaction();
+					ft.commit();
+				}
+			}
+		}
+
+	}
+	public void registerDevice(){
+		GCMRegistrar.checkDevice(this);
+		GCMRegistrar.checkManifest(this);
+		GCMRegistrar.register(getBaseContext(), "701434416320");		
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			FragmentManager manager = getSupportFragmentManager();
+
+			if (manager != null) {
+				if (manager.getBackStackEntryCount() == 0) {
+					finish();
+				} else if (manager.getBackStackEntryCount() == 1) {
+					setTitleOne();
+					FragmentManager fragmentmanager = getSupportFragmentManager();
+					FragmentTransaction fragmenttransaction = fragmentmanager
+							.beginTransaction();
+					fragmentmanager.popBackStack();
+					FragmentTransaction ft = getSupportFragmentManager()
+							.beginTransaction();
+					ft.commit();
+
+				} else {
+					setTitleTwo();
+					FragmentManager fragmentmanager = getSupportFragmentManager();
+					FragmentTransaction fragmenttransaction = fragmentmanager
+							.beginTransaction();
+					fragmentmanager.popBackStack();
+					FragmentTransaction ft = getSupportFragmentManager()
+							.beginTransaction();
+					ft.commit();
+				}
+			}
+			return true;
+		} else
+			return false;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public char getParentsex() {
+		return parentsex;
+	}
+
+	public void setParentsex(char parentsex) {
+		this.parentsex = parentsex;
+	}
+
+	public int getParentage() {
+		return parentage;
+	}
+
+	public void setParentage(int parentage) {
+		this.parentage = parentage;
+	}
+
+	public String getChildsex() {
+		return childsex;
+	}
+
+	public void setChildsex(String childsex) {
+		this.childsex = childsex;
+	}
+
+	public int getChildage() {
+		return childage;
+	}
+
+	public void setChildage(int childage) {
+		this.childage = childage;
+	}
+
+	public String[] getInterest() {
+		return interest;
+	}
+
+	public void setInterest(String[] interest) {
+		this.interest = interest;
+	}
+
+	public String getPasswd() {
+		return passwd;
+	}
+
+	public void setPasswd(String passwd) {
+		this.passwd = passwd;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getTown() {
+		return town;
+	}
+
+	public void setTown(String town) {
+		this.town = town;
+	}
+
+}

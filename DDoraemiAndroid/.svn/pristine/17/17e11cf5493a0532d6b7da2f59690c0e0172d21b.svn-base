@@ -1,0 +1,102 @@
+package ddoraemi.creategroup.view;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import ddoraemi.dialog.Dialog_GroupDateSelect;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.start.R;
+
+public class CreateGroup_View extends Activity implements CreateGroup_view_Interface,OnClickListener{
+	ProgramData data;
+	TextView tv_p_name;
+	TextView tv_p_addr;
+	TextView tv_selectdate;
+	TextView tv_enddate;
+	ImageView plus,minus;
+	TextView count_minperson;
+	Button create;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_creategroup);
+		init();
+		
+	}
+	public void init()
+	{
+		Intent intent = getIntent();
+		data = (ProgramData) intent.getSerializableExtra("item");
+		tv_p_name = (TextView)findViewById(R.id.activity_creategroup_Tv_ChallengeName);
+		tv_p_addr = (TextView)findViewById(R.id.activity_creategroup_Tv_Address);
+		tv_selectdate=(TextView)findViewById(R.id.activity_creategroup_Tv_date_select);
+		tv_enddate=(TextView)findViewById(R.id.activity_creategroup_Tv_date_end);
+		plus=(ImageView)findViewById(R.id.activity_creategroup_persons_plus);
+		minus=(ImageView)findViewById(R.id.activity_creategroup_persons_minus);
+		count_minperson=(TextView)findViewById(R.id.activity_creategroup_minpersons_creategroup);
+		create=(Button)findViewById(R.id.activity_creategroup_Btn_Create);
+		tv_p_name.setText(data.getP_name());
+		String addr = data.getP_addr_1();
+		if(!data.getP_addr_2().equalsIgnoreCase("")){
+			addr+=" "+data.getP_addr_2();
+			if(!data.getP_addr_3().equalsIgnoreCase("")){
+				addr+=" "+data.getP_addr_3();
+				if(!data.getP_addr_4().equalsIgnoreCase("")){
+					addr+=" "+data.getP_addr_4();
+					if(!data.getP_addr_5().equalsIgnoreCase("")){
+						addr+=" "+data.getP_addr_5();
+						if(!data.getP_addr_6().equalsIgnoreCase("")){
+							addr+=" "+data.getP_addr_6();
+						}
+					}
+				}
+			}
+		}
+		
+		tv_p_addr.setText(addr);
+		plus.setOnClickListener(this);
+		minus.setOnClickListener(this);
+		tv_selectdate.setOnClickListener(this);
+		create.setOnClickListener(this);
+	}
+	@Override
+	public void showDatePopUp() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createGroup() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if(v.getId()==R.id.activity_creategroup_Tv_date_select)
+		{
+			Dialog_GroupDateSelect dialog=new Dialog_GroupDateSelect(this);
+			dialog.show();
+		}
+		else if(v.getId()==R.id.activity_creategroup_persons_plus)
+		{
+			
+		}
+		else if(v.getId()==R.id.activity_creategroup_persons_minus)
+		{
+			
+		}
+		else if(v.getId()==R.id.btn_left_menu){
+			finish();
+		}
+	}
+
+
+}

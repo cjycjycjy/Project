@@ -1,0 +1,6 @@
+package ddoraemi.myinfopage.presenter;
+
+public interface MyPagePresenterInterface {
+	public void validateCredentials(String event);
+	
+}

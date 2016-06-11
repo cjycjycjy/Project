@@ -1,0 +1,22 @@
+package com.fuck.hangang.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.fuck.hangang.vo.CheerfulVo;
+import com.fuck.hangang.vo.ScheduleVo;
+import com.fuck.hangang.vo.TeamGalleryVo;
+import com.fuck.hangang.vo.TeamVo;
+
+@Repository
+public interface TeamListMapper {
+	public List<TeamVo> getteaminfo();
+	public List<ScheduleVo> getteamschedule(@Param("t_num") int t_num, @Param("year") int year, @Param("month") int month, @Param("nextmonth") int nextmonth);
+	public TeamVo getteamdata(@Param("t_num") int t_num);
+	public List<CheerfulVo> getteamcheerful(@Param("t_num") int t_num);
+	public int getcheerfulcommentnum(@Param("c_num") int c_num);
+	public List<TeamGalleryVo> getteamgallery(@Param("t_num") int t_num);
+	
+}

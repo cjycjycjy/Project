@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tv_selecttype"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dip"
+            android:gravity="center"
+            android:text="체험을 원하는 유형을 선택하세요."
+            android:textColor="#000000"
+            android:textSize="19sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+             >
+
+            <Button
+                android:id="@+id/btn_traditionalfood"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:layout_marginLeft="58dp"
+
+                android:background="@drawable/traditionalfood_selector" />
+
+            <TextView
+                android:id="@+id/tv_traditionalfood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="6dp"
+                android:text="전통음식체험"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btn_planting"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                 android:layout_marginRight="58dp"
+   
+                android:layout_gravity="right"
+                android:background="@drawable/planting_selector" />
+
+            <TextView
+                android:id="@+id/tv_planting"
+                android:layout_width="wrap_content"
+                android:layout_gravity="right"
+                android:layout_height="wrap_content"
+                 android:layout_marginRight="72dp"
+                android:layout_marginTop="6dp"
+                android:text="경작체험"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btn_harvest"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:layout_below="@+id/tv_traditionalfood"
+                android:layout_marginLeft="58dp"
+    
+                android:background="@drawable/harvest_selector" />
+
+            <TextView
+                android:id="@+id/tv_harvest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_harvest"
+                android:layout_marginLeft="72dp"
+                android:layout_marginTop="6dp"
+                android:text="수확체험"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btn_traditionalplay"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+              	android:layout_gravity="right"
+                android:layout_marginRight="58dp"
+    
+                android:background="@drawable/traditionalplay_selector" />
+
+            <TextView
+                android:id="@+id/tv_traditionalplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="60dp"
+                android:layout_marginTop="6dp"
+                android:text="전통놀이체험"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btn_cooking"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:layout_marginLeft="58dp"
+           
+                android:background="@drawable/cooking_selector" />
+
+            <TextView
+                android:id="@+id/tv_cooking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="72dp"
+                android:layout_marginTop="6dp"
+                android:text="요리체험"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btn_craft"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="58dp"
+           
+                android:background="@drawable/craft_selector" />
+
+            <TextView
+                android:id="@+id/tv_craft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="72dp"
+                android:layout_marginTop="6dp"
+                android:text="공예체험"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btn_culture"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:layout_marginLeft="58dp"
+
+                android:background="@drawable/culture_selector" />
+
+            <TextView
+                android:id="@+id/tv_culture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="72dp"
+                android:layout_marginTop="6dp"
+                android:text="문화체험"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/btn_nature"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:layout_marginRight="58dp"
+                android:layout_gravity="right" 
+                android:background="@drawable/nature_selector" />
+
+            <TextView
+                android:id="@+id/tv_nature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="72dp"
+                android:layout_gravity="right"
+                android:layout_marginTop="6dp"
+                android:text="자연체험"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

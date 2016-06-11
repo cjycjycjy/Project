@@ -1,0 +1,14 @@
+package com.myserver.skp.vo;
+
+public class CurriculumVo {
+	String cur;
+
+	public String getCur() {
+		return cur;
+	}
+
+	public void setCur(String cur) {
+		this.cur = cur;
+	}
+	
+}

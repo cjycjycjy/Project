@@ -1,0 +1,58 @@
+package ddoraemi.creategroup.view;
+
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.start.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
+public class CreateGroup_View extends Activity implements CreateGroup_view_Interface{
+	ProgramData data;
+	TextView tv_p_name;
+	TextView tv_p_addr;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_creategroup);
+		Intent intent = getIntent();
+		data = (ProgramData) intent.getSerializableExtra("item");
+		tv_p_name = (TextView)findViewById(R.id.tv_creategroup_p_name);
+		tv_p_addr = (TextView)findViewById(R.id.tv_creategroup_p_addr);
+		
+		tv_p_name.setText(data.getP_name());
+		String addr = data.getP_addr_1();
+		if(!data.getP_addr_2().equalsIgnoreCase("")){
+			addr+=" "+data.getP_addr_2();
+			if(!data.getP_addr_3().equalsIgnoreCase("")){
+				addr+=" "+data.getP_addr_3();
+				if(!data.getP_addr_4().equalsIgnoreCase("")){
+					addr+=" "+data.getP_addr_4();
+					if(!data.getP_addr_5().equalsIgnoreCase("")){
+						addr+=" "+data.getP_addr_5();
+						if(!data.getP_addr_6().equalsIgnoreCase("")){
+							addr+=" "+data.getP_addr_6();
+						}
+					}
+				}
+			}
+		}
+
+		tv_p_addr.setText(addr);
+	}
+
+	@Override
+	public void showDatePopUp() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createGroup() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

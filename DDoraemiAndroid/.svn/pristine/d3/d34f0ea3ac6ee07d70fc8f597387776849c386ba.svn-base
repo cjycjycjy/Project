@@ -1,0 +1,56 @@
+package ddoraemi.home.view;
+
+import java.util.ArrayList;
+
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.home.model.AlarmListHelper;
+import ddoraemi.home.model.PushMessage;
+import ddoraemi.start.R;
+
+public class AlarmView extends Fragment implements OnItemClickListener{
+	ListView listview;
+	AppController app;
+	SQLiteDatabase db;
+	AlarmListHelper helper;
+	ArrayList<PushMessage> array;
+	Adapter_AlarmList adapter;
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+		View v = inflater.inflate(R.layout.fragment_alarm, null);
+		listview = (ListView) v.findViewById(R.id.fragment_alarmlistview);
+		app = (AppController) getActivity().getApplicationContext();
+		helper = new AlarmListHelper(getActivity());
+		try {
+			db = helper.getWritableDatabase();
+		} catch (SQLException e) {
+			db = helper.getReadableDatabase();
+		}
+		array=helper.selectMylist(db,app.getId());
+		adapter=new Adapter_AlarmList(getActivity(), R.layout.item_alarm, array);
+		listview.setAdapter(adapter);
+		listview.setOnItemClickListener(this);
+		return v;
+	}
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		PushMessage p= adapter.getItem(arg2);
+		int pk=p.getPk();
+		helper.check(db, pk, app.getId());
+		array.clear();
+		array.addAll(helper.selectMylist(db, app.getId()));
+		adapter.notifyDataSetChanged();
+		app.getRootActivity().countMyAlarm();
+		
+	}
+}

@@ -1,0 +1,57 @@
+package ddoraemi.adminmodehome.model;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import ddoraemi.adminmodehome.presenter.OnAdminHomeMain_FinishenListener;
+import ddoraemi.retrofit.Retrofit;
+
+public class AdminHomeMainInteractor implements AdminHomeMainInteractorInterface {
+
+	@Override
+	public void getProgramInfo(final int p_id,
+			final OnAdminHomeMain_FinishenListener listener) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					RestAdapter restAdapter = new RestAdapter.Builder()
+							.setEndpoint(Retrofit.ROOT) // call your base
+							// url
+							.build();
+					Retrofit retofit = restAdapter.create(Retrofit.class);
+					retofit.getAdmin_ProgramInfo(p_id, new Callback<JsonObject>() {
+						@Override
+						public void success(JsonObject result, Response response) {
+							String resultstr = result.get("result")
+									.getAsString();
+							
+							if (resultstr.equals("200"))
+								listener.onSuccess(result);
+							else
+								listener.onFail();
+
+						}
+
+						@Override
+						public void failure(RetrofitError retrofitError) {
+							listener.onFail();
+
+						}
+					});
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					listener.onFail();
+				}
+			}
+
+		}).start();
+		
+	}
+
+}

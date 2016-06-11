@@ -1,0 +1,37 @@
+package ddoraemi.myinfopage.view;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.start.R;
+
+public class MyPage_AccountSettingView extends Activity implements OnClickListener {
+	EditText phonenum;
+	ImageView sendbt, back;
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		//setContentView(R.layout.activity_account_setting);
+		init();
+	}
+
+	public void init() {
+		//sendbt = (ImageView) findViewById(R.id.btn_save);
+		sendbt.setOnClickListener(this);
+		back = (ImageView) findViewById(R.id.btn_left_menu);
+		back.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if(v.getId()==R.id.btn_left_menu){
+			finish();
+		}
+	}
+
+}

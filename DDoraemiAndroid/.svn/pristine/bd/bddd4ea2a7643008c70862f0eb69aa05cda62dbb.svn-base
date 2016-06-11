@@ -1,0 +1,10 @@
+package ddoraemi.applyadmin.model;
+
+import ddoraemi.applyadmin.presenter.OnApply_Admin_Request_FinishedListener;
+import android.content.Context;
+
+public interface Apply_Admin_Interactor_Interface {
+	public void sendRequest(final Context context, final String u_id, final String a_name,
+			final String a_phonenum,final String a_p_phonenum, final String a_email,final String a_programinfo,
+			final OnApply_Admin_Request_FinishedListener listener);
+}

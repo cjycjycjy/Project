@@ -1,0 +1,13 @@
+package ddoraemi.detailedgroupinfo.view;
+
+import java.util.ArrayList;
+
+import android.content.Intent;
+import ddoraemi.detailedgroupinfo.model.QnA;
+import ddoraemi.home.model.Group;
+
+public interface DetailedGroupInfo_View_Interface {
+	public void setViewPager(ArrayList<QnA> qna, Group group);
+	public void setqnalist(ArrayList<QnA> qna );
+	public void goToPic(int p_id);
+}

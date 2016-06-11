@@ -1,0 +1,427 @@
+package com.fuck.hangang.controller;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.apache.commons.codec.binary.*;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.simple.JSONObject;
+
+import com.fuck.hangang.dao.CheerfulDao;
+import com.fuck.hangang.util.GCMSender;
+import com.fuck.hangang.vo.AdminBoardVo;
+import com.fuck.hangang.vo.CheerfulReplyOfReplyVo;
+import com.fuck.hangang.vo.CheerfulReplyVo;
+import com.fuck.hangang.vo.CheerfulVo;
+import com.fuck.hangang.vo.NoticePhotoVo;
+import com.fuck.hangang.vo.NoticeVo;
+import com.fuck.hangang.vo.NoticecommentVo;
+import com.fuck.hangang.vo.NoticecommentofcommentVo;
+import com.fuck.hangang.vo.RegistrationIdVo;
+
+@Controller
+public class CheerfulController {
+	@Resource
+	CheerfulDao cheerfulDao;
+	String filePath = "photo/cheerful/";
+	String savePath = "C:/Users/user/Desktop/springwork/Hangang/src/main/webapp/photo/cheerful/";
+
+	@RequestMapping(value = "/getcheerful", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getteambloginfo(@RequestParam("t_num") int t_num,
+			@RequestParam("lastnum") int lastnum) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		if (t_num != -1) {
+			List<CheerfulVo> resultCheerfulVo = null;
+
+			if (lastnum == -1) {
+				lastnum = 0;
+				int count = 20;
+				resultCheerfulVo = cheerfulDao.getteamcheerfulfirst(t_num, lastnum, count);
+
+			} else {
+
+				resultCheerfulVo = cheerfulDao.getteamcheerfullast(t_num, lastnum);
+			}
+
+			for (int i = 0; i < resultCheerfulVo.size(); i++) {
+				resultCheerfulVo.get(i)
+						.setCh_c_count(cheerfulDao.getcheerfulcommentnum(resultCheerfulVo.get(i).getCh_num()));
+				resultCheerfulVo.get(i).setU_permission(
+						cheerfulDao.getcheerfuluserinfo(resultCheerfulVo.get(i).getU_id()).getU_permission());
+				resultCheerfulVo.get(i)
+						.setU_photo(cheerfulDao.getcheerfuluserinfo(resultCheerfulVo.get(i).getU_id()).getU_photo());
+
+			}
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("cheer", (T) resultCheerfulVo);
+			return resultHashMap;
+		} else {
+			List<CheerfulVo> resultCheerfulVo = null;
+
+			if (lastnum == -1) {
+				lastnum = 0;
+				int count = 20;
+				resultCheerfulVo = cheerfulDao.gettotalcheerfulfirst(lastnum, count);
+			} else {
+
+				resultCheerfulVo = cheerfulDao.gettotalcheerfullast(lastnum);
+			}
+
+			for (int i = 0; i < resultCheerfulVo.size(); i++) {
+				resultCheerfulVo.get(i)
+						.setCh_c_count(cheerfulDao.getcheerfulcommentnum(resultCheerfulVo.get(i).getCh_num()));
+				resultCheerfulVo.get(i).setU_permission(
+						cheerfulDao.getcheerfuluserinfo(resultCheerfulVo.get(i).getU_id()).getU_permission());
+				resultCheerfulVo.get(i)
+						.setU_photo(cheerfulDao.getcheerfuluserinfo(resultCheerfulVo.get(i).getU_id()).getU_photo());
+			}
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("cheer", (T) resultCheerfulVo);
+			return resultHashMap;
+		}
+
+	}
+
+	@RequestMapping(value = "/getcheerfulone", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getcheerfulone(@RequestParam("c_num") int c_num) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		CheerfulVo resultCheerfulVo = cheerfulDao.getcheerfulOne(c_num);
+
+		if (resultCheerfulVo != null) {
+			int count = cheerfulDao.getcheerfulcommentnum(resultCheerfulVo.getCh_num());
+			resultCheerfulVo.setCh_c_count(count);
+			resultCheerfulVo.setCh_c_count(cheerfulDao.getcheerfulcommentnum(resultCheerfulVo.getCh_num()));
+			resultCheerfulVo
+					.setU_permission(cheerfulDao.getcheerfuluserinfo(resultCheerfulVo.getU_id()).getU_permission());
+			resultCheerfulVo.setU_photo(cheerfulDao.getcheerfuluserinfo(resultCheerfulVo.getU_id()).getU_photo());
+
+			// List<CheerfulReplyVo> replyVo =
+			// cheerfulDao.getcheerfulreplyfirst(c_num, 0, 20);
+
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("cheerful", (T) resultCheerfulVo);
+			// resultHashMap.put("cheerfulreply",(T) replyVo );
+		} else {
+			resultHashMap.put("result", (T) "Failed");
+		}
+		return resultHashMap;
+
+	}
+
+	@RequestMapping(value = "/registcheerful", method = RequestMethod.POST)
+	public @ResponseBody String registcheerful(@RequestBody JSONObject json) {
+		CheerfulVo cheerfulVo = null;
+		ObjectMapper mapper = new ObjectMapper();
+
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		String time = dateFormat.format(calendar.getTime()).toString();
+		String ch_photo = null;
+		try {
+
+			cheerfulVo = mapper.readValue(json.toString(), CheerfulVo.class);
+			if (!cheerfulVo.getCh_photourl().equalsIgnoreCase("empty")) {
+				writeFile(cheerfulVo.getCh_photourl(), savePath, cheerfulVo.getT_num(), time);
+				ch_photo = filePath + cheerfulVo.getT_num() + "_" + time + ".jpg";
+			}
+			cheerfulDao.registcheerful(cheerfulVo.getU_id(), cheerfulVo.getT_num(), cheerfulVo.getCh_content(),
+					ch_photo);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Failed";
+		}
+
+		return "Success";
+	}
+
+	@RequestMapping(value = "/getcheerfulreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getcheerfulreply(@RequestParam("c_num") int c_num,
+			@RequestParam("lastnum") int lastnum) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		List<CheerfulReplyVo> resultCheerfulReplyVo = new ArrayList<CheerfulReplyVo>();
+
+		if (lastnum == -1) {
+			lastnum = 0;
+			int count = 20;
+
+			resultCheerfulReplyVo = cheerfulDao.getcheerfulreplyfirst(c_num, lastnum, count);
+
+		}
+
+		else {
+			resultCheerfulReplyVo = cheerfulDao.getcheerfulreplylast(c_num, lastnum);
+
+		}
+		if (resultCheerfulReplyVo != null) {
+			for (int i = 0; i < resultCheerfulReplyVo.size(); i++) {
+
+				int c_rr_count = cheerfulDao.getcheerfulreplyofreplycount(c_num,
+						resultCheerfulReplyVo.get(i).getC_r_num());
+				resultCheerfulReplyVo.get(i).setC_rr_count(c_rr_count);
+			}
+
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("cheerfulreplylist", (T) resultCheerfulReplyVo);
+
+			return resultHashMap;
+		}
+
+		else {
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+
+		}
+	}
+
+	@RequestMapping(value = "/getcheerfulreplyone", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getcheerfulone(@RequestParam("c_num") int c_num,
+			@RequestParam("c_r_num") int c_r_num) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		CheerfulReplyVo resultCheerfulReplyVo = cheerfulDao.getcheerfulreplyone(c_num, c_r_num);
+
+		if (resultCheerfulReplyVo != null) {
+			int c_rr_count = cheerfulDao.getcheerfulreplyofreplycount(c_num, resultCheerfulReplyVo.getC_r_num());
+			resultCheerfulReplyVo.setC_rr_count(c_rr_count);
+
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("comment", (T) resultCheerfulReplyVo);
+
+			List<CheerfulReplyOfReplyVo> resultCheerfulReplyOfReplyVo = cheerfulDao.getcheerfulreplyofreplyfirst(c_num,
+					c_r_num);
+
+			resultHashMap.put("commentofcomment", (T) resultCheerfulReplyOfReplyVo);
+
+			// resultHashMap.put("cheerfulreply",(T) replyVo );
+		} else {
+			resultHashMap.put("result", (T) "Failed");
+		}
+		return resultHashMap;
+
+	}
+
+	@RequestMapping(value = "/registcheerfulreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> registcheerfulreply(@RequestParam("c_num") int c_num,
+			@RequestParam("u_id") String u_id, @RequestParam("c_r_content") String c_r_content) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		try {
+
+			cheerfulDao.registcheerfulreply(c_num, u_id, c_r_content);
+
+			List<CheerfulReplyVo> resultCheerfulReplyVo = cheerfulDao.getcheerfulreplyfirst(c_num, 0, 20);
+			for (int i = 0; i < resultCheerfulReplyVo.size(); i++) {
+
+				int c_rr_count = cheerfulDao.getcheerfulreplyofreplycount(c_num,
+						resultCheerfulReplyVo.get(i).getC_r_num());
+				resultCheerfulReplyVo.get(i).setC_rr_count(c_rr_count);
+
+			}
+
+			String c_r_count = Integer.toString(cheerfulDao.getcheerfulreplycount(c_num));
+
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("cheerfulreplylist", (T) resultCheerfulReplyVo);
+			resultHashMap.put("c_r_count", (T) c_r_count);
+
+			String id = cheerfulDao.checkReplyUser(c_num);
+			int push = cheerfulDao.checkPushUser(id);
+			if (push != 0) {
+				if (!id.equalsIgnoreCase(u_id)) {
+					RegistrationIdVo resultRegiId = cheerfulDao.getRegiIdOfUser(c_num);
+					GCMSender gs = new GCMSender();
+					gs.sendGCMToOneUser(resultRegiId, c_num, 3);
+				}
+			}
+
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+
+	}
+
+	@RequestMapping(value = "/getcheerfulreplyofreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getcheerfulreplyofreply(@RequestParam("c_num") int c_num,
+			@RequestParam("c_r_num") int c_r_num, @RequestParam("lastnum") int lastnum) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		List<CheerfulReplyOfReplyVo> resultCheerfulReplyofReplyVo = new ArrayList<CheerfulReplyOfReplyVo>();
+
+		if (lastnum == -1) {
+			resultCheerfulReplyofReplyVo = cheerfulDao.getcheerfulreplyofreplyfirst(c_num, c_r_num);
+		} else {
+
+			resultCheerfulReplyofReplyVo = cheerfulDao.getcheerfulreplyofreplylast(c_num, c_r_num, lastnum);
+		}
+
+		if (resultCheerfulReplyofReplyVo != null) {
+
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("cheerfulreplyofreplylist", (T) resultCheerfulReplyofReplyVo);
+			return resultHashMap;
+		}
+
+		else {
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+
+		}
+
+	}
+
+	@RequestMapping(value = "/registcheerfulreplyofreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> registcheerfulreplyofreply(@RequestParam("c_num") int c_num,
+			@RequestParam("c_r_num") int c_r_num, @RequestParam("u_id") String u_id,
+			@RequestParam("c_rr_content") String c_rr_content) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		try {
+
+			cheerfulDao.registcheerfulreplyofreply(c_num, c_r_num, u_id, c_rr_content);
+
+			List<CheerfulReplyOfReplyVo> resultCheerfulReplyofReplyVo = cheerfulDao.getcheerfulreplyofreplyfirst(c_num,
+					c_r_num);
+
+			String c_rr_count = Integer.toString(cheerfulDao.getcheerfulreplyofreplycount(c_num, c_r_num));
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("cheerfulreplyofreplylist", (T) resultCheerfulReplyofReplyVo);
+			resultHashMap.put("c_rr_count", (T) c_rr_count);
+
+			String id = cheerfulDao.checkReplyUser(c_r_num);
+			int push = cheerfulDao.checkPushUser(id);
+			if (push != 0) {
+				if (!id.equalsIgnoreCase(u_id)) {
+					RegistrationIdVo resultRegiId = cheerfulDao.getRegiIdOfUser(c_r_num);
+					GCMSender gs = new GCMSender();
+					gs.sendGCMToOneUserAboutCommentOfComment(resultRegiId, c_num, c_r_num, 4);
+				}
+			}
+
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+
+	}
+
+	@RequestMapping(value = "/deletecheerfulreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> deletecheerfulreply(@RequestParam("c_num") int c_num,
+			@RequestParam("c_r_num") int c_r_num) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		try {
+			cheerfulDao.deletecheerfulreply(c_num, c_r_num);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/deletecheerfulreplyofreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> deletecheerfulreplyofreply(@RequestParam("c_num") int c_num,
+			@RequestParam("c_r_num") int c_r_num, @RequestParam("c_rr_num") int c_rr_num) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		try {
+			cheerfulDao.deletecheerfulreplyofreply(c_num, c_r_num, c_rr_num);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/deletecheerful", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> deletecheerful(@RequestParam("c_num") int c_num) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		try {
+			deleteFile(cheerfulDao.getcheerfulphotourl(c_num));
+			cheerfulDao.deletecheerful(c_num);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/updatecheerfulreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> updatecheerfulreply(@RequestParam("c_num") int c_num,
+			@RequestParam("c_r_num") int c_r_num, @RequestParam("c_r_content") String c_r_content) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		try {
+			cheerfulDao.updatecheerfulreply(c_num, c_r_num, c_r_content);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/updatecheerfulreplyofreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> updatecheerfulreplyofreply(@RequestParam("c_num") int c_num,
+			@RequestParam("c_r_num") int c_r_num, @RequestParam("c_rr_num") int c_rr_num,
+			@RequestParam("c_rr_content") String c_rr_content) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		try {
+			cheerfulDao.updatecheerfulreplyofreply(c_num, c_r_num, c_rr_num, c_rr_content);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	public String writeFile(String file, String savePath, int t_num, String time) throws Exception {
+		String n_photo_url = t_num + "_" + time + ".jpg";
+		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(savePath + n_photo_url));
+		bos.write(Base64.decodeBase64(file));
+		bos.flush();
+		bos.close();
+		return n_photo_url;
+	}
+
+	public boolean deleteFile(String filePath) throws Exception {
+
+		File delete_file = new File("C:/Users/user/Desktop/springwork/Hangang/src/main/webapp/" + filePath);
+		if (!delete_file.delete())
+			return false;
+
+		return true;
+	}
+}

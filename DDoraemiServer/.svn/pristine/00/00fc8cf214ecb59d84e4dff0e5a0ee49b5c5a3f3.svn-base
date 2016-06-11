@@ -1,0 +1,50 @@
+package com.myserver.skp.dao;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.myserver.skp.mapper.UserMapper;
+import com.myserver.skp.vo.UserVo;
+
+@Service
+public class UserDao {
+	@Resource
+	private UserMapper userMapper;
+
+	public void insertBase(UserVo user) {
+		this.userMapper.insertBase(user);
+	}
+
+	public UserVo idCheck(String u_id) {
+		return this.userMapper.idCheck(u_id);
+	}
+	
+	public void insertFavoritProgram(String u_id, String e_name){
+		this.userMapper.insertFavoritProgram(u_id, e_name);
+	}
+	
+	public UserVo login(String u_id, String password){
+		return this.userMapper.login(u_id, password);
+	}
+	
+	public List<HashMap<String, Integer>> getSelectBookmark(String u_id){
+		return this.userMapper.selectBookmark(u_id);
+	}
+	
+	public List<HashMap<String, String>> getSelectFavoritProgram(String u_id){
+		return this.userMapper.selectFavoritProgram(u_id);
+	}
+	
+	public void insertBookmark(String u_id, int p_id){
+		this.userMapper.insertBookmark(u_id, p_id);
+	}
+	
+	public void deleteBookmark(String u_id, int p_id){
+		this.userMapper.deleteBookmark(u_id, p_id);
+	}
+
+}

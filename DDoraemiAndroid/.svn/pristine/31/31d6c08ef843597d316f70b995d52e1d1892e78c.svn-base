@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/fragment_joinone_logo"
+        android:layout_width="104dp"
+        android:layout_height="77dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/logo2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="31dp"
+        android:layout_marginTop="120dp"
+        android:orientation="vertical" >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <LinearLayout
+                        android:layout_width="236dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical" >
+
+                        <EditText
+                            android:id="@+id/join_fragmentone_IDEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="아이디를 입력해주세요(영문,숫자조합)"
+                            android:singleLine="true"
+                            android:textColor="#868585"
+                            android:textColorHint="#868585"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#868585" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/join_fragmentone_ImgID"
+                        android:layout_width="57dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/btn_id" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp" >
+
+                    <LinearLayout
+                        android:layout_width="284dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical" >
+
+                        <EditText
+                            android:id="@+id/join_fragmentone_PasswdEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="비밀번호를 입력해주세요.(6자 이상 12자리 미만)"
+                            android:password="true"
+                            android:singleLine="true"
+                            android:textColor="#868585"
+                            android:textColorHint="#868585"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#868585" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp" >
+
+                    <LinearLayout
+                        android:layout_width="284dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical" >
+
+                        <EditText
+                            android:id="@+id/join_fragmentone_ConfirmPasswdEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="비밀번호를 한번 더 입력해주세요."
+                            android:password="true"
+                            android:singleLine="true"
+                            android:textColor="#868585"
+                            android:textColorHint="#868585"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#868585" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp" >
+
+                    <LinearLayout
+                        android:layout_width="236dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical" >
+
+                        <EditText
+                            android:id="@+id/join_fragmentone_PhoneEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="전화번호를 입력해주세요.(숫자만 입력)"
+                            android:singleLine="true"
+                            android:textColor="#868585"
+                            android:textColorHint="#868585"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#868585" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp" >
+
+                    <LinearLayout
+                        android:layout_width="236dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical" >
+
+                        <EditText
+                            android:id="@+id/join_fragmentone_ConfirmPhoneEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="인증번호를 입력해주세요."
+                            android:singleLine="true"
+                            android:textColor="#868585"
+                            android:textColorHint="#868585"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:background="#868585" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/join_fragmentone_ImgConfirmPhone"
+                        android:layout_width="57dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/btn_phone" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="55dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <ToggleButton
+                        android:id="@+id/join_fragmentone_ToggleService"
+                        android:layout_width="21dp"
+                        android:layout_height="21dp"
+                        android:background="@drawable/custom_checkbox"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical" >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/join_fragmentone_TextService"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="7dp"
+                                android:text="[필수] 서비스 이용약관에 동의"
+                                android:textColor="#000000"
+                                android:textSize="11sp" >
+                            </TextView>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="7dp"
+                                android:layout_marginTop="3dp"
+                                android:background="#000000"
+                                android:orientation="vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <ToggleButton
+                        android:id="@+id/join_fragmentone_TogglePersonal"
+                        android:layout_width="21dp"
+                        android:layout_height="21dp"
+                        android:background="@drawable/custom_checkbox"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/join_fragmentone_TextPersonal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="7dp"
+                            android:text="[필수] 개인정보 수집 및 이용동의"
+                            android:textColor="#000000"
+                            android:textSize="11sp" >
+                        </TextView>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="7dp"
+                            android:layout_marginTop="3dp"
+                            android:background="#000000"
+                            android:orientation="vertical" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/join_fragmentone_ButtonNext"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_alignParentBottom="true"
+        android:background="#8d6252"
+        android:gravity="center"
+        android:text="다음 단계로 이동"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

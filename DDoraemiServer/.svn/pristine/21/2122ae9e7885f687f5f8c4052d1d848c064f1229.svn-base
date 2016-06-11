@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.QuestionReplyMapper">
+
+	<resultMap id="questionReplyMap" type="com.myserver.skp.vo.QuestionReplyVo">
+		<id property="q_r_id" column="q_r_id" />
+		<result property="q_id" column="q_id" />
+		<result property="q_r_content" column="q_r_content" />
+		<result property="q_r_year" column="q_r_year" />
+		<result property="q_r_month" column="q_r_month" />
+		<result property="q_r_day" column="q_r_day" />
+		<association property="q_r_user" javaType="com.myserver.skp.vo.UserVo">
+			<id property="u_id" column="u_id" />
+			<result property="u_photo_url" column="u_photo_url" />
+		</association>
+	</resultMap>
+
+	<select id="selectAllofQuestionReply" resultMap="questionReplyMap">
+		SELECT question_reply.*, user.u_id, user.u_photo_url FROM
+		question_reply, user WHERE user.u_id=question_reply.u_id and q_id = #{q_id}
+	</select>
+
+	<insert id="insertQuestionReply" parameterType="QuestionReplyVo">
+		insert into
+		question_reply
+		values(null, #{q_r_user.u_id}, #{q_id},
+		#{q_r_content},
+		#{q_r_year}, #{q_r_month},
+		#{q_r_day})
+	</insert>
+</mapper>

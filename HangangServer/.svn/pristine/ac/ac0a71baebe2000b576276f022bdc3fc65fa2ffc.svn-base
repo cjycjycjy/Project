@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.UserMapper">
+
+	<resultMap id="userMap" type="com.fuck.hangang.vo.UserVo">
+		<id property="u_id" column="u_id" />
+		<result property="u_passwd" column="u_passwd"/>
+		<result property="u_name" column="u_name" />
+		<result property="u_email" column="u_email" />
+		<result property="u_permission" column="u_permission"/>
+		<result property="push" column="push"/>
+		<result property="u_photo" column="u_photo"/>
+		<result property="u_registrationid" column="u_registrationid"/>
+	</resultMap>
+	
+	<resultMap type="com.fuck.hangang.vo.TeamVo" id="teamMap">
+		<id property = "t_num" column = "t_num"/>
+		<result property="t_name" column="t_name"/>
+		<result property="t_info" column="t_info" />
+		<result property="t_facebook" column="t_facebook" />
+		<result property="t_youtube" column="t_youtube"/>
+		<result property="t_logo" column="t_logo"/>
+		<result property="t_background_img" column="t_background_img"/>
+		
+	</resultMap>
+
+	<insert id="signup" parameterType="UserVo">
+		insert into user values(#{u_id},#{u_passwd},#{u_name},#{u_email},1,1, null, null)
+	</insert>
+	
+	<select id="signin" resultMap="userMap">
+		select * from user where u_id =#{u_id} and u_passwd =#{u_passwd}
+	</select>
+	
+	<select id="getuser" resultMap="userMap">
+		select * from user where u_id = #{u_id}
+	</select>
+	
+	<select id="getbookmarkteam" resultMap="teamMap">
+		select * from team where t_num = (select t_num from bookmark where u_id = #{u_id})
+	</select>
+	
+	<select id="getteam" resultMap="teamMap">
+		select * from team where  t_num = (select t_num from team_user where u_id= #{u_id})
+	</select>
+
+</mapper>

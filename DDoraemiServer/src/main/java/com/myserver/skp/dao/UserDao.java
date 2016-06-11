@@ -1,0 +1,121 @@
+package com.myserver.skp.dao;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.myserver.skp.mapper.UserMapper;
+import com.myserver.skp.vo.UserVo;
+
+@Service
+public class UserDao {
+	@Resource
+	private UserMapper userMapper;
+
+	public void insertBase(UserVo user) {
+		this.userMapper.insertBase(user);
+	}
+
+	public UserVo idCheck(String u_id) {
+		return this.userMapper.idCheck(u_id);
+	}
+	
+	public void insertFavoritProgram(String u_id, String e_name){
+		this.userMapper.insertFavoritProgram(u_id, e_name);
+	}
+	
+	public UserVo login(String u_id, String password){
+		return this.userMapper.login(u_id, password);
+	}
+	
+	public List<HashMap<String, Integer>> getSelectBookmark(String u_id){
+		return this.userMapper.selectBookmark(u_id);
+	}
+	
+	public List<HashMap<String, String>> getSelectFavoritProgram(String u_id){
+		return this.userMapper.selectFavoritProgram(u_id);
+	}
+	
+	public void insertBookmark(String u_id, int p_id){
+		this.userMapper.insertBookmark(u_id, p_id);
+	}
+	
+	public void deleteBookmark(String u_id, int p_id){
+		this.userMapper.deleteBookmark(u_id, p_id);
+	}
+	
+	public void updatePermissionAdminRequest(String u_id){
+		this.userMapper.updatePermissionAdminRequest(u_id);
+	}
+	
+	public void updatePermissionAdmin(String u_id){
+		this.userMapper.updatePermissionAdmin(u_id);
+	}
+	
+	public HashMap<String, String> getSelectGCMregisterQuestion(int g_id){
+		return this.userMapper.selectGCMregisterQuestion(g_id);
+	}
+	
+	public HashMap<String, String> getSelectGCMregisterQuestionReply(int q_id){
+		return this.userMapper.selectGCMregisterQuestionReply(q_id);
+	}
+	
+	public List<HashMap<String, String>> getSelectGCMBookmark(int p_id){
+		return this.userMapper.selectGCMBookmark(p_id);
+	}
+
+	public void deleteFavoritProgram(String u_id){
+		this.userMapper.deleteFavoritProgram(u_id);
+	}
+	
+	public void updatePassword(String u_id, String password){
+		this.userMapper.updatePassword(u_id, password);
+	}
+	
+	public List<UserVo> getSelectJoinGatheringUser(int g_id){
+		return this.userMapper.selectJoinGatheringUser(g_id);
+	}
+	
+	public void updateUserPhoto(String u_id, String u_photo_url){
+		this.userMapper.updateUserPhoto(u_id, u_photo_url);
+	}
+	
+	public void insertVerificationCode(String u_id, String verification_code){
+		this.userMapper.insertVerificationCode(u_id, verification_code);
+	}
+	
+	public void deleteVerificationCode(String u_id){
+		this.userMapper.deleteVerificationCode(u_id);
+	}
+	
+	public String getSelectVerificationCode(String u_id){
+		return this.userMapper.selectVerificationCode(u_id);
+	}
+	
+	public String getSelectUserPhone(String u_id){
+		return this.userMapper.selectUserPhone(u_id);
+	}
+	
+	public void updateAlarm(String u_id, int alarm){
+		this.userMapper.updateAlarm(u_id, alarm);
+	}
+	
+	public void updateRegisterId(String u_register_id, String new_register_id){
+		this.userMapper.updateRegisterId(u_register_id, new_register_id);
+	}
+	
+	public String getSelectUserPhoto(String u_id){
+		return this.userMapper.selectUserPhoto(u_id);
+	}
+	
+	public void updateRegisterIdUId(String u_id, String u_register_id){
+		this.userMapper.updateRegisterIdUId(u_id, u_register_id);
+	}
+	
+	public <T> List<HashMap<String, T>> getSelectUId(){
+		return this.userMapper.selectUId();
+	}
+}

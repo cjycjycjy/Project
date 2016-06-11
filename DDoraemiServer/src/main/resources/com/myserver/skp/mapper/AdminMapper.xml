@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.AdminMapper">
+
+	<insert id="insertAdminRequest">
+		insert admin_request values(#{u_id}, #{p_id})
+	</insert>
+	
+	<insert id="insertAdmin">
+		insert admin values(#{u_id}, #{p_id})
+	</insert>
+	
+	<delete id="deleteAdminRequest">
+		delete from admin_request where u_id=#{u_id} and p_id=#{p_id}
+	</delete>
+	
+	<delete id="deleteAdmin">
+		delete from admin where u_id=#{u_id} and p_id=#{p_id}
+	</delete>
+
+
+</mapper>

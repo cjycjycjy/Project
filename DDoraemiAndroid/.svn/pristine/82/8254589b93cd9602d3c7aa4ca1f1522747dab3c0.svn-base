@@ -1,0 +1,7 @@
+package ddoraemi.detailediteminfo.model;
+
+public class Afterword {
+	public Afterword() {
+		// TODO Auto-generated constructor stub
+	}
+}

@@ -1,0 +1,11 @@
+package ddoraemi.detailediteminfo.view;
+
+import ddoraemi.home.model.ProgramData;
+
+public interface DetailedItemInfo_InfoView_Interface {
+	public void goToCreateGroup(ProgramData item);
+	public void callToAdmin();
+	public void goToWebsite();
+	public void goToTmap();
+	
+}

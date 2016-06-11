@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF" >
+
+    <EditText
+        android:id="@+id/et_setpasswd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dip"
+        android:background="@drawable/editbox"
+        android:textColor="#000000"
+        android:hint="설정할 비밀번호를 입력 (4자 이상)"
+        android:textSize="15dip" />
+
+    <RelativeLayout
+        android:id="@+id/rl_line_row"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_below="@+id/et_setpasswd"
+        android:background="#000000" >
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_line_row" >
+
+        <Button
+            android:id="@+id/btn_setpasswd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignRight="@+id/rl_line_col"
+            android:background="@drawable/button_custom_dialog"
+            android:text="확인"
+            android:textColor="#000000"
+            android:textSize="15dip" />
+
+        <RelativeLayout
+            android:id="@+id/rl_line_col"
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/btn_setpasswd"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="#000000" >
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_setpasswd_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/rl_line_col"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_custom_dialog"
+            android:text="취소"
+            android:textColor="#000000"
+            android:textSize="15dip" />
+    </RelativeLayout>
+
+</RelativeLayout>

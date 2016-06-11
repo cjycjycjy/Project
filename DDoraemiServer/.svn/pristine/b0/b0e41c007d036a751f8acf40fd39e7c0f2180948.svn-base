@@ -1,0 +1,41 @@
+package com.myserver.skp.util;
+
+import java.io.IOException;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.android.gcm.server.InvalidRequestException;
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.Result;
+import com.google.android.gcm.server.Sender;
+
+public class GCMSender {
+	final String API_KEY = "AIzaSyCHNDhsozVX4B4sFvUy6_Z9mpRw5TH3nFY";
+	final int retries = 5;
+	String register_id;
+	String message;
+
+	public boolean sendGCM(String register_id, String title, String message){
+		Sender sender = new Sender(API_KEY);
+		Message msg = new Message.Builder().addData("title", title)
+				.addData("msg", message).build();
+		try {
+
+			Result result = sender.send(msg, register_id, retries);
+
+			if (StringUtils.isEmpty(result.getErrorCodeName())) {
+				System.out.println(msg.toString() + "GCM Notification is sent successfully" + result.toString());
+				return true;
+			}
+
+			System.out.println("Error occurred while sending push notification :" + result.getErrorCodeName());
+			
+		} catch (InvalidRequestException e) {
+			System.out.println("Invalid Request");
+		} catch (IOException e) {
+			System.out.println("IO Exception");
+		}
+		return false;
+	}
+
+}

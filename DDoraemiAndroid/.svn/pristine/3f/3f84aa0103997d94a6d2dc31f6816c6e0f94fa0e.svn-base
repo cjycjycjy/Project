@@ -1,0 +1,168 @@
+package ddoraemi.joining.view;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
+import ddoraemi.dialog.Dialog_AddressSelect;
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.start.R;
+
+public class Fragment_JoinTwo extends Fragment implements OnClickListener,
+		OnCheckedChangeListener {
+	TextView next;
+	ImageView plus, minus;
+	int age;
+	char sex;
+	RadioGroup radiogroup;
+	String str_city, str_country, str_town;
+	TextView agetv, city, country, town;
+	RadioButton man, woman;
+	LinearLayout address;
+	boolean isAddressSelected, isSexSelected;
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_jointwo, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		isAddressSelected = false;
+		age = 35;
+		radiogroup = (RadioGroup) v
+				.findViewById(R.id.join_fragmenttwo_radiogroup);
+		radiogroup.setOnCheckedChangeListener(this);
+		plus = (ImageView) v.findViewById(R.id.join_fragmenttwo_PlusBt);
+		minus = (ImageView) v.findViewById(R.id.join_fragmenttwo_MinusBt);
+		next = (TextView) v.findViewById(R.id.join_fragmenttwo_ButtonNext);
+		agetv = (TextView) v.findViewById(R.id.join_fragmenttwo_agetv);
+		address = (LinearLayout) v
+				.findViewById(R.id.join_fragmenttwo_addresslayout);
+		city = (TextView) v.findViewById(R.id.join_fragmenttwo_city);
+		country = (TextView) v.findViewById(R.id.join_fragmenttwo_country);
+		town = (TextView) v.findViewById(R.id.join_fragmenttwo_town);
+		address = (LinearLayout) v
+				.findViewById(R.id.join_fragmenttwo_addresslayout);
+		next.setOnClickListener(this);
+		plus.setOnClickListener(this);
+		minus.setOnClickListener(this);
+		address.setOnClickListener(this);
+	}
+
+	public void setCity(String str_city, String str_coutry, String str_town) {
+		city.setText(str_city);
+		country.setText(str_coutry);
+		town.setText(str_town);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if (v.getId() == R.id.join_fragmenttwo_ButtonNext) {
+			if (ConfirmForNext()) {
+				setActivityValue();
+				setDefaultValue();
+				((JoinActivity) getActivity()).setTitleThree();
+				FragmentTransaction ft = getActivity()
+						.getSupportFragmentManager().beginTransaction();
+				ft.replace(R.id.joinFragment, new Fragment_JoinThree());
+				ft.setTransition(FragmentTransaction.TRANSIT_NONE);
+				ft.addToBackStack(null);
+				ft.commit();
+			} else {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(getActivity(),
+						"모든 항목에 응답하셔야\n다음 단계 진행이 가능합니다.");
+				dialog.show();
+			}
+
+		} else if (v.getId() == R.id.join_fragmenttwo_MinusBt) {
+			age--;
+			if (age < 0) {
+				age = 0;
+			}
+			agetv.setTextColor(Color.parseColor("#000000"));
+			agetv.setText(String.valueOf(age) + "세");
+		} else if (v.getId() == R.id.join_fragmenttwo_PlusBt) {
+			age++;
+			if (age > 100) {
+				age = 100;
+			}
+			agetv.setTextColor(Color.parseColor("#000000"));
+			agetv.setText(String.valueOf(age) + "세");
+		} else if (v.getId() == R.id.join_fragmenttwo_addresslayout) {
+			Dialog_AddressSelect dialog = new Dialog_AddressSelect(
+					getActivity(), this);
+			dialog.show();
+		}
+	}
+
+	public void setAddress(String city, String country, String town) {
+		str_city = city;
+		str_country = country;
+		str_town = town;
+		this.city.setText(city);
+		this.country.setText(country);
+		this.town.setText(town);
+		this.city.setTextColor(Color.parseColor("#000000"));
+		this.country.setTextColor(Color.parseColor("#000000"));
+		this.town.setTextColor(Color.parseColor("#000000"));
+		isAddressSelected = true;
+	}
+
+	public boolean ConfirmForNext() {
+		if (isAddressSelected && isSexSelected) {
+			return true;
+		}
+		return false;
+	}
+
+	public void setDefaultValue() {
+		radiogroup.clearCheck();
+		isAddressSelected = false;
+		isSexSelected = false;
+		age = 35;
+		agetv.setTextColor(Color.parseColor("#868585"));
+		agetv.setText(String.valueOf(age) + "세");
+		this.city.setText("시/도");
+		this.country.setText("군/구");
+		this.town.setText("읍/면/동");
+		this.city.setTextColor(Color.parseColor("#868585"));
+		this.country.setTextColor(Color.parseColor("#868585"));
+		this.town.setTextColor(Color.parseColor("#868585"));
+
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		if (checkedId == R.id.join_fragmenttwo_RadioMan) {
+			sex = 'M';
+			isSexSelected = true;
+		} else if (checkedId == R.id.join_fragmenttwo_RadioWoman) {
+			sex = 'F';
+			isSexSelected = true;
+		}
+
+	}
+
+	public void setActivityValue() {
+		
+		((JoinActivity) getActivity()).setParentage(age);
+		((JoinActivity) getActivity()).setParentsex(sex);
+		((JoinActivity) getActivity()).setCity(str_city);
+		((JoinActivity) getActivity()).setCountry(str_country);
+		((JoinActivity) getActivity()).setTown(str_town);
+	}
+
+}

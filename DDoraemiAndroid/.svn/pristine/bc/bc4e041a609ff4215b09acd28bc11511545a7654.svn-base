@@ -1,0 +1,98 @@
+package ddoraemi.adminmodehome.view;
+
+import java.util.ArrayList;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import ddoraemi.adminmodehome.presenter.AdminAfterwordPresenter;
+import ddoraemi.adminmodehome.presenter.AdminAfterwordPresenterInterface;
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.detailediteminfo.view.DetailedAfterword_reply_view;
+import ddoraemi.detailediteminfo.view.DetailedItemInfo_AfterwordListAdapter;
+import ddoraemi.start.R;
+
+public class AdminAfterwordView extends Fragment implements AdminAfterwordViewInterface,
+OnItemClickListener,OnScrollListener{
+	ListView listview;
+	ArrayList<Afterword> list;
+	AdminAfterwordPresenterInterface presenter;
+	DetailedItemInfo_AfterwordListAdapter adapter;
+
+	public AdminAfterwordView(ArrayList<Afterword> list) {
+		// TODO Auto-generated constructor stub
+		this.list = new ArrayList<Afterword>();
+		this.list = list;
+
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_admin_afterword, null);
+		init(v);
+		return v;
+	}
+	public void init(View v){
+		listview=(ListView)v.findViewById(R.id.lv_challenge_afterword);
+		listview.setOnItemClickListener(this);
+		presenter = new AdminAfterwordPresenter(this);
+
+		adapter=new DetailedItemInfo_AfterwordListAdapter(getActivity(), R.layout.item_afterwordlist, list);
+		listview.setAdapter(adapter);
+
+		listview.setOnScrollListener(this);
+		listview.setFocusable(true);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		// TODO Auto-generated method stub
+
+		presenter.validatecredential((Afterword)listview.getItemAtPosition(position),position);
+
+	}
+
+
+	@Override
+	public void goToDetailedAfterword(Afterword item, int position) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(this.getActivity(),DetailedAfterword_reply_view.class);
+		//intent.putExtra("replynum", replynum);
+		intent.putExtra("position", position);
+		intent.putExtra("item", item);
+		getActivity().startActivityForResult(intent, 50);
+	}
+	public void renewData(Afterword data, int position){
+
+		int num = data.getA_r_num();
+		data.setA_r_num(data.getAfterword_reply().size());
+		this.list.set(position, data);
+
+		adapter.notifyDataSetChanged();
+
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+}

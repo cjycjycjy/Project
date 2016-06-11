@@ -1,0 +1,69 @@
+package ddoraemi.adminmodehome.presenter;
+
+import java.util.ArrayList;
+
+import com.google.common.base.Preconditions;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import ddoraemi.adminmodehome.model.AdminHome_Interactor;
+import ddoraemi.adminmodehome.model.AdminHome_InteratorInterface;
+import ddoraemi.adminmodehome.view.AdminHomeView;
+import ddoraemi.home.model.ProgramData;
+
+public class AdminHomePresenter implements AdminHomePresenterInterface,OnAdminHome_FinishenListener{
+	AdminHomeView view;
+	AdminHome_InteratorInterface interactor;
+	public AdminHomePresenter(AdminHomeView adminHomeView) {
+		// TODO Auto-generated constructor stub
+		this.view=adminHomeView;
+		interactor=new AdminHome_Interactor();
+	}
+	@Override
+	public void validatecredential(String event) {
+		// TODO Auto-generated method stub
+		if(event.equals("clickSideMenu"))
+		{
+			view.showSideMenu();
+		}
+		else if(event.equals("goToUserMode"))
+		{
+			view.goToUserMode();
+		}
+		
+	}
+	@Override
+	public void onSuccess(JsonArray program) {
+		// TODO Auto-generated method stub
+		ArrayList<ProgramData> programs = new ArrayList<>();
+		for(int i=0; i<program.size(); i++){
+		JsonObject dataobj = (JsonObject)program.get(i);
+		int p_id = (dataobj.get("p_id")).getAsInt();
+		String p_name = (dataobj.get("p_name")).getAsString();
+		ProgramData data=new ProgramData();
+		data.setP_id(p_id);
+		data.setP_name(p_name);
+		programs.add(data);
+		}
+		view.setSideMenu(programs);
+		
+	}
+	@Override
+	public void onFail() {
+		view.showFailureDialog();
+	}
+	@Override
+	public void validatecredential(String event, String User_id) {
+		if(event.equals("getAdminList"))
+		{
+			interactor.getProgram(view,User_id, this);
+		}
+		
+	}
+	@Override
+	public void selectProgram(int p_id) {
+		// TODO Auto-generated method stub
+		view.selectProgram(p_id);
+	}
+
+}

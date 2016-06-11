@@ -1,0 +1,47 @@
+package com.fuck.hangang.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
+
+import com.fuck.hangang.mapper.UserMapper;
+import com.fuck.hangang.vo.TeamVo;
+import com.fuck.hangang.vo.UserVo;
+
+@Service
+public class UserDao {
+
+	@Resource
+	UserMapper userMapper;
+	
+	public void signup(UserVo userVo){
+		this.userMapper.signup(userVo);
+	}
+	
+	public UserVo signin(String u_id, String u_passwd){
+		return this.userMapper.signin(u_id, u_passwd);
+	}
+	
+	public UserVo getuser(String u_id){
+		return this.userMapper.getuser(u_id);
+	}
+	public List<TeamVo> getbookmarkteam(String u_id){
+		return this.userMapper.getbookmarkteam(u_id);
+	}
+	public TeamVo getteam(String u_id){
+		return this.userMapper.getteam(u_id);
+	}
+	
+	public String getuserphoto(@Param("u_id") String u_id) {
+		return this.userMapper.getuserphoto(u_id);
+	}
+	
+	public void changeuserphoto(@Param("u_id") String u_id, @Param("u_photo") String u_photo) {
+		this.userMapper.changeuserphoto(u_id, u_photo);
+	}
+	
+	
+}

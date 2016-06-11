@@ -1,0 +1,43 @@
+package com.fuck.hangang.vo;
+
+public class QnareplyVo {
+
+	int q_num;
+	int q_r_num;
+	String q_r_time;
+	String u_id;
+	String content;
+	
+	public int getQ_num() {
+		return q_num;
+	}
+	public void setQ_num(int q_num) {
+		this.q_num = q_num;
+	}
+	public int getQ_r_num() {
+		return q_r_num;
+	}
+	public void setQ_r_num(int q_r_num) {
+		this.q_r_num = q_r_num;
+	}
+	public String getQ_r_time() {
+		return q_r_time;
+	}
+	public void setQ_r_time(String q_r_time) {
+		this.q_r_time = q_r_time;
+	}
+	public String getU_id() {
+		return u_id;
+	}
+	public void setU_id(String u_id) {
+		this.u_id = u_id;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	
+}

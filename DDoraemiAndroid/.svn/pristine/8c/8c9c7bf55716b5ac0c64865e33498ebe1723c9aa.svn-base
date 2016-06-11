@@ -1,0 +1,16 @@
+package ddoraemi.detailediteminfo.model;
+
+import android.support.v4.app.FragmentActivity;
+import ddoraemi.detailediteminfo.presenter.OnDetailedItemInfo_MainView_FinishedListener;
+
+public class DetailedItemInfo_MainView_Interactor implements DetailedItemInfo_MainView_Interactor_interface{
+
+	@Override
+	public void getData(FragmentActivity context,
+			OnDetailedItemInfo_MainView_FinishedListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+}

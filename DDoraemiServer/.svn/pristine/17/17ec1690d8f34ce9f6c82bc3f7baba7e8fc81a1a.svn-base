@@ -1,0 +1,50 @@
+package com.myserver.skp.dao;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.myserver.skp.mapper.ProgramMapper;
+import com.myserver.skp.vo.CurriculumVo;
+import com.myserver.skp.vo.ProgramVo;
+
+@Service
+public class ProgramDao {
+	@Resource
+    private ProgramMapper programMapper;
+	
+	public List<ProgramVo> getSelectAll() {
+        return this.programMapper.selectAll();
+    }
+	
+	public List<ProgramVo> getSelectAddr(String p_addr_1) {
+        return this.programMapper.selectAddr(p_addr_1);
+    }
+	
+	public List<ProgramVo> getSelectExperience(String e_name) {
+        return this.programMapper.selectExperience(e_name);
+    }
+	
+	public List<HashMap<String, String>> getSelectAfterwordPhotoUrl(int p_id) {
+        return this.programMapper.selectAfterwordPhotoUrl(p_id);
+    }
+	
+	public List<CurriculumVo> getSelectCurriculum(int p_id) {
+        return this.programMapper.selectCurriculum(p_id);
+    }
+	
+	public List<ProgramVo> getSelectBookmark(String u_id){
+		return this.programMapper.selectBookmark(u_id);
+	}
+	
+	public List<HashMap<String,String>> getSelectPasser(String u_id){
+		return this.programMapper.selectPasser(u_id);
+	}
+	
+	public void updateProgramGrade(int g_id, float p_grade){
+		this.programMapper.updateProgramGrade(g_id, p_grade);
+	}
+}

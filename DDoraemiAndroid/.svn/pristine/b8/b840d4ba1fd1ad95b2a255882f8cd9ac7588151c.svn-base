@@ -1,0 +1,5 @@
+package ddoraemi.join;
+
+public interface OnJoinFinishedListnerInterface {
+	public void onSuccess();
+}

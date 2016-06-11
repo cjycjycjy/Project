@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.AdminMapper">
+
+	<resultMap type="com.fuck.hangang.vo.AdminBoardVo" id="adminboardMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_title" column="a_title" />
+		<result property="a_contents" column="a_contents" />
+		<result property="a_type" column="a_type" />
+		<result property="a_time" column="a_time" />
+		<result property="a_year" column="a_year" />
+		<result property="a_month" column="a_month" />
+		<result property="a_day" column="a_day" />
+		<result property="a_hour" column="a_hour" />
+		<result property="a_min" column="a_min" />
+		<collection property="photo" ofType="com.fuck.hangang.vo.AdminBoardPhotoVo">
+			<result property="a_index" column="a_index" />
+			<result property="a_photo_url" column="a_photo_url" />
+		</collection>
+	</resultMap>
+	
+	<resultMap type="com.fuck.hangang.vo.AdminBoardPhotoVo" id="adminboardphotoMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_index" column="a_index" />
+		<result property="a_photo_url" column="a_photo_url" />
+	</resultMap>
+	
+	<resultMap type="com.fuck.hangang.vo.AdminRequestVo" id="adminrequestMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_r_num" column="a_r_num" />
+		<result property="t_num" column="t_num" />
+		<result property="t_members_num" column="t_members_num" />
+	</resultMap>
+	
+	<insert id="registadminboard" parameterType="AdminBoardVo">
+		insert into admin_board values
+		(null, #{a_title}, #{a_contents}, #{a_type}, null, #{a_year}, #{a_month}, #{a_day}, #{a_hour}, #{a_min})
+		<selectKey keyProperty="a_num" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="registadminboardphoto">
+		insert into admin_board_photo values
+		(#{a_num}, #{a_index}, #{a_photo_url})
+	</insert>
+
+
+</mapper>

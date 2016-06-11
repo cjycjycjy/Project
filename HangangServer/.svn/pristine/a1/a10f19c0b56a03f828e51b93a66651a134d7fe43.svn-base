@@ -1,0 +1,21 @@
+package com.fuck.hangang.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.fuck.hangang.vo.ContestPhotoVo;
+import com.fuck.hangang.vo.ContestVo;
+
+@Repository
+public interface ContestMapper {
+	
+	public void registcontest(ContestVo contestVo);
+	public void registcontestphoto(@Param("p_num") int p_num, @Param("p_index") int p_index, @Param("photo") String photo);
+	public List<ContestVo> getcontestfirst();
+	public List<ContestVo> getcontestlast(@Param("lastnum") int lastnum);
+	public List<ContestPhotoVo> getcontestphoto(@Param("p_num") int p_num);
+	public void deletecontestphoto(@Param("p_num") int p_num);
+	public void deletecontest(@Param("p_num") int p_num);
+}

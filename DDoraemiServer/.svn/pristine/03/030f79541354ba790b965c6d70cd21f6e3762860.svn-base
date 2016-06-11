@@ -1,0 +1,24 @@
+package com.myserver.skp.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.myserver.skp.mapper.QuestionReplyMapper;
+import com.myserver.skp.vo.QuestionReplyVo;
+
+@Service
+public class QuestionReplyDao {
+	@Resource
+	QuestionReplyMapper questionReplyMapper;
+	
+	public List<QuestionReplyVo> getSelectAllofQuestionReply(int q_id) {
+        return this.questionReplyMapper.selectAllofQuestionReply(q_id);
+    }
+	
+	public void insertQuestionReply(QuestionReplyVo questionReplyVo){
+		this.questionReplyMapper.insertQuestionReply(questionReplyVo);
+	}
+}

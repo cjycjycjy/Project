@@ -1,0 +1,38 @@
+package ddoraemi.detailediteminfo.model;
+
+public class Afterword {
+	String u_id;
+	String date;
+	String text;
+	
+	public Afterword(String u_id, String date, String text) {
+		// TODO Auto-generated constructor stub
+		this.u_id = u_id;
+		this.date = date;
+		this.text = text;
+	}
+
+	public String getU_id() {
+		return u_id;
+	}
+
+	public void setU_id(String u_id) {
+		this.u_id = u_id;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+}

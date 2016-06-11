@@ -1,0 +1,42 @@
+package ddoraemi.joining.view;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import ddoraemi.start.R;
+
+public class Fragment_JoinTwo extends Fragment implements OnClickListener{
+	Button next;
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_jointwo, null);
+		init(v);
+		return v;
+	}
+	public void init(View v)
+	{
+		next=(Button)v.findViewById(R.id.join_fragmenttwo_ButtonNext);
+		next.setOnClickListener(this);
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if(v.getId()==R.id.join_fragmenttwo_ButtonNext)
+		{
+			((JoinActivity)getActivity()).setTitleThree();
+			FragmentTransaction ft = getActivity().getSupportFragmentManager()
+					.beginTransaction();
+			ft.replace(R.id.joinFragment, new Fragment_JoinThree());
+			ft.setTransition(FragmentTransaction.TRANSIT_NONE);
+			ft.addToBackStack(null);
+			ft.commit();
+			
+		}
+	}
+
+}

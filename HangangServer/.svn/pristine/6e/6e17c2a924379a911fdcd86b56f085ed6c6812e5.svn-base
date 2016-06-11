@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.AdminMapper">
+
+	<resultMap type="com.fuck.hangang.vo.AdminBoardVo" id="adminboardMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_title" column="a_title" />
+		<result property="a_contents" column="a_contents" />
+		<result property="a_type" column="a_type" />
+		<result property="a_time" column="a_time" />
+		<result property="a_year" column="a_year" />
+		<result property="a_month" column="a_month" />
+		<result property="a_day" column="a_day" />
+		<result property="a_hour" column="a_hour" />
+		<result property="a_min" column="a_min" />
+		<collection property="photo"
+			ofType="com.fuck.hangang.vo.AdminBoardPhotoVo">
+			<result property="a_index" column="a_index" />
+			<result property="a_photo_url" column="a_photo_url" />
+		</collection>
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.AdminBoardPhotoVo" id="adminboardphotoMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_index" column="a_index" />
+		<result property="a_photo_url" column="a_photo_url" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.AdminBoardCommentVo" id="adminboardcommentMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_c_num" column="a_c_num" />
+		<result property="u_id" column="u_id" />
+		<result property="a_c_content" column="a_c_content" />
+		<result property="a_c_time" column="a_c_time" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_photo" column="u_photo" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.AdminBoardCommentOfCommentVo"
+		id="adminboardcommentofcommentMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_c_num" column="a_c_num" />
+		<result property="a_cc_num" column="a_cc_num" />
+		<result property="u_id" column="u_id" />
+		<result property="a_cc_content" column="a_cc_content" />
+		<result property="a_cc_time" column="a_cc_time" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_photo" column="u_photo" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.AdminRequestVo" id="adminrequestMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_r_num" column="a_r_num" />
+		<result property="t_num" column="t_num" />
+		<result property="contents" column="contents" />
+		<result property="t_name" column="t_name" />
+		<result property="t_logo" column="t_logo" />
+	</resultMap>
+
+
+	<insert id="registadminboard" parameterType="AdminBoardVo">
+		insert into admin_board values
+		(null, #{a_title}, #{a_contents},
+		#{a_type}, null, #{a_year}, #{a_month}, #{a_day}, #{a_hour}, #{a_min})
+		<selectKey keyProperty="a_num" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="registadminboardphoto">
+		insert into admin_board_photo values
+		(#{a_num},
+		#{a_index}, #{a_photo_url})
+	</insert>
+
+	<select id="getadminboardfirst" resultMap="adminboardMap">
+		select *
+		from
+		admin_board left outer join admin_board_photo on admin_board.a_num =
+		admin_board_photo.a_num
+		where a_type = #{flag}
+		order by a_time DESC
+		LIMIT 0, 20
+	</select>
+
+	<select id="getadminboardlast" resultMap="adminboardMap">
+		select *
+		from( select *
+		from admin_board
+		where admin_board.a_num <![CDATA[<]]>
+		#{lastnum} and a_type = #{flag}
+		order by a_time DESC LIMIT 0, 20)x1
+		left outer join admin_board_photo on
+		x1.a_num = admin_board_photo.a_num;
+	</select>
+
+	<select id="getadminboardfirstnoflag" resultMap="adminboardMap">
+		select *
+		from
+		admin_board left outer join admin_board_photo on admin_board.a_num =
+		admin_board_photo.a_num
+		order by a_time DESC LIMIT 0, 20
+	</select>
+
+	<select id="getadminboardlastnoflag" resultMap="adminboardMap">
+		select *
+		from( select *
+		from admin_board
+		where admin_board.a_num <![CDATA[<]]>
+		#{lastnum}
+		order by a_time DESC LIMIT 0, 20)x1
+		left outer join admin_board_photo on
+		x1.a_num = admin_board_photo.a_num;
+	</select>
+
+	<select id="admincommentcount" resultType="int">
+		select count(*)
+		from
+		admin_board_comment
+		where a_num = #{a_num}
+	</select>
+	
+	<select id="getadminphoto" resultMap="adminboardphotoMap">
+		select *
+		from admin_board_photo
+		where a_num = #{a_num}
+	</select>
+	
+	<delete id="deleteadminphoto">
+		delete from admin_board_photo where a_num = #{a_num}
+	</delete>
+	
+	<delete id="deleteadminboard">
+		delete from admin_board where a_num = #{a_num}
+	</delete>
+	
+	<delete id="deleteadminboard_allcomment">
+		delete from admin_board_comment where a_num = #{a_num}
+	</delete>
+	
+	<delete id="deleteadminboard_commentofallcomment">
+		delete from admin_board_comment_comment where a_num = #{a_num}
+	</delete>
+	
+	<delete id="deleteadminboard_allrequest">
+		delete from admin_board_request where a_num = #{a_num}
+	</delete>
+	
+	<select id="getadminboardcommentfirst" resultMap="adminboardcommentMap">
+		select admin_board_comment.*, user.u_permission, user.u_photo
+		from admin_board_comment natural join user
+		where admin_board_comment.a_num = #{a_num}
+		order by a_c_time DESC LIMIT 0, 20
+	</select>
+	
+	<select id="getadminboardcommentlast" resultMap="adminboardcommentMap">
+		select admin_board_comment.*, user.u_permission, user.u_photo
+		from admin_board_comment natural join user
+		where admin_board_comment.a_num = #{a_num} and a_c_num <![CDATA[<]]> #{lastnum}
+		order by a_c_time DESC LIMIT 0, 20
+	</select>
+	
+	<select id="getadminboardcommentofcommentcount" resultType="int">
+		select count(*)
+		from admin_board_comment_comment
+		where a_num = #{a_num} and a_c_num = #{a_c_num}
+	</select>
+	
+	<insert id="registadminboardcomment">
+		insert into admin_board_comment values (#{a_num}, null, #{u_id}, #{a_c_content}, null)
+	</insert>
+	
+	<update id="updateadminboardcomment">
+		update admin_board_comment set a_c_content = #{a_c_content} where a_num = #{a_num} and a_c_num = #{a_c_num}
+	</update>
+	
+	<delete id="deleteadminboardcomment">
+		delete from admin_board_comment where a_num = #{a_num} and a_c_num = #{a_c_num}
+	</delete>
+	
+	<delete id="deleteadminboardcommentofallcomment">
+		delete from admin_board_comment_comment where a_num = #{a_num} and a_c_num = #{a_c_num}
+	</delete>
+	
+	<select id="getadminboardcommentofcommentfirst" resultMap="adminboardcommentofcommentMap">
+		select admin_board_comment_comment.*, user.u_permission, user.u_photo
+		from admin_board_comment_comment natural join user
+		where a_num = #{a_num} and a_c_num = #{a_c_num}
+		order by a_cc_time DESC LIMIT 0, 20 
+	</select>
+	
+	<select id="getadminboardcommentofcommentlast" resultMap="adminboardcommentofcommentMap">
+		select admin_board_comment_comment.*, user.u_permission, user.u_photo
+		from admin_board_comment_comment natural join user
+		where a_num = #{a_num} and a_c_num = #{a_c_num} and a_cc_num <![CDATA[<]]> #{lastnum}
+		order by a_cc_time DESC LIMIT 0, 20 
+	</select>
+
+	<insert id="registadminboardcommentofcomment">
+		insert into admin_board_comment_comment values (#{a_num}, #{a_c_num}, null, #{u_id}, #{a_cc_content}, null)
+	</insert>
+	
+	<update id="updateadminboardcommentofcomment">
+		update admin_board_comment_comment set a_cc_content = #{a_cc_content}
+		where a_num = #{a_num} and a_c_num = #{a_c_num} and a_cc_num = #{a_cc_num}
+	</update>
+	
+	<delete id="deleteadminboardcommentofcomment">
+		delete from admin_board_comment_comment where a_num = #{a_num} and a_c_num = #{a_c_num} and a_cc_num = #{a_cc_num}
+	</delete>
+	
+	<insert id="registadminboardrequest">
+		insert into admin_board_request values (#{a_num}, null, #{t_num}, #{contents})
+	</insert>
+	
+	<select id="getadminboardrequest" resultMap="adminrequestMap">
+		select admin_board_request.*, t_name, t_logo
+		from admin_board_request natural join team
+		where a_num = #{a_num}
+	</select>
+	
+	<delete id="deleteadminboardrequest">
+		delete from admin_board_request where a_num = #{a_num} and t_num = #{t_num}
+	</delete>
+
+</mapper>

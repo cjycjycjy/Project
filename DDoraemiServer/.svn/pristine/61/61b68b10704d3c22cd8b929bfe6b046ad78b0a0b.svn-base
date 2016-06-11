@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.QuestionMapper">
+
+	<resultMap id="questionMap" type="com.myserver.skp.vo.QuestiondVo">
+		<id property="q_id" column="q_id" />
+		<result property="u_id" column="u_id" />
+		<result property="g_id" column="g_id" />
+		<result property="q_content" column="q_content" />
+		<result property="q_grade" column="q_grade" />
+		<result property="q_year" column="q_year" />
+		<result property="q_month" column="q_month" />
+		<result property="q_day" column="q_day" />
+		<result property="q_r_num" column="q_r_num" />
+
+	</resultMap>
+
+	<select id="selectAllofQuestion" resultMap="questionMap">
+		SELECT * FROM question WHERE g_id = #{g_id}
+	</select>
+	
+	
+
+	<update id="updateQuestionReplyNum">
+		update question set
+		q_r_num = q_r_num+1
+		where q_id = #{q_id}
+	</update>
+
+</mapper>

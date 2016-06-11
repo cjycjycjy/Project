@@ -1,0 +1,8 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+import com.google.gson.JsonArray;
+
+public interface OnDetailedGroupInfo_FinishedListener {
+	public void onDataGetSuccess(JsonArray data);
+	public void onRenewDataGetSuccess(JsonArray data);
+}

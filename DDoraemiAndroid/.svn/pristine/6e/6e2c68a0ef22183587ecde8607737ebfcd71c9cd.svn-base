@@ -1,0 +1,5 @@
+package ddoraemi.home;
+
+public interface HomeInteractorInterface {
+
+}

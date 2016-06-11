@@ -1,0 +1,62 @@
+package ddoraemi.detailediteminfo.presenter;
+
+import java.util.ArrayList;
+
+import com.google.gson.JsonArray;
+
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.detailediteminfo.model.DetailedItemInfo_Interactor;
+import ddoraemi.detailediteminfo.model.DetailedItemInfo_Interactor_Interface;
+import ddoraemi.detailediteminfo.view.DetailedItemInfo_View;
+
+public class DetailedItemInfo_Presenter implements DetailedItemInfo_Presenter_Interface,
+OnDetailedItemInfo_FinishedListener
+{
+
+	DetailedItemInfo_View view;
+	DetailedItemInfo_Interactor_Interface interactor;
+	ArrayList<Afterword> afterword;
+	Afterword a;
+	
+	public DetailedItemInfo_Presenter(DetailedItemInfo_View view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		interactor = new DetailedItemInfo_Interactor();
+		afterword = new ArrayList<Afterword>();
+	}
+	
+	@Override
+	public void createGroup() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showMap() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void validatecredential(String event, int p_id) {
+		// TODO Auto-generated method stub
+		interactor.getData(view, this, p_id);
+		////////////////////////////////////////////////////////////
+		a = new Afterword("ididid", "date", "뭘바 씨발새끼야");
+		afterword.add(a);
+		view.setProgramList(afterword);
+		/////////////////////////////////////////////////////////////
+		
+	}
+
+	@Override
+	public void OnDataGetSuccess(JsonArray data) {
+		// TODO Auto-generated method stub
+		afterword.clear();
+		// 통신해서 받은 JsonArray(후기) 를 afterword arraylist에 집어넣고
+		//view.setprogramlist(afterword);
+		
+	
+	}
+
+}

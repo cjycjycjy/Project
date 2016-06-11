@@ -1,0 +1,86 @@
+package com.myserver.skp.vo;
+
+public class GatheringVo {
+	int g_id;
+	int p_id;
+	String g_name;
+	int g_persons;
+	String g_date;
+	String g_due;
+	int g_min_persons;
+	String g_info;
+	String p_name;
+	String p_addr;
+	boolean is_available;
+	
+	
+	public int getP_id() {
+		return p_id;
+	}
+	public void setP_id(int p_id) {
+		this.p_id = p_id;
+	}
+	public int getG_id() {
+		return g_id;
+	}
+	public void setG_id(int g_id) {
+		this.g_id = g_id;
+	}
+	public String getG_name() {
+		return g_name;
+	}
+	public void setG_name(String g_name) {
+		this.g_name = g_name;
+	}
+	
+	public int getG_persons() {
+		return g_persons;
+	}
+	public void setG_persons(int g_persons) {
+		this.g_persons = g_persons;
+	}
+	public String getG_date() {
+		return g_date;
+	}
+	public void setG_date(String g_date) {
+		this.g_date = g_date;
+	}
+	public String getG_due() {
+		return g_due;
+	}
+	public void setG_due(String g_due) {
+		this.g_due = g_due;
+	}
+	public int getG_min_persons() {
+		return g_min_persons;
+	}
+	public void setG_min_persons(int g_min_persons) {
+		this.g_min_persons = g_min_persons;
+	}
+	public String getG_info() {
+		return g_info;
+	}
+	public void setG_info(String g_info) {
+		this.g_info = g_info;
+	}
+	
+	public String getP_name() {
+		return p_name;
+	}
+	public void setP_name(String p_name) {
+		this.p_name = p_name;
+	}
+	public String getP_addr() {
+		return p_addr;
+	}
+	public void setP_addr(String p_addr) {
+		this.p_addr = p_addr;
+	}
+	public boolean isIs_available() {
+		return is_available;
+	}
+	public void setIs_available(boolean is_available) {
+		this.is_available = is_available;
+	}
+	
+}

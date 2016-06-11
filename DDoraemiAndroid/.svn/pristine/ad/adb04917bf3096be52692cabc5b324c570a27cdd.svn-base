@@ -1,0 +1,5 @@
+package ddoraemi.detailediteminfo.presenter;
+
+public interface OnDetailedItemInfo_MainView_FinishedListener {
+	public void getDataSuccess();
+}

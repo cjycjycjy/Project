@@ -1,0 +1,6 @@
+package ddoraemi.home.presenter;
+
+public interface OnHome_RecommendFinishedListener {
+	public void onGetDataSuccess();
+	
+}

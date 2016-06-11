@@ -1,0 +1,10 @@
+package ddoraemi.join;
+
+public interface JoinViewInterface {
+	public void showProgress();
+	public void hideProgress();
+	public void setEmptyError();
+	public void setExistError();
+	public void setFailedError();
+	public void navigateToNext();
+}

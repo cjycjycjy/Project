@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#50000000" >
+
+    <TextView
+        android:id="@+id/tv_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dip"
+        android:text="로그아웃 하시겠습니까?"
+        android:textColor="#FFFFFFFF"
+        android:textSize="15dip" />
+
+    <RelativeLayout
+        android:id="@+id/rl_line_row"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_below="@+id/tv_logout"
+        android:background="#FFFFFF" >
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_line_row" >
+
+        <Button
+            android:id="@+id/btn_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignRight="@+id/rl_line_col"
+            android:background="@drawable/button_custom_dialog"
+            android:text="확인"
+            android:textColor="#FFFFFF"
+            android:textSize="15dip" />
+
+        <RelativeLayout
+            android:id="@+id/rl_line_col"
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/btn_out"
+            android:layout_centerHorizontal="true"
+            android:background="#FFFFFF" >
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_out_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignLeft="@+id/rl_line_col"
+            android:background="@drawable/button_custom_dialog"
+            android:text="취소"
+            android:textColor="#FFFFFF"
+            android:textSize="15dip" />
+    </RelativeLayout>
+
+</RelativeLayout>

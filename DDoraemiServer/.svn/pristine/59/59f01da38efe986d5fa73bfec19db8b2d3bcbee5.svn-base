@@ -1,0 +1,19 @@
+package com.myserver.skp.mapper;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.myserver.skp.vo.GatheringVo;
+
+@Repository
+public interface GatheringMapper {
+	public List<HashMap<String, String>> selectAllofGathering(@Param("p_id") int p_id);
+	public List<HashMap<String, String>> selectIsAvailable();
+	public void insertGathering(GatheringVo gatheringVo);
+	public void insertJoinGathering(@Param("g_id") int g_id, @Param("u_id") String u_id);
+	public void updateJonGatheringNum(@Param("g_id") int g_id);
+	public List<HashMap<String, String>> selectJoinGathering(@Param("u_id") String u_id);
+}

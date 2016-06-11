@@ -1,0 +1,17 @@
+package ddoraemi.myinfopage.model;
+
+import com.google.gson.JsonObject;
+
+import android.app.Activity;
+import ddoraemi.myinfopage.presenter.OnWrite_AfterwordFinishedListner;
+
+public class Write_AfterwordInteractor implements Write_AfterwordInteractorInterface{
+
+	@Override
+	public void saveAfterword(Activity context,
+			OnWrite_AfterwordFinishedListner listener ,JsonObject info) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

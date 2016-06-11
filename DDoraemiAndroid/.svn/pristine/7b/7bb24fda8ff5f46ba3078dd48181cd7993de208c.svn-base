@@ -1,0 +1,124 @@
+package ddoraemi.detailedgroupinfo.model;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.v4.app.FragmentActivity;
+
+import com.google.gson.JsonArray;
+
+import ddoraemi.detailedgroupinfo.presenter.OnDetailedGroupInfo_FinishedListener;
+import ddoraemi.retrofit.Retrofit;
+
+public class DetailedGroupInfo_Interactor implements DetailedGroupInfo_Interactor_Interface{
+	@Override
+	public void getData(final FragmentActivity context,
+			final OnDetailedGroupInfo_FinishedListener listener, final int g_id) {
+		// TODO Auto-generated method stub
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					RestAdapter restAdapter = new RestAdapter.Builder()
+							.setEndpoint(Retrofit.ROOT) // call your base url
+							.build();
+					Retrofit retrofit = restAdapter.create(Retrofit.class);		
+					retrofit.getQuestion(g_id,new Callback<JsonArray>() {
+						@Override
+						public void success(JsonArray result
+								,Response response) {
+							if (context != null) {
+								listener.onDataGetSuccess(result);
+							}
+						}
+
+						@Override
+						public void failure(RetrofitError retrofitError) {
+							new AlertDialog.Builder(context)
+									.setMessage("데이터를 받아오는데 실패하였습니다.")
+									.setPositiveButton(
+											"확인",
+											new DialogInterface.OnClickListener() {
+												@Override
+												public void onClick(
+														DialogInterface dia,
+														int which) {
+													dia.dismiss();
+												}
+											}).show();
+						}
+					});
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					new AlertDialog.Builder(context)
+							.setMessage("데이터를 받아오는데 실패하였습니다.")
+							.setPositiveButton("확인",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dia, int which) {
+											dia.dismiss();
+										}
+									}).show();
+				}
+			}
+		}).start();
+	}
+	
+	
+	public void renewData(final FragmentActivity context,
+			final OnDetailedGroupInfo_FinishedListener listener, final int g_id) {
+		// TODO Auto-generated method stub
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					RestAdapter restAdapter = new RestAdapter.Builder()
+							.setEndpoint(Retrofit.ROOT) // call your base url
+							.build();
+					Retrofit retrofit = restAdapter.create(Retrofit.class);		
+					retrofit.getQuestion(g_id,new Callback<JsonArray>() {
+						@Override
+						public void success(JsonArray result
+								,Response response) {
+							if (context != null) {
+								listener.onRenewDataGetSuccess(result);
+							}
+						}
+
+						@Override
+						public void failure(RetrofitError retrofitError) {
+							new AlertDialog.Builder(context)
+									.setMessage("데이터를 받아오는데 실패하였습니다.")
+									.setPositiveButton(
+											"확인",
+											new DialogInterface.OnClickListener() {
+												@Override
+												public void onClick(
+														DialogInterface dia,
+														int which) {
+													dia.dismiss();
+												}
+											}).show();
+						}
+					});
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					new AlertDialog.Builder(context)
+							.setMessage("데이터를 받아오는데 실패하였습니다.")
+							.setPositiveButton("확인",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dia, int which) {
+											dia.dismiss();
+										}
+									}).show();
+				}
+			}
+		}).start();
+	}
+}

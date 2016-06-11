@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FFCC00" >
+
+        <ImageView
+            android:id="@+id/btn_left_menu"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/normal_horizontal_margin"
+            android:scaleType="fitXY"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/tv_titlebars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:text="모임 신청"
+            android:textColor="#ffffff"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" >
+
+        <TextView
+            android:id="@+id/tv_programname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="74dip"
+            android:text="체험 이름"
+            android:textColor="#474747"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_programaddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_programname"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="21dip"
+            android:text="체험 주소주소주소주소"
+            android:textColor="#474747"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_programaddress"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dip"
+            android:text="날짜"
+            android:textColor="#474747"
+            android:textSize="17sp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_datebox"
+            android:layout_width="209dip"
+            android:layout_height="57dip"
+            android:layout_below="@+id/tv_date"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dip"
+            android:background="@drawable/date_box" >
+
+            <TextView
+                android:id="@+id/tv_date_inbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="14dip"
+                android:text="2000.12.12"
+                android:textColor="#474747"
+                android:textSize="14sp" />
+             <TextView
+                android:id="@+id/tv_time_inbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/tv_date_inbox"
+                android:layout_marginTop="5dip"
+                android:text="오후1시-오후3시"
+                android:textColor="#474747"
+                android:textSize="14sp" />
+        </RelativeLayout>
+        
+         <TextView
+                android:id="@+id/tv_persons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/rl_datebox"
+                android:layout_marginTop="34dip"
+                android:text="참여 인원"
+                android:textColor="#474747"
+                android:textSize="17sp" />
+         
+         <TextView
+                android:id="@+id/tv_selectpersons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/tv_persons"
+                android:layout_marginTop="9dip"
+                android:text="프로그램에 참여하는 인원을 선택해주세요."
+                android:textColor="#7e7e7e"
+                android:textSize="11sp" />
+         
+         <Button
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:layout_alignParentBottom="true"
+             android:background="@drawable/btn_bottom"
+             android:text="모임을 신청합니다."
+             android:textColor="#FFFFFF">
+            
+         </Button>
+    </RelativeLayout>
+    
+    
+
+</LinearLayout>

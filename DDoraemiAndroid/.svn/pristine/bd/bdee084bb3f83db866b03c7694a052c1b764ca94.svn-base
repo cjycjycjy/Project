@@ -1,0 +1,7 @@
+package ddoraemi.join;
+
+public interface JoinInteractorInterface {
+	public void join(String address, String nickname, String serverIp);
+
+	
+}

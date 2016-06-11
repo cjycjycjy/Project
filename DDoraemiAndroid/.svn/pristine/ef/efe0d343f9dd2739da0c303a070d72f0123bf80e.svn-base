@@ -1,0 +1,15 @@
+package ddoraemi.programlist.model;
+
+import android.support.v4.app.Fragment;
+import ddoraemi.programlist.presenter.OnProgramlist_type_FinishedListener;
+
+public class Programlist_type_Interactor implements Programlist_type_Interactor_Interface{
+
+	@Override
+	public void getData(final Fragment context,
+			final OnProgramlist_type_FinishedListener listener,final String event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

@@ -1,0 +1,41 @@
+package com.fuck.hangang.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.fuck.hangang.mapper.TeamListMapper;
+import com.fuck.hangang.vo.CheerfulVo;
+import com.fuck.hangang.vo.ScheduleVo;
+import com.fuck.hangang.vo.TeamGalleryVo;
+import com.fuck.hangang.vo.TeamVo;
+
+@Service
+public class TeamListDao {
+	@Resource
+	private TeamListMapper mapper;
+	
+	public List<TeamVo> getteaminfo(){
+		return this.mapper.getteaminfo();
+	}
+	
+	public List<ScheduleVo> getteamschedule(int t_num, int year, int month, int nextmonth){
+		return this.mapper.getteamschedule(t_num, year, month, nextmonth);
+	}
+	
+	public TeamVo getteamdata(int t_num){
+		return this.mapper.getteamdata(t_num);
+	}
+	
+	public List<TeamGalleryVo> getteamgallery(int t_num){
+		return this.mapper.getteamgallery(t_num);
+	}
+	public List<CheerfulVo> getteamcheerful(int t_num){
+		return this.mapper.getteamcheerful(t_num);
+	}
+	public int getcheerfulcommentnum(int c_num){
+		return this.mapper.getcheerfulcommentnum(c_num);
+	}
+}

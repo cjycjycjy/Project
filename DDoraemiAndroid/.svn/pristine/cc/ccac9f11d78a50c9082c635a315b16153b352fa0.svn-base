@@ -1,0 +1,13 @@
+package ddoraemi.home.presenter;
+
+import android.content.Intent;
+
+public interface Home_MainViewPresenterInterface {
+	public void validateCredentials(String event, Intent intent);
+	public void goToMyPage();
+	public void goToHome();
+	public void goToShowMenu();
+	public void goToChallenge();
+	public void goToLocationChallenge();
+	public void goToApplyAdmin();
+}

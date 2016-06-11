@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fuck.hangang.mapper.QnaMapper">
+
+	<resultMap id="qnaMap" type="com.fuck.hangang.vo.QnaVo">
+		<id property="u_id" column="u_id" />
+		<result property="q_num" column="q_num" />
+		<result property="title" column="title" />
+		<result property="contents" column="contents" />
+		<result property="q_time" column="q_time" />
+	</resultMap>
+
+
+	<resultMap id="qnareplyMap" type="com.fuck.hangang.vo.QnareplyVo">
+		<id property="q_num" column="q_num" />
+		<result property="q_r_num" column="q_r_num" />
+		<result property="q_r_time" column="q_r_time" />
+		<result property="u_id" column="u_id" />
+		<result property="content" column="content" />
+	</resultMap>
+
+
+
+	<select id="getqna" resultMap="qnaMap">
+		select * from qna order by q_time
+		DESC
+	</select>
+
+
+
+
+</mapper>

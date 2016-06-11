@@ -1,0 +1,64 @@
+package ddoraemi.dialog;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+import ddoraemi.start.R;
+
+public class Adapter_Dialog_AddressGrid extends BaseAdapter {
+
+	private Context mContext;
+	private LayoutInflater infalter;
+	private ArrayList<String> data;
+
+	private boolean isActionMultiplePick;
+	public void setData(ArrayList<String> data)
+	{
+		this.data=data;
+	}
+	public Adapter_Dialog_AddressGrid(Context c, ArrayList<String> data) {
+		infalter = (LayoutInflater) c
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.data = data;
+		mContext = c;
+		// clearCache();
+	}
+
+	@Override
+	public int getCount() {
+		return data.size();
+	}
+
+	@Override
+	public String getItem(int position) {
+		return data.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+
+		if (convertView == null) {
+			convertView = infalter.inflate(R.layout.item_dialogaddress, null);
+		}
+		try {
+			String name=data.get(position);
+			TextView cityname=(TextView)convertView.findViewById(R.id.item_addressname);
+			cityname.setText(name);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return convertView;
+	}
+
+}

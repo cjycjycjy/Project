@@ -1,0 +1,7 @@
+package ddoraemi.detailediteminfo.view;
+
+import ddoraemi.detailediteminfo.model.Afterword;
+
+public interface DetailedItemInfo_AfterwordView_Interface {
+	public void goToDetailedAfterword(Afterword item, int position);
+}

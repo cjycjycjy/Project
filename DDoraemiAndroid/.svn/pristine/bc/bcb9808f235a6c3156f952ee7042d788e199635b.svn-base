@@ -1,0 +1,43 @@
+package ddoraemi.detailediteminfo.view;
+
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.androidquery.AQuery;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.detailediteminfo.model.ChallengePicture;
+import ddoraemi.start.R;
+import ddoraemi.volley.VolleySingleton;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ImageView;
+
+public class DetailedItemInfo_PopupImage_View extends Activity{
+
+	AppController app;
+	NetworkImageView avatar;
+	RequestQueue mRequestQueue;
+	ImageLoader mImageLoader;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_image_popup);
+		app = (AppController)getApplicationContext();
+		Intent intent = getIntent();
+		ChallengePicture pic = (ChallengePicture)intent.getSerializableExtra("picture");
+
+		AQuery aq = new AQuery(this);
+		mRequestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+		mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
+		avatar = (NetworkImageView)findViewById(R.id.iv_clickedphoto);
+		avatar.setImageUrl(app.getServerIp()+"/afterword_photo/"+pic.getPhoto_url(),mImageLoader);
+
+		//		aq.id(R.id.iv_clickphoto).image(app.getServerIp()+"/afterword_photo/"+pic.getPhoto_url(), 
+		//				true, true, 200, 0, null, 0, 0.75f);
+
+	}
+}

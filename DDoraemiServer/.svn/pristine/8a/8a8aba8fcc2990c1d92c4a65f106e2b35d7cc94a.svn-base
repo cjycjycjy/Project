@@ -1,0 +1,24 @@
+package com.myserver.skp.mapper;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.myserver.skp.vo.AfterwordVo;
+
+@Repository
+public interface AfterwordMapper {
+	public <T> List<HashMap<String, T>> selectAllofAfterword(@Param("p_id") int p_id);
+	public void updateAfterwordReplyNumAdd(@Param("a_id") int a_id);
+	public void updateAfterwordReplyNumSub(@Param("a_id") int a_id);
+	public void insertAfterword(AfterwordVo afterwordVo);
+	public List<HashMap<String, String>> selectAfterwordPhotoUrl(@Param("a_id") int a_id);
+	public void insertAfterwordPhoto(@Param("a_id") int a_id, @Param("a_photo_url") String a_photo_url);
+	public float selectAVGofProgram(@Param("g_id") int g_id);
+	public void updateAfterword(AfterwordVo afterwordVo);
+	public void deleteAfterword(@Param("a_id") int a_id);
+	public void deleteAfterwordPhoto(@Param("a_id") int a_id);
+	public void updateAfterwordPhoto(@Param("a_id") int a_id, @Param("a_photo_url") String a_photo_url);
+}

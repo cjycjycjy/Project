@@ -1,0 +1,14 @@
+package ddoraemi.appcontroller;
+
+import android.app.Application;
+
+public class AppController extends Application{
+	private String ServerIp;
+	
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		super.onCreate();
+		
+	}
+}

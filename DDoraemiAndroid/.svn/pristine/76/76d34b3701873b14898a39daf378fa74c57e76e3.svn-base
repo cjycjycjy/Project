@@ -1,0 +1,14 @@
+package ddoraemi.retrofit;
+
+import retrofit.Callback;
+import retrofit.http.Body;
+import retrofit.http.POST;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+public interface Retrofit {
+		public static final String ROOT = "http://203.252.166.151:8080/skp";
+		@POST("/getprogram.skp")
+	    public void login(Callback<JsonArray> callback);
+}

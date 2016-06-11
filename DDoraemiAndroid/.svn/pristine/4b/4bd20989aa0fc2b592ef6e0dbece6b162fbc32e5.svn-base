@@ -1,0 +1,250 @@
+package ddoraemi.start;
+
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.joining.view.FindPasswordAcitivity;
+import ddoraemi.joining.view.JoinActivity;
+import ddoraemi.retrofit.Retrofit;
+
+public class LoginActivity extends Activity implements OnClickListener {
+	Button bt_join, bt_login, bt_kakaojoin;
+	TextView find_passwd;
+	EditText id, passwd;
+	AppController app;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		app = (AppController) getApplicationContext();
+
+		SharedPreferences setting = getSharedPreferences("setting",
+				MODE_PRIVATE);
+		if (setting.getBoolean("auto_login", false)) {
+			String u_id = setting.getString("u_id", "");
+			String password = setting.getString("password", "");
+			requestLogin(u_id, password);
+		} else {
+			setContentView(R.layout.activity_login);
+			init();
+		}
+
+	}
+
+	public void init() {
+		bt_login = (Button) findViewById(R.id.login_activity_LoginButton);
+		bt_join = (Button) findViewById(R.id.login_activity_JoinButton);
+		bt_kakaojoin = (Button) findViewById(R.id.login_activity_KAKAOJoinButton);
+		find_passwd = (TextView) findViewById(R.id.login_activity_FindPasswd);
+		id = (EditText) findViewById(R.id.login_activity_IDEditText);
+		passwd = (EditText) findViewById(R.id.login_activity_PasswordEditText);
+		bt_login.setOnClickListener(this);
+		bt_join.setOnClickListener(this);
+		bt_kakaojoin.setOnClickListener(this);
+		find_passwd.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.login_activity_LoginButton)// 占싸깍옙占쏙옙 占쏙옙占쏙옙占쏙옙
+		{
+			String u_id = id.getText().toString();
+			String password = passwd.getText().toString();
+			requestLogin(u_id, password);
+		} else if (v.getId() == R.id.login_activity_JoinButton) {
+			Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
+			startActivity(intent);
+		} else if (v.getId() == R.id.login_activity_KAKAOJoinButton) {
+			new Dialog_BaseDialog(this, "서비스 준비 중입니다.").show();
+		} else if (v.getId() == R.id.login_activity_FindPasswd) {
+			Intent intent = new Intent(LoginActivity.this,
+					FindPasswordAcitivity.class);
+			startActivity(intent);
+		} else
+			;
+
+	}
+
+	public void requestLogin(final String u_id, final String password) {
+
+		final ProgressDialog progressdialog = new ProgressDialog(this);
+		progressdialog.setMessage(getString(R.string.loading));
+		progressdialog.setIndeterminate(true);
+		progressdialog.setCancelable(false);
+		progressdialog.show();
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					RestAdapter restAdapter = new RestAdapter.Builder()
+							.setEndpoint(Retrofit.ROOT) // call your base url
+							.build();
+					Retrofit retofit = restAdapter.create(Retrofit.class);
+					retofit.requestLogin(u_id, password,
+							new Callback<JsonObject>() {
+								@Override
+								public void success(JsonObject data,
+										Response response) {
+									progressdialog.dismiss();
+									String result = data.get("result")
+											.getAsString();
+
+									if (result.equals("200")) {
+										JsonObject userobj = data.get("user")
+												.getAsJsonObject();
+
+										String u_id = userobj.get("u_id")
+												.getAsString();
+										int permission = userobj.get(
+												"permission").getAsInt();
+										String password = userobj.get(
+												"password").getAsString();
+										String u_phone = userobj.get("u_phone")
+												.getAsString();
+										char parent_gender = userobj.get(
+												"parent_gender")
+												.getAsCharacter();
+										int parent_age = userobj.get(
+												"parent_age").getAsInt();
+										String u_addr1 = userobj
+												.get("u_addr_1").getAsString();
+										String u_addr2 = userobj
+												.get("u_addr_2").getAsString();
+										String u_addr3 = userobj
+												.get("u_addr_3").getAsString();
+										char u_gender = userobj.get("u_gender")
+												.getAsCharacter();
+										int u_age = userobj.get("u_age")
+												.getAsInt();
+										String u_photo_url = "empty";
+										if (!userobj.get("u_photo_url")
+												.isJsonNull()) {
+											u_photo_url = userobj.get(
+													"u_photo_url")
+													.getAsString();
+										}
+										JsonArray fp_arr = userobj.get(
+												"favorit_program")
+												.getAsJsonArray();
+										ArrayList<String> favorit_program;
+										// String u_photo_url =
+										// userobj.get("u_photo_url").getAsString();
+										favorit_program = new ArrayList<>();
+										if (!fp_arr.isJsonNull()) {
+											for (int i = 0; i < fp_arr.size(); i++) {
+												JsonObject tmp = (JsonObject) fp_arr
+														.get(i);
+												String e_name = tmp.get(
+														"e_name").getAsString();
+												favorit_program.add(e_name);
+											}
+										}
+										JsonArray bm = userobj.get("bookmark")
+												.getAsJsonArray();
+										ArrayList<Integer> bookmark;
+										bookmark = new ArrayList<>();
+										if (!bm.isJsonNull()) {
+											for (int j = 0; j < bm.size(); j++) {
+												JsonObject tmp = (JsonObject) bm
+														.get(j);
+												int p_id = tmp.get("p_id")
+														.getAsInt();
+												bookmark.add(p_id);
+											}
+										}
+
+										JsonArray joingrouparr = userobj.get(
+												"g_id").getAsJsonArray();
+										ArrayList<Integer> participatedgroup;
+										participatedgroup = new ArrayList<>();
+										if (!joingrouparr.isJsonNull()) {
+											for (int k = 0; k < joingrouparr
+													.size(); k++) {
+												JsonObject tmp = (JsonObject) joingrouparr
+														.get(k);
+												int g_id = tmp.get("g_id")
+														.getAsInt();
+												participatedgroup.add(g_id);
+											}
+										}
+										User user = new User(u_id, password,
+												u_phone, parent_gender,
+												parent_age, u_addr1, u_addr2,
+												u_addr3, u_gender, u_age,
+												favorit_program, bookmark,
+												u_photo_url, participatedgroup,
+												permission);
+										app.setUser(user);
+
+										SharedPreferences setting = getSharedPreferences(
+												"setting", MODE_PRIVATE);
+										SharedPreferences.Editor editor = setting
+												.edit();
+										editor.putString("u_id", u_id);
+										editor.putString("password", password);
+										editor.putBoolean("auto_login", true);
+										editor.commit();
+										app.setId(u_id);
+										Intent intent = new Intent(
+												LoginActivity.this,
+												SplashActivity.class);
+										LoginActivity.this
+												.startActivity(intent);
+										LoginActivity.this.finish();
+									} else {
+										Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+												LoginActivity.this,
+												"로그인에 실패하였습니디.\n아이디와 비밀번호를 확인해주세요.");
+										dialog.show();
+										setContentView(R.layout.activity_login);
+										init();
+									}
+
+								}
+
+								@Override
+								public void failure(RetrofitError retrofitError) {
+									progressdialog.dismiss();
+
+									Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+											LoginActivity.this,
+											getString(R.string.failed_dialog));
+									dialog.show();
+
+								}
+							});
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					progressdialog.dismiss();
+					if (LoginActivity.this != null) {
+
+						Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+								LoginActivity.this,
+								getString(R.string.failed_dialog));
+						dialog.show();
+
+					}
+				}
+			}
+		}).start();
+	}
+}

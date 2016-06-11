@@ -1,0 +1,65 @@
+package ddoraemi.programlist.view;
+
+import java.util.ArrayList;
+
+import ddoraemi.detailediteminfo.view.DetailedItemInfo_View;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.home.view.Home_MainViewChallengeListAdapter;
+import ddoraemi.start.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
+
+public class Programlist_type_list_view extends Activity implements Programlist_type_list_view_Interface,
+OnItemClickListener{
+
+	ListView listview;
+	ArrayList<ProgramData> list;
+	Home_MainViewChallengeListAdapter adapter;
+	
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_programlist_type);
+		init();
+	}
+	public void init(){
+		this.list = new ArrayList();
+		Intent intent = getIntent();
+		this.list = (ArrayList<ProgramData>) intent.getSerializableExtra("list");
+		
+		listview=(ListView)findViewById(R.id.lv_programlist_type);
+		adapter=new Home_MainViewChallengeListAdapter(this, R.layout.item_challengelist, list);
+		listview.setAdapter(adapter);
+		listview.setOnItemClickListener(this);
+	}
+
+	@Override
+	public void goToDetailedInfo(ProgramData item) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(this, DetailedItemInfo_View.class);
+		intent.putExtra("item",item);
+		startActivityForResult(intent, 50);
+	}
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		goToDetailedInfo((ProgramData)parent.getItemAtPosition(position));
+		
+	}
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode == 100){
+			this.setResult(resultCode, data);
+		}
+	}
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonjin.sherlockphones.mapper.PhotoMapper">
+
+	<resultMap id="photoMap" type="com.wonjin.sherlockphones.vo.PhotoVo">
+		<id property="p_photo_url" column="p_photo_url" />
+		<result property="p_u_phonenum" column="p_u_phonenum" />
+		<result property="p_time" column="p_time" />
+	</resultMap>
+	
+	<insert id="registerPhoto">
+		insert into photo values(#{p_u_phonenum}, #{p_photo_url}, now())
+	</insert>
+	
+	<select id="selectPhoto"	resultMap="photoMap">
+		SELECT *
+		FROM photo
+		WHERE p_u_phonenum=#{p_u_phonenum}
+	</select>
+	
+</mapper>

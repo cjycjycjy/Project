@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:clickable="true" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <TextView
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:text="이 단계를 지나면\n더 정교한 추천에 가까워질 수 있습니다."
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold" >
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="71dp"
+            android:text="귀하의 지역을 선택해주세요."
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold" >
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/join_fragmentthree_addresslayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="19dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/join_fragmentthree_city"
+                android:layout_width="75dp"
+                android:layout_height="21dp"
+                android:background="@drawable/addressbox"
+                android:gravity="center"
+                android:text="시/도"
+                android:textColor="#868585"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="11dp"
+                android:layout_height="14dp"
+                android:layout_marginLeft="3dp"
+                android:src="@drawable/addressnext" />
+
+            <TextView
+                android:id="@+id/join_fragmentthree_country"
+                android:layout_width="75dp"
+                android:layout_height="21dp"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/addressbox"
+                android:gravity="center"
+                android:text="구/군"
+                android:textColor="#868585"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="11dp"
+                android:layout_height="14dp"
+                android:layout_marginLeft="3dp"
+                android:src="@drawable/addressnext" />
+
+            <TextView
+                android:id="@+id/join_fragmentthree_town"
+                android:layout_width="75dp"
+                android:layout_height="21dp"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/addressbox"
+                android:gravity="center"
+                android:text="읍/면/동"
+                android:textColor="#868585"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="선호 체험 유형을 1개 이상 선택해주세요."
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold" >
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/join_fragmentthree_tranditionalfood"
+                        android:layout_width="49dp"
+                        android:layout_height="49dp"
+                        android:background="@drawable/selector_tranditionalfood"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="전통음식체험"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/join_fragmentthree_planting"
+                        android:layout_width="49dp"
+                        android:layout_height="49dp"
+                        android:background="@drawable/selector_planting"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="경작체험"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/join_fragmentthree_harvest"
+                        android:layout_width="49dp"
+                        android:layout_height="49dp"
+                        android:background="@drawable/selector_harvest"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="수확체험"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/join_fragmentthree_tranditionalplay"
+                        android:layout_width="49dp"
+                        android:layout_height="49dp"
+                        android:background="@drawable/selector_tranditionalplay"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="전통놀이체험"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/join_fragmentthree_cooking"
+                        android:layout_width="49dp"
+                        android:layout_height="49dp"
+                        android:background="@drawable/selector_cooking"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="요리체험"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/join_fragmentthree_craft"
+                        android:layout_width="49dp"
+                        android:layout_height="49dp"
+                        android:background="@drawable/selector_craft"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="공예체험"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/join_fragmentthree_culture"
+                        android:layout_width="49dp"
+                        android:layout_height="49dp"
+                        android:background="@drawable/selector_culture"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="문화체험"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/join_fragmentthree_nature"
+                        android:layout_width="49dp"
+                        android:layout_height="49dp"
+                        android:background="@drawable/selector_nature"
+                        android:textOff=""
+                        android:textOn="" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="자연체험"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/join_fragmentThree_ButtonNext"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_alignParentBottom="true"
+        android:background="#8d6252"
+        android:gravity="center"
+        android:text="가입완료"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

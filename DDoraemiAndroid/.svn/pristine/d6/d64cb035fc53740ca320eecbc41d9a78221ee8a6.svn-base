@@ -1,0 +1,92 @@
+package ddoraemi.join;
+
+import ddoraemi.start.R;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+
+
+/////////////////////////////////////
+// 닉네임, 주소 , 관심사 등등 정보 입력 후 HomeView로 이동
+/////////////////////////////////////////
+public class JoinView extends Activity implements JoinViewInterface, OnClickListener{
+	
+	private EditText et_nickname;
+	private EditText et_address;
+	private CheckBox cb_1;
+	private CheckBox cb_2;
+	private CheckBox cb_3;
+	private CheckBox cb_4;
+	private CheckBox cb_5;
+	private Button btn_submit;
+	
+	private JoinPresenterInterface presenter;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.joinview);
+		presenter = new JoinPresenter(this);
+		
+		findViewById(R.id.btn_submit).setOnClickListener(this);
+		
+		et_nickname = (EditText)findViewById(R.id.et_nickname);
+		et_address = (EditText)findViewById(R.id.et_address);
+		cb_1 = (CheckBox)findViewById(R.id.cb_1);
+		cb_2 = (CheckBox)findViewById(R.id.cb_2);
+		cb_3 = (CheckBox)findViewById(R.id.cb_3);
+		cb_4 = (CheckBox)findViewById(R.id.cb_4);
+		cb_5 = (CheckBox)findViewById(R.id.cb_5);
+		
+	}
+	
+	@Override
+	public void showProgress() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hideProgress() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setEmptyError() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setExistError() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setFailedError() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void navigateToNext() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		presenter.validateCredentials(et_address.getText().toString(),et_nickname.getText().toString(),
+				null);
+	}
+
+}

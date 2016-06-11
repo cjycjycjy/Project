@@ -1,0 +1,60 @@
+package ddoraemi.appcontroller;
+
+
+
+import java.util.ArrayList;
+
+import ddoraemi.start.User;
+import android.app.Application;
+
+public class AppController extends Application {
+	private String ServerIp;
+	private String id;
+	private User user;
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		super.onCreate();
+		this.ServerIp = "http://203.252.166.151:9090/skp";
+
+	}
+
+	public void setbookmark(int p_id){
+		this.user.getbookmark().add(p_id);
+	}
+	public void delbookmark(int p_id){
+		this.user.getbookmark().remove((Object)p_id);
+	}
+	public boolean searchbookmark(int p_id){
+		ArrayList<Integer> ar = user.getbookmark();
+		if(ar.contains(p_id)){
+			
+			return true;
+		}else
+			return false;
+		
+	}
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getServerIp() {
+		return ServerIp;
+	}
+
+	public void setServerIp(String serverIp) {
+		ServerIp = serverIp;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return this.id;
+	}
+}

@@ -1,0 +1,19 @@
+package ddoraemi.dialog;
+
+public class CountryInfo {
+	String Code;
+	String name;
+	public String getCode() {
+		return Code;
+	}
+	public void setCode(String code) {
+		Code = code;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+}

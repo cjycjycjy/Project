@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.AdminMapper">
+
+	<resultMap type="com.fuck.hangang.vo.AdminBoardVo" id="adminboardMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_title" column="a_title" />
+		<result property="a_contents" column="a_contents" />
+		<result property="a_type" column="a_type" />
+		<result property="a_time" column="a_time" />
+		<result property="a_year" column="a_year" />
+		<result property="a_month" column="a_month" />
+		<result property="a_day" column="a_day" />
+		<result property="a_hour" column="a_hour" />
+		<result property="a_min" column="a_min" />
+		<collection property="photo"
+			ofType="com.fuck.hangang.vo.AdminBoardPhotoVo">
+			<result property="a_index" column="a_index" />
+			<result property="a_photo_url" column="a_photo_url" />
+		</collection>
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.AdminBoardPhotoVo" id="adminboardphotoMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_index" column="a_index" />
+		<result property="a_photo_url" column="a_photo_url" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.AdminBoardCommentVo" id="adminboardcommentMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_c_num" column="a_c_num" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="a_c_content" column="a_c_content" />
+		<result property="a_c_time" column="a_c_time" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_photo" column="u_photo" />
+		<result property="t_name" column="t_name" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.AdminBoardCommentOfCommentVo"
+		id="adminboardcommentofcommentMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_c_num" column="a_c_num" />
+		<result property="a_cc_num" column="a_cc_num" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="a_cc_content" column="a_cc_content" />
+		<result property="a_cc_time" column="a_cc_time" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_photo" column="u_photo" />
+		<result property="t_name" column="t_name" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.AdminRequestVo" id="adminrequestMap">
+		<id property="a_num" column="a_num" />
+		<result property="a_r_num" column="a_r_num" />
+		<result property="t_num" column="t_num" />
+		<result property="contents" column="contents" />
+		<result property="t_name" column="t_name" />
+		<result property="t_logo" column="t_logo" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.RequestChangeTeamNameVo"
+		id="RequestChangeTeamNameMap">
+		<result property="t_num" column="t_num" />
+		<result property="flag" column="flag" />
+		<result property="new_t_name" column="new_t_name" />
+
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.AdminMenuTeamVo" id="AdminMenuTeamMap">
+		<result property="t_num" column="t_num" />
+		<result property="a_num" column="a_num" />
+		<result property="t_name" column="t_name" />
+		<result property="t_logo" column="t_logo" />
+
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.AdminReportListVo" id="AdminReportListMap">
+		<result property="y_count" column="y_count" />
+		<result property="m_count" column="m_count" />
+		<result property="t_num" column="t_num" />
+		<result property="t_name" column="t_name" />
+		<result property="t_logo" column="t_logo" />
+
+	</resultMap>
+
+	<resultMap id="reportMap" type="com.fuck.hangang.vo.ReportVo">
+		<id property="report_num" column="report_num" />
+		<result property="r_year" column="r_year" />
+		<result property="r_month" column="r_month" />
+		<result property="r_day" column="r_day" />
+		<result property="r_starthour" column="r_starthour" />
+		<result property="r_startmin" column="r_startmin" />
+		<result property="r_endhour" column="r_endhour" />
+		<result property="r_endmin" column="r_endmin" />
+		<result property="people_num" column="people_num" />
+		<result property="contents" column="contents" />
+		<result property="flag" column="flag" />
+		<result property="t_num" column="t_num" />
+		<result property="park" column="park" />
+		<result property="r_members" column="r_members" />
+		<result property="t_name" column="t_name" />
+		<result property="t_logo" column="t_logo" />
+		<collection property="r_photo" ofType="com.fuck.hangang.vo.ReportPhotoVo">
+			<result property="r_photo_url" column="r_photourl" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="userMap" type="com.fuck.hangang.vo.UserVo">
+		<id property="u_id" column="u_id" />
+		<result property="u_passwd" column="u_passwd" />
+		<result property="u_name" column="u_name" />
+		<result property="u_email" column="u_email" />
+		<result property="u_permission" column="u_permission" />
+		<result property="push" column="push" />
+		<result property="u_photo" column="u_photo" />
+		<result property="u_registrationid" column="u_registrationid" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.RegistrationIdVo" id="registrationIdMap">
+		<result property="u_registrationid" column="u_registrationid" />
+	</resultMap>
+
+	<update id="updatePushisChecked">
+		update push_list
+		set isChecked = 1
+		where pm_num =
+		#{pm_num}
+	</update>
+
+	<insert id="registPushAboutAdminBoardComment">
+		insert into push_list
+		values (#{id}, null, #{u_id},
+		#{flag}, #{num}, null, 0, null)
+	</insert>
+
+	<select id="getAllAdmin" resultMap="userMap">
+		select u_id
+		from user
+		where
+		u_permission = 3
+	</select>
+
+	<insert id="registPushAboutAdminBoard">
+		insert into push_list
+		values (null, null, null,
+		#{flag}, #{num}, null, 1, null)
+	</insert>
+
+	<insert id="registPushList">
+		insert into push_list
+		values (#{u_id}, null, #{reply_writer}, #{flag},
+		#{num}, #{reply_num}, 0, null)
+		<selectKey keyProperty="pm_num" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<select id="getRegiIdOfUserComment" resultMap="registrationIdMap">
+		select
+		u_registrationid from user where u_id =
+		(select u_id from admin_board_comment where a_c_num = #{a_c_num})
+	</select>
+
+	<select id="checkPushUser" resultType="int">
+		select push from user
+		where u_id = #{id}
+	</select>
+
+	<select id="checkReplyUser" resultType="String">
+		select u_id from user
+		where u_id =(select u_id from admin_board_comment where a_c_num =
+		#{a_c_num})
+	</select>
+
+
+	<select id="getTeamUserRegiId" resultMap="registrationIdMap">
+		select u_registrationid
+		from user where u_registrationid is not null and u_permission = 2
+	</select>
+
+	<select id="getAdminBoardOne" resultMap="adminboardMap">
+		select admin_board.*,
+		admin_board_photo.a_photo_url
+		from
+		admin_board left outer join
+		admin_board_photo on admin_board.a_num =
+		admin_board_photo.a_num where
+		admin_board.a_num=#{a_num}
+	</select>
+
+
+	<insert id="registadminboard" parameterType="AdminBoardVo">
+		insert into admin_board values
+		(null, #{a_title}, #{a_contents},
+		#{a_type}, null, #{a_year}, #{a_month}, #{a_day}, #{a_hour}, #{a_min})
+		<selectKey keyProperty="a_num" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateadminboard" parameterType="AdminBoardVo">
+		update admin_board
+		set a_title = #{a_title}, a_contents = #{a_contents}, a_type =
+		#{a_type}, a_year = #{a_year}, a_month = #{a_month},
+		a_day = #{a_day},
+		a_hour = #{a_hour}, a_min= #{a_min} where a_num = #{a_num}
+	</update>
+
+	<insert id="registadminboardphoto">
+		insert into admin_board_photo values
+		(#{a_num},
+		#{a_index}, #{a_photo_url})
+	</insert>
+
+	<select id="getadminboardfirst" resultMap="adminboardMap">
+		select *
+		from
+		admin_board left outer join admin_board_photo on admin_board.a_num =
+		admin_board_photo.a_num
+		where a_type = #{flag}
+		order by
+		admin_board.a_num DESC
+		LIMIT 0, 20
+	</select>
+
+	<select id="getadminboardlast" resultMap="adminboardMap">
+		select *
+		from( select *
+		from admin_board
+		where admin_board.a_num <![CDATA[<]]>
+		#{lastnum} and a_type = #{flag}
+		order by a_num DESC LIMIT 0, 20)x1
+		left
+		outer join admin_board_photo on
+		x1.a_num =
+		admin_board_photo.a_num order
+		by x1.a_num DESC;
+	</select>
+
+	<select id="getadminboardfirstnoflag" resultMap="adminboardMap">
+		select *
+		from
+		admin_board left outer join admin_board_photo on admin_board.a_num =
+		admin_board_photo.a_num
+		order by admin_board.a_num DESC LIMIT 0, 20
+	</select>
+
+	<select id="getadminboardlastnoflag" resultMap="adminboardMap">
+		select *
+		from( select *
+		from admin_board
+		where admin_board.a_num <![CDATA[<]]>
+		#{lastnum}
+		order by a_num DESC LIMIT 0, 20)x1
+		left outer join
+		admin_board_photo on
+		x1.a_num = admin_board_photo.a_num order by
+		x1.a_num DESC;
+	</select>
+
+	<select id="admincommentcount" resultType="int">
+		select count(*)
+		from
+		admin_board_comment
+		where a_num = #{a_num}
+	</select>
+
+	<select id="getadminphoto" resultMap="adminboardphotoMap">
+		select *
+		from
+		admin_board_photo
+		where a_num = #{a_num}
+	</select>
+
+	<delete id="deleteadminphoto">
+		delete from admin_board_photo where a_num = #{a_num}
+	</delete>
+
+	<delete id="deleteadminboard">
+		delete from admin_board where a_num = #{a_num}
+	</delete>
+
+	<delete id="deleteadminboard_allcomment">
+		delete from admin_board_comment where a_num =
+		#{a_num}
+	</delete>
+
+	<delete id="deleteadminboard_commentofallcomment">
+		delete from admin_board_comment_comment where a_num =
+		#{a_num}
+	</delete>
+
+	<delete id="deleteadminboard_allrequest">
+		delete from admin_board_request where a_num =
+		#{a_num}
+	</delete>
+
+	<select id="getadminboardcommentfirst" resultMap="adminboardcommentMap">
+		select
+		admin_board_comment.*,x2.t_num ,u_permission, u_photo, t_name, u_name
+		from
+		(select x1.*,team.t_name from
+		(select user.*, team_user.t_num from
+		user
+		left outer join team_user on
+		user.u_id = team_user.u_id) x1 left
+		outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join
+		admin_board_comment
+		on admin_board_comment.u_id = x2.u_id
+		where
+		admin_board_comment.a_num =
+		#{a_num}
+		order by a_c_time DESC LIMIT 0, 20
+	</select>
+
+	<select id="getadminboardcommentone" resultMap="adminboardcommentMap">
+		select
+		admin_board_comment.*,x2.t_num ,u_permission, u_photo, t_name, u_name
+		from
+		(select x1.*,team.t_name from
+		(select user.*, team_user.t_num from
+		user
+		left outer join team_user on
+		user.u_id = team_user.u_id) x1 left
+		outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join
+		admin_board_comment
+		on admin_board_comment.u_id = x2.u_id
+		where
+		admin_board_comment.a_num =
+		#{a_num} and admin_board_comment.a_c_num =
+		#{a_c_num}
+
+	</select>
+
+	<select id="getadminboardcommentlast" resultMap="adminboardcommentMap">
+		select
+		admin_board_comment.*,x2.t_num ,u_permission, u_photo, t_name,
+		u_name from
+		(select x1.*,team.t_name from
+		(select user.*,
+		team_user.t_num from user
+		left outer join team_user on
+		user.u_id =
+		team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join admin_board_comment
+		on admin_board_comment.u_id =
+		x2.u_id
+		where
+		admin_board_comment.a_num =
+		#{a_num} and a_c_num <![CDATA[<]]>
+		#{lastnum}
+		order by a_c_time DESC LIMIT 0, 20
+	</select>
+
+	<select id="getadminboardcommentofcommentcount" resultType="int">
+		select count(*)
+		from admin_board_comment_comment
+		where a_num = #{a_num}
+		and a_c_num = #{a_c_num}
+	</select>
+
+
+
+	<insert id="registadminboardcomment">
+		insert into admin_board_comment values (#{a_num},
+		null, #{u_id}, #{a_c_content}, null)
+	</insert>
+
+	<update id="updateadminboardcomment">
+		update admin_board_comment set a_c_content =
+		#{a_c_content} where a_num = #{a_num} and a_c_num = #{a_c_num}
+	</update>
+
+	<delete id="deleteadminboardcomment">
+		delete from admin_board_comment where a_num =
+		#{a_num} and a_c_num = #{a_c_num}
+	</delete>
+
+	<delete id="deleteadminboardcommentofallcomment">
+		delete from admin_board_comment_comment where a_num =
+		#{a_num} and a_c_num = #{a_c_num}
+	</delete>
+
+	<select id="getadminboardcommentofcommentfirst" resultMap="adminboardcommentofcommentMap">
+		select
+		admin_board_comment_comment.*,x2.t_num ,u_permission, u_photo,
+		t_name, u_name from
+		(select x1.*,team.t_name from
+		(select user.*,
+		team_user.t_num from user
+		left outer join team_user on
+		user.u_id =
+		team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join admin_board_comment_comment
+		on
+		admin_board_comment_comment.u_id = x2.u_id
+		where
+		a_num =
+		#{a_num} and
+		a_c_num = #{a_c_num}
+		order
+		by a_cc_time DESC LIMIT
+		0, 20
+	</select>
+
+	<select id="getadminboardcommentofcommentlast" resultMap="adminboardcommentofcommentMap">
+		select
+		admin_board_comment_comment.*,x2.t_num ,u_permission, u_photo,
+		t_name, u_name from
+		(select x1.*,team.t_name from
+		(select user.*,
+		team_user.t_num from user
+		left outer join team_user on
+		user.u_id =
+		team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join admin_board_comment_comment
+		on
+		admin_board_comment_comment.u_id = x2.u_id
+		where
+		a_num =
+		#{a_num} and
+		a_c_num = #{a_c_num} and a_cc_num <![CDATA[<]]>
+		#{lastnum}
+		order by a_cc_time DESC LIMIT 0, 20
+	</select>
+
+
+
+	<insert id="registadminboardcommentofcomment">
+		insert into admin_board_comment_comment values
+		(#{a_num}, #{a_c_num}, null, #{u_id}, #{a_cc_content}, null)
+	</insert>
+
+	<update id="updateadminboardcommentofcomment">
+		update admin_board_comment_comment set a_cc_content =
+		#{a_cc_content}
+		where a_num = #{a_num} and a_c_num = #{a_c_num} and
+		a_cc_num = #{a_cc_num}
+	</update>
+
+	<delete id="deleteadminboardcommentofcomment">
+		delete from admin_board_comment_comment where a_num =
+		#{a_num} and a_c_num = #{a_c_num} and a_cc_num = #{a_cc_num}
+	</delete>
+
+	<insert id="registadminboardrequest">
+		insert into admin_board_request values (#{a_num},
+		null, #{t_num}, #{contents})
+	</insert>
+
+	<select id="getadminboardrequest" resultMap="adminrequestMap">
+		select
+		admin_board_request.*, t_name, t_logo
+		from admin_board_request natural
+		join team
+		where a_num = #{a_num}
+	</select>
+
+	<delete id="deleteadminboardrequest">
+		delete from admin_board_request where a_num =
+		#{a_num} and t_num = #{t_num}
+	</delete>
+
+	<select id="getChangeTeamName" resultMap="RequestChangeTeamNameMap">
+		select changeteamname.*
+		, team.t_name, team.t_logo from changeteamname natural join team where
+		flag = 0
+	</select>
+
+	<update id="permitChangeTeamName">
+		update changeteamname set flag = 1 where t_num =
+		#{t_num}
+	</update>
+
+	<update id="setNewTeamName">
+		update team set t_name = (select new_t_name from
+		changeteamname where t_num = #{t_num} and flag = 0) where t_num =
+		#{t_num}
+	</update>
+	<delete id="rejectChangeTeamName">
+		delete from changeteamname where t_num = #{t_num} and
+		flag = 0
+	</delete>
+
+	<select id="getAdminMenuTeamList" resultMap="AdminMenuTeamMap">
+		select
+		team.t_num,team.t_name,team.t_logo,x2.a_num from (select * from
+		(select MAX(a_num) as a_num from admin_board where a_type=1) x1
+		natural join admin_board_request) x2 right outer join team on
+		team.t_num =x2.t_num;
+	</select>
+
+	<delete id="deleteTeam">
+		delete from team where t_num = #{t_num}
+	</delete>
+
+	<select id="getReportList" resultMap="AdminReportListMap">
+		select
+		x3.m_count,x3.y_count, team.t_num,team.t_name,team.t_logo from (
+		Select * from (SELECT report.t_num
+		, count(*) m_count
+		FROM report
+		WHERE
+		r_year = #{year} and r_month = #{month}
+		GROUP BY report.t_num
+		)x1
+		natural join (
+		SELECT report.t_num
+		, count(*) y_count
+		FROM report
+		WHERE
+		r_year = #{year}
+		GROUP BY report.t_num)x2) x3 right outer join team on
+		x3.t_num =
+		team.t_num;
+	</select>
+
+	<select id="getReportOfTeam" resultMap="reportMap">
+		select * from(
+		select
+		report.*, t_logo, t_name from report natural join team
+		where
+		report.r_year = #{year}) x1
+		left
+		outer join report_photo on
+		x1.report_num = report_photo.report_num where t_num = #{t_num} order
+		by r_month ASC ,r_day ASC ;
+
+	</select>
+
+
+</mapper>

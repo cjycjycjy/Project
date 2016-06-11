@@ -1,0 +1,11 @@
+package ddoraemi.home.view;
+
+public interface HomeViewInterface {
+	public void goToshowMenu();
+	public void goToHome();
+	public void goMyPage();
+	public void goChallenge();
+	public void goLocationChallenge();
+	public void goApplyAdmin();
+	
+}

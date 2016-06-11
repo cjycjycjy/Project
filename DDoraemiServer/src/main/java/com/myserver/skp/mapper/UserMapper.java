@@ -1,0 +1,40 @@
+package com.myserver.skp.mapper;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.junit.runners.Parameterized.Parameters;
+import org.springframework.stereotype.Repository;
+
+import com.myserver.skp.vo.UserVo;
+
+@Repository
+public interface UserMapper {
+	public void insertBase(UserVo user);
+	public String selectUserPhoto(@Param("u_id") String u_id);
+	public UserVo idCheck(@Param("u_id") String u_id);
+	public void insertFavoritProgram(@Param("u_id") String u_id, @Param("e_name") String e_name);
+	public UserVo login(@Param("u_id") String u_id,@Param("password")  String password);
+	public List<HashMap<String, Integer>> selectBookmark(@Param("u_id") String u_id);
+	public List<HashMap<String, String>> selectFavoritProgram(@Param("u_id") String u_id);
+	public void insertBookmark(@Param("u_id") String u_id, @Param("p_id") int p_id);
+	public void deleteBookmark(@Param("u_id") String u_id, @Param("p_id") int p_id);
+	public void updatePermissionAdminRequest(@Param("u_id") String u_id);
+	public void updatePermissionAdmin(@Param("u_id") String u_id);
+	public HashMap<String, String> selectGCMregisterQuestion(@Param("g_id") int g_id);
+	public HashMap<String, String> selectGCMregisterQuestionReply(@Param("q_id") int q_id);
+	public List<HashMap<String, String>> selectGCMBookmark(@Param("p_id") int p_id);
+	public void deleteFavoritProgram(@Param("u_id") String u_id);
+	public void updatePassword(@Param("u_id") String u_id, @Param("password") String password);
+	public List<UserVo> selectJoinGatheringUser(@Param("g_id") int g_id);
+	public void updateUserPhoto(@Param("u_id") String u_id, @Param("u_photo_url") String u_photo_url);
+	public void insertVerificationCode(@Param("u_id") String u_id, @Param("verification_code") String verification_code);
+	public void deleteVerificationCode(@Param("u_id") String u_id);
+	public String selectVerificationCode(@Param("u_id") String u_id);
+	public String selectUserPhone(@Param("u_id") String u_id);
+	public void updateAlarm(@Param("u_id") String u_id, @Param("alarm") int alarm);
+	public void updateRegisterId(@Param("u_register_id") String u_register_id, @Param("new_register_id") String new_register_id);
+	public void updateRegisterIdUId(@Param("u_id")String u_id, @Param("u_register_id") String u_register_id);
+	public <T> List<HashMap<String, T>> selectUId();
+}

@@ -1,0 +1,102 @@
+package ddoraemi.adminmodehome.view;
+
+import java.util.ArrayList;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import ddoraemi.adminmodehome.presenter.AdminGroupInfoPresenter;
+import ddoraemi.adminmodehome.presenter.AdminGroupInfoPresenterInterface;
+import ddoraemi.detailedgroupinfo.view.DetailedGroupInfo_View;
+import ddoraemi.home.model.Group;
+import ddoraemi.home.view.Home_MainViewGroupListAdapter;
+import ddoraemi.start.R;
+
+public class AdminGroupInfoView extends Fragment implements AdminGroupInfoViewInterface
+,OnItemClickListener{
+	
+	ListView listview;// �������� ���� ����Ʈ��
+	ArrayList<Group> list;
+	Home_MainViewGroupListAdapter adapter;
+	AdminGroupInfoPresenterInterface presenter;
+	int s_pos;
+
+	public AdminGroupInfoView(ArrayList<Group> list) {
+		this.list = new ArrayList<Group>();
+		this.list.addAll(list);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_admin_grouplist, null);
+		init(v);
+		return v;
+	}
+	
+	public void init(View v){
+		presenter = new AdminGroupInfoPresenter(this);
+		listview = (ListView) v.findViewById(R.id.fragment_available_listview);
+		adapter = new Home_MainViewGroupListAdapter(getActivity(),
+				R.layout.item_grouplist, list);
+		listview.setAdapter(adapter);
+		listview.setOnItemClickListener(this);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		Group group = (Group) parent.getItemAtPosition(position);
+		s_pos = position;
+		presenter.validatecredential(group);
+
+	}
+
+
+	public int get_s_pos() {
+		return s_pos;
+	}
+
+	public void deleteGroup(Group group) {
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getG_id() == group.getG_id()) {
+				list.remove(i);
+				break;
+			}
+		}
+		adapter.notifyDataSetChanged();
+	}
+
+	public void renewList(ArrayList<Group> group) {
+		this.list.clear();
+		this.list.addAll(group);
+		adapter.notifyDataSetChanged();
+	}
+
+	public void renewPersons(Group group) {
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getG_id() == group.getG_id()) {
+				list.get(i).setG_persons(group.getG_persons());
+				break;
+			}
+		}
+		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void goToDetailedGroupInfo(Group group) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(this.getActivity(),
+				DetailedGroupInfo_View.class);
+		intent.putExtra("group", group);
+		getActivity().startActivityForResult(intent, 50);
+
+	}
+}

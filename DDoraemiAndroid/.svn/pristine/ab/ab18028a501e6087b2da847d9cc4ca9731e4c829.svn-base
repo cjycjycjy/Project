@@ -1,0 +1,19 @@
+package ddoraemi.home.view;
+
+import java.util.ArrayList;
+
+import android.view.View;
+import ddoraemi.home.model.Group;
+import ddoraemi.home.model.ProgramData;
+
+public interface HomeViewInterface {
+	public void setViewPager(ArrayList<ProgramData> data, ArrayList<Group> group);
+	public void setProgramList(ArrayList<ProgramData> data , ArrayList<Group> group);
+	public void goToshowMenu();
+	public void goToHome();
+	public void goMyPage();
+	public void goChallenge();
+	public void goLocationChallenge();
+	public void goApplyAdmin();
+	
+}

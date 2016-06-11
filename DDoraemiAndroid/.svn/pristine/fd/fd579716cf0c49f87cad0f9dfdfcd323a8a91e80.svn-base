@@ -1,0 +1,14 @@
+package ddoraemi.myinfopage.view;
+
+import java.util.ArrayList;
+
+import android.view.View;
+import ddoraemi.home.model.Group;
+import ddoraemi.home.model.ProgramData;
+
+public interface MypageViewInterface {
+	public void navigateToNext();
+	public void setViewPager(View v, ArrayList<Group> partcipateprogram, ArrayList<ProgramData> wishprogram,ArrayList<Group> pastprogram );
+	public void setArrayList(ArrayList<Group> partcipateprogram, ArrayList<ProgramData> wishprogram,ArrayList<Group> pastprogram);
+	public void notifyAfterword(ArrayList<Group> renewitem);
+}

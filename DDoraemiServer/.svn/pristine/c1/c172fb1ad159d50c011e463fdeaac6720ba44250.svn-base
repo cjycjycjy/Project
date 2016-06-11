@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.AfterwordMapper">
+
+    <resultMap id="afterwordMap" type="com.myserver.skp.vo.AfterwordVo">
+        <id    		property="a_id"    		column="a_id" />
+        <result     property="p_id"    		column="p_id" />
+        <result     property="u_id"    		column="u_id" />
+        <result     property="a_content"    column="a_content" />
+        <result     property="a_grade"    	column="a_grade" />
+        <result     property="a_year"    	column="a_year" />
+        <result     property="a_month"    	column="a_month" />
+        <result     property="a_day"    	column="a_day" />
+        <result     property="a_r_num"    	column="a_r_num" />
+
+    </resultMap>
+
+    <select id="selectAllofProgram" resultMap="afterwordMap">
+        SELECT  * FROM afterword WHERE p_id = #{p_id}
+    </select>
+
+</mapper>

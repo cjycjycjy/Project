@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/normal_horizontal_margin"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="18dp" >
+
+                <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/user_photo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_user" />
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/circle_yellow" />
+            </FrameLayout>
+
+            <ListView 
+                android:id="@+id/lv_sidemenu_admin_cha_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                ></ListView>
+           
+
+            
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true" >
+
+            <ImageView
+                android:id="@+id/sidemenu_switch_usermode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/mode_switch_user" />       
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

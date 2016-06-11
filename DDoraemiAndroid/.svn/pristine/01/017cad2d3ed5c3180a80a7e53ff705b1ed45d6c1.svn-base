@@ -1,0 +1,32 @@
+package ddoraemi.home;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import ddoraemi.start.R;
+
+public class Home_RecommendView extends Fragment{
+	ListView listview;//추천 모임 리스트뷰
+	ArrayList list;///통신으로 넘어온 리스트
+	public Home_RecommendView(ArrayList list)
+	{
+		list=new ArrayList();
+		this.list=(ArrayList) list.clone();
+	}
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_recommendview, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		listview=(ListView)v.findViewById(R.id.fragment_recommend_listview);
+
+	}
+}

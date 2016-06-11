@@ -1,0 +1,200 @@
+package com.fuck.hangang.controller;
+
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.annotations.Param;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.simple.JSONObject;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fuck.hangang.dao.NoticeDao;
+import com.fuck.hangang.vo.ContestVo;
+import com.fuck.hangang.vo.NoticePhotoVo;
+import com.fuck.hangang.vo.NoticeVo;
+import com.fuck.hangang.vo.NoticecommentVo;
+import com.fuck.hangang.vo.NoticecommentofcommentVo;
+import com.fuck.hangang.vo.RealtimeScheduleVo;
+import com.fuck.hangang.vo.ScheduleVo;
+import com.fuck.hangang.vo.TeamVo;
+import com.fuck.hangang.vo.UserVo;
+
+@Controller
+public class NoticeController {
+	@Resource
+	private NoticeDao noticeDao;
+
+	@RequestMapping(value = "/getnotice", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getNotice() {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		List<NoticeVo> resultNoticeVo = noticeDao.getnotice();
+
+		if (resultNoticeVo != null) {
+			resultHashMap.put("result", (T) "Success");
+			for (int i = 0; i < resultNoticeVo.size(); i++) {
+				int count = noticeDao.getnoticecommentcount(resultNoticeVo.get(i).getN_num());
+				resultNoticeVo.get(i).setN_c_num(count);
+			}
+
+			resultHashMap.put("noticelist", (T) resultNoticeVo);
+			return resultHashMap;
+
+		} else {
+			resultHashMap.put("result", (T) "Error");
+			return resultHashMap;
+		}
+
+	}
+
+	@RequestMapping(value = "/registnotice", method = RequestMethod.GET)
+	public @ResponseBody String registNotice(@ModelAttribute JSONObject json) {
+
+		try {
+			NoticeVo noticeVo = null;
+			ObjectMapper mapper = new ObjectMapper();
+			noticeVo = mapper.readValue(json.toString(), NoticeVo.class);
+
+			if (noticeVo.getN_photo() == null) {
+				noticeDao.registnotice(noticeVo);
+			}
+
+			else {
+
+				noticeDao.registnotice(noticeVo);
+				List<NoticePhotoVo> photo = noticeVo.getN_photo();
+				String filePath = "photo/notice/";
+				String savePath = "C:/Users/user/Desktop/springwork/Hangang/src/main/webapp/photo/notice/";
+
+				for (int i = 0; i < photo.size(); i++) {
+					writeFile(photo.get(i).getN_photo_url(), savePath, noticeVo.getN_num(), i);
+					photo.get(i).setN_photo_url(filePath + noticeVo.getN_num() + "_" + i);
+					noticeDao.registnoticephoto(photo.get(i));
+				}
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Failed";
+		}
+		return "Success";
+
+	}
+
+	@RequestMapping(value = "/getnoticecomment", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getnoticeComment(@RequestParam("n_num") int n_num,
+			@RequestParam("lastnum") int lastnum) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		int count = lastnum + 20;
+		List<NoticecommentVo> resultNoticecommentVo = noticeDao.getnoticecomment(n_num, lastnum, count);
+
+		if (resultNoticecommentVo != null) {
+			resultHashMap.put("result", (T) "Success");
+			for (int i = 0; i < resultNoticecommentVo.size(); i++) {
+				int commentcount = noticeDao.getnoticecommentofcommentcount(resultNoticecommentVo.get(i).getN_num(), resultNoticecommentVo.get(i).getN_c_num());
+				resultNoticecommentVo.get(i).setN_cc_count(commentcount);
+			}
+			resultHashMap.put("n_commentlist", (T) resultNoticecommentVo);
+			return resultHashMap;
+
+		} else {
+			resultHashMap.put("result", (T) "Error");
+			return resultHashMap;
+		}
+
+	}
+
+	@RequestMapping(value = "/registnoticecomment", method = RequestMethod.GET)
+	public @ResponseBody String registnoticeComment(@ModelAttribute NoticecommentVo noticecommentVo) {
+
+		try {
+			noticeDao.registnoticecomment(noticecommentVo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Failed";
+		}
+		return "Success";
+	}
+
+	@RequestMapping(value = "/getnoticecommentofcomment", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getnoticecommentOfcomment(@RequestParam("n_num") int n_num,
+			@RequestParam("n_c_num") int n_c_num, @RequestParam("lastnum") int lastnum) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		int count = lastnum + 20;
+		List<NoticecommentofcommentVo> resultNoticecommentofcommentVo = noticeDao.getnoticecommentofcomment(n_num,
+				n_c_num, lastnum, count);
+
+		if (resultNoticecommentofcommentVo != null) {
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("noticecommentofcommentlist", (T) resultNoticecommentofcommentVo);
+			return resultHashMap;
+
+		} else {
+			resultHashMap.put("result", (T) "Error");
+			return resultHashMap;
+		}
+
+	}
+
+	@RequestMapping(value = "/registnoticecommentofcomment", method = RequestMethod.GET)
+	public @ResponseBody String registnoticecommentOfcomment(
+			@ModelAttribute NoticecommentofcommentVo noticecommentofcommentVo) {
+
+		try {
+			noticeDao.registnoticecommentofcomment(noticecommentofcommentVo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Failed";
+		}
+		return "Success";
+	}
+
+	@RequestMapping(value = "/deletenotice", method = RequestMethod.GET)
+	public @ResponseBody String deleteNotice(@RequestParam("n_num") int n_num) {
+
+		try {
+			noticeDao.deletenotice(n_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Failed";
+		}
+		return "Success";
+	}
+
+	@RequestMapping(value = "/deletenoticecomment", method = RequestMethod.GET)
+	public @ResponseBody String deletenoticeComment(@RequestParam("n_num") int n_num,
+			@RequestParam("n_c_num") int n_c_num) {
+
+		try {
+			noticeDao.deletenoticecomment(n_num, n_c_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Failed";
+		}
+		return "Success";
+	}
+
+	public String writeFile(String file, String savePath, int n_num, int i) throws Exception {
+		String n_photo_url = n_num + "_" + i + ".jpg";
+		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(savePath + n_photo_url));
+		bos.write(Base64.getDecoder().decode(file));
+		bos.flush();
+		bos.close();
+		return n_photo_url;
+	}
+
+}

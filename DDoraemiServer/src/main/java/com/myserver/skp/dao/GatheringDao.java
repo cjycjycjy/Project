@@ -1,0 +1,86 @@
+package com.myserver.skp.dao;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
+
+import com.myserver.skp.mapper.GatheringMapper;
+import com.myserver.skp.vo.GatheringVo;
+
+@Service
+public class GatheringDao {
+	@Resource
+    private GatheringMapper gatheringMapper;
+	
+	public List<HashMap<String, String>> getSelectAllofGathering(int p_id) {
+        return this.gatheringMapper.selectAllofGathering(p_id);
+    }
+	
+	public List<HashMap<String, String>> getSelectAllofGatheringAdmin(int p_id) {
+        return this.gatheringMapper.selectAllofGatheringAdmin(p_id);
+    }
+	
+	public List<HashMap<String, String>> getSelectIsAvailable() {
+        return this.gatheringMapper.selectIsAvailable();
+    }
+	
+	public void insertGathering(GatheringVo gatheringVo){
+		this.gatheringMapper.insertGathering(gatheringVo);
+	}
+	
+	public void updateJonGatheringNumAdd(int g_id, int j_g_persons){
+		this.gatheringMapper.updateJonGatheringNumAdd(g_id, j_g_persons);
+	}
+
+	public void updateJonGatheringNumSub(int g_id, int j_g_persons){
+		this.gatheringMapper.updateJonGatheringNumSub(g_id, j_g_persons);
+	}
+	
+	public void deleteJoinGathering(int g_id, String u_id){
+		this.gatheringMapper.deleteJoinGathering(g_id, u_id);
+	}
+	
+	public void insertJoinGathering(int g_id, String u_id, int j_g_persons){
+		this.gatheringMapper.insertJoinGathering(g_id, u_id, j_g_persons);
+	}
+	
+	public List<HashMap<String, String>> getSelectJoinGathering(String u_id){
+		return this.gatheringMapper.selectJoinGathering(u_id);
+	}
+	
+	public List<HashMap<String, Integer>> getSelectJoinGatheringId(String u_id){
+		return this.gatheringMapper.selectJoinGatheringId(u_id);
+	}
+	
+	public int getSelectJoinGatheringPersons(int g_id, String u_id){
+		return this.gatheringMapper.selectJoinGatheringPersons(g_id, u_id);
+	}
+	
+	public void deleteGathering(int g_id){
+		this.gatheringMapper.deleteGathering(g_id);
+	}
+	
+	public void deleteJoinGatheringAll(int g_id){
+		this.gatheringMapper.deleteJoinGatheringAll(g_id);
+	}
+	
+	public void updateGathering(int year, int month, int day){
+		this.gatheringMapper.updateGathering(year, month, day);
+	}
+	
+	public String getSelectGatheringUId(int g_id){
+		return this.gatheringMapper.selectGatheringUId(g_id);
+	}
+	
+	public List<HashMap<String, String>> getSelectSearch(String content) {
+        return this.gatheringMapper.selectSearch(content);
+    }
+	
+	public <T> HashMap<String, T> getSelectGathering(int g_id){
+		return this.gatheringMapper.selectGathering(g_id);
+	}
+ }

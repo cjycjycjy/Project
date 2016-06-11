@@ -1,0 +1,33 @@
+package com.fuck.hangang.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.fuck.hangang.mapper.CheerfulMapper;
+import com.fuck.hangang.vo.CheerfulVo;
+import com.fuck.hangang.vo.UserVo;
+
+@Service
+public class CheerfulDao {
+	@Resource
+	private CheerfulMapper mapper;
+	
+	public List<CheerfulVo> getteamcheerful(int t_num, int lastnum, int count){
+		return this.mapper.getteamcheerful(t_num, lastnum, count);
+	}
+	public List<CheerfulVo> gettotalcheerful(int lastnum, int count){
+		return this.mapper.gettotalcheerful(lastnum, count);
+	}
+	public int getcheerfulcommentnum(int c_num){
+		return this.mapper.getcheerfulcommentnum(c_num);
+	}
+	public void registcheerfule(String u_id, int t_num, String ch_content, String ch_photo){
+		this.mapper.registcheerful(u_id, t_num, ch_content, ch_photo);
+	}
+	public UserVo getcheerfuluserinfo(String u_id){
+		return this.mapper.getcheerfuluserinfo(u_id);
+	}
+}

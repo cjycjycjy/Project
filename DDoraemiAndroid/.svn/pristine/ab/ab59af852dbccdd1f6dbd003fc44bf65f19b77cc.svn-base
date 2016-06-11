@@ -1,0 +1,176 @@
+package ddoraemi.home;
+
+public class ProgramData {
+
+	int p_id;
+	String p_name;
+	String p_town_name;
+	String p_addr_1;
+	String p_addr_2;
+	String p_addr_3;
+	String p_addr_4;
+	String p_addr_5;
+	String p_addr_6;
+	int cost;
+	int p_min_persons;
+	int p_max_persons;
+	int p_lead_time;
+	String p_note;
+	int p_is_possible;
+
+	public ProgramData(int p_id,
+			String p_name,
+			String p_town_name,
+			String p_addr_1,
+			String p_addr_2,
+			String p_addr_3,
+			String p_addr_4,
+			String p_addr_5,
+			String p_addr_6,
+			int cost,
+			int p_min_persons,
+			int p_max_persons,
+			int p_lead_time,
+			String p_note,
+			int p_is_possible) {
+		// TODO Auto-generated constructor stub
+		this.p_id=p_id;
+		this.p_name=p_name;
+		this.p_town_name = p_town_name;
+		this.p_addr_1 = p_addr_1;
+		this.p_addr_2 = p_addr_2;
+		this.p_addr_3 = p_addr_3;
+		this.p_addr_4 = p_addr_4;
+		this.p_addr_5 = p_addr_5;
+		this.p_addr_6 = p_addr_6;
+		this.cost = cost;
+		this.p_max_persons = p_max_persons;
+		this.p_min_persons = p_min_persons;
+		this.p_lead_time =p_lead_time;
+		this.p_note = p_note;
+		this.p_is_possible = p_is_possible;
+
+	}
+
+	public int getP_id() {
+		return p_id;
+	}
+
+	public void setP_id(int p_id) {
+		this.p_id = p_id;
+	}
+
+	public String getP_name() {
+		return p_name;
+	}
+
+	public void setP_name(String p_name) {
+		this.p_name = p_name;
+	}
+
+	public String getP_town_name() {
+		return p_town_name;
+	}
+
+	public void setP_town_name(String p_town_name) {
+		this.p_town_name = p_town_name;
+	}
+
+	public String getP_addr_1() {
+		return p_addr_1;
+	}
+
+	public void setP_addr_1(String p_addr_1) {
+		this.p_addr_1 = p_addr_1;
+	}
+
+	public String getP_addr_2() {
+		return p_addr_2;
+	}
+
+	public void setP_addr_2(String p_addr_2) {
+		this.p_addr_2 = p_addr_2;
+	}
+
+	public String getP_addr_3() {
+		return p_addr_3;
+	}
+
+	public void setP_addr_3(String p_addr_3) {
+		this.p_addr_3 = p_addr_3;
+	}
+
+	public String getP_addr_4() {
+		return p_addr_4;
+	}
+
+	public void setP_addr_4(String p_addr_4) {
+		this.p_addr_4 = p_addr_4;
+	}
+
+	public String getP_addr_5() {
+		return p_addr_5;
+	}
+
+	public void setP_addr_5(String p_addr_5) {
+		this.p_addr_5 = p_addr_5;
+	}
+
+	public String getP_addr_6() {
+		return p_addr_6;
+	}
+
+	public void setP_addr_6(String p_addr_6) {
+		this.p_addr_6 = p_addr_6;
+	}
+
+	public int getCost() {
+		return cost;
+	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
+
+	public int getP_min_persons() {
+		return p_min_persons;
+	}
+
+	public void setP_min_persons(int p_min_persons) {
+		this.p_min_persons = p_min_persons;
+	}
+
+	public int getP_max_persons() {
+		return p_max_persons;
+	}
+
+	public void setP_max_persons(int p_max_persons) {
+		this.p_max_persons = p_max_persons;
+	}
+
+	public int getP_lead_time() {
+		return p_lead_time;
+	}
+
+	public void setP_lead_time(int p_lead_time) {
+		this.p_lead_time = p_lead_time;
+	}
+
+	public String getP_note() {
+		return p_note;
+	}
+
+	public void setP_note(String p_note) {
+		this.p_note = p_note;
+	}
+
+	public int isP_is_possible() {
+		return p_is_possible;
+	}
+
+	public void setP_is_possible(int p_is_possible) {
+		this.p_is_possible = p_is_possible;
+	}
+
+
+}

@@ -1,0 +1,14 @@
+package com.myserver.skp.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.myserver.skp.vo.AfterwordReplyVo;
+
+@Repository
+public interface AfterwordReplyMapper {
+	public List<AfterwordReplyVo> selectAllofAfterword(@Param("a_id") int a_id);
+	public void insertAfterwordReply(AfterwordReplyVo afterwordVo); 
+}

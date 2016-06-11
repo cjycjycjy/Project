@@ -1,0 +1,57 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+import com.google.gson.JsonObject;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.detailedgroupinfo.model.DetailedGroupInfo_Info_Interactor;
+import ddoraemi.detailedgroupinfo.model.DetailedGroupInfo_Info_Interactor_Interface;
+import ddoraemi.detailedgroupinfo.view.DetailedGroupInfo_InfoView;
+import ddoraemi.home.model.Group;
+
+public class DetailedGroupInfo_InfoView_presenter implements DetailedGroupInfo_InfoView_presenter_Interface,
+OnDetailedGroupInfo_Info_FinishedListener{
+
+	DetailedGroupInfo_InfoView view;
+	DetailedGroupInfo_Info_Interactor_Interface interactor;
+	AppController app;
+	public DetailedGroupInfo_InfoView_presenter(DetailedGroupInfo_InfoView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		this.interactor = new DetailedGroupInfo_Info_Interactor();
+		this.app = (AppController)view.getContext().getApplicationContext();
+	}
+	@Override
+	public void validatecredential(String event, Group group) {
+		// TODO Auto-generated method stub
+		if(event.equalsIgnoreCase("joingroup")){
+			view.goToJoinGroup(group);
+		}else if(event.equalsIgnoreCase("cancel")){
+			view.showCancelDialog();
+		}else if(event.equalsIgnoreCase("dismiss_cancel_dialog")){
+			view.dismissCancelDialog();
+		}else if(event.equalsIgnoreCase("cancelGroup")){
+			//통신해서 그룹참여 취소
+			interactor.cancelGroup(view.getActivity(), group.getG_id(),app.getUser().getU_id() ,this);
+		}
+		else if(event.equalsIgnoreCase("delete")){
+			//모임 삭제
+			view.showDeleteDialog();
+		}else if(event.equalsIgnoreCase("dismiss_delete_dialog")){
+			view.dismissDeleteDialog();
+		}else if(event.equalsIgnoreCase("deleteGroup")){
+			//통신 해서 지우기
+			interactor.deleteGroup(view.getActivity(), group.getG_id(), this);
+		}
+	}
+	@Override
+	public void onCancelGroupSuccess(int minus) {
+		// TODO Auto-generated method stub	
+		view.cancelGroup(minus);
+	}
+	@Override
+	public void onDeleteGroupSuccess() {
+		// TODO Auto-generated method stub
+		view.deleteGroup();
+	}
+
+}

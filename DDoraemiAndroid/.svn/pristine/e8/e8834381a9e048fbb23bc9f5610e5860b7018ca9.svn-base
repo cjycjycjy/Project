@@ -1,0 +1,9 @@
+package ddoraemi.home;
+
+public class HomeInteractor implements HomeInteractorInterface{
+	@Override
+	public void getdata(){
+		// 처음 홈뷰 띄울때 띄워야 되는 데이터를 통신으로 받아오는 부분
+		
+	}
+}

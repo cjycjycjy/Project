@@ -1,0 +1,21 @@
+package com.fuck.hangang.vo;
+
+public class ContestPhotoVo {
+	int p_index;
+	String photo;
+
+	public int getP_index() {
+		return p_index;
+	}
+	public void setP_index(int p_index) {
+		this.p_index = p_index;
+	}
+	public String getUrl() {
+		return photo;
+	}
+	public void setUrl(String url) {
+		this.photo = url;
+	}
+	
+	
+}

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FFCC00" >
+
+        <ImageView
+            android:id="@+id/activity_applyadmin_cancel"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/normal_horizontal_margin"
+            android:scaleType="fitXY"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/tv_titlebars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:text="담당자 계정 인증"
+            android:textColor="#ffffff"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_sendrequest"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginRight="@dimen/normal_horizontal_margin"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_mail" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="104dp"
+        android:layout_height="77dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="17dp"
+        android:src="@drawable/logo2" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="26dp"
+            android:layout_marginRight="26dp"
+            android:layout_marginTop="26dp"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/et_admin_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="귀하의 성함을 입력해주세요."
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:textColorHint="#868585"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="6dp"
+                android:background="#a0a0a0" >
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_admin_phonenum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:layout_marginTop="28dp"
+                android:background="@null"
+                android:hint="귀하의 휴대폰 번호를 입력해 주세요. (숫자만 입력)"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:textColorHint="#868585"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="6dp"
+                android:background="#a0a0a0" >
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_program_phonenum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:inputType="phone"
+                android:background="@null"
+                android:hint="기관 연락처를 입력해 주세요. (지역번호 포함)"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:textColorHint="#868585"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="6dp"
+                android:background="#a0a0a0" >
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_admin_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:inputType="textEmailAddress"
+                android:background="@null"
+                android:hint="귀하의 이메일 주소를 입력해주세요."
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:textColorHint="#868585"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="6dp"
+                android:background="#a0a0a0" >
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_admin_programinfo"
+                android:layout_width="match_parent"
+                android:layout_height="171dp"
+                android:layout_marginTop="17dp"
+                android:background="@drawable/textview_opengroup"
+                android:gravity="top"
+                android:hint="담당하고 있는 체험 정보를 입력해 주세요"
+                android:paddingLeft="9dp"
+                android:paddingRight="9dp"
+                android:paddingTop="14dp"
+                android:textColor="#474747"
+                android:textColorHint="#9b9b9b"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,5 @@
+package ddoraemi.mypage;
+
+public interface MyPageInteractorInterface {
+	public void myPage();
+}

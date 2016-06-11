@@ -1,0 +1,146 @@
+package ddoraemi.detailediteminfo.view;
+
+import java.util.ArrayList;
+
+import com.astuetz.PagerSlidingTabStrip;
+import com.skp.Tmap.TMapView;
+
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.detailediteminfo.presenter.DetailedItemInfo_Presenter;
+import ddoraemi.detailediteminfo.presenter.DetailedItemInfo_Presenter_Interface;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.start.R;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+public class DetailedItemInfo_View extends FragmentActivity implements DetailedIteminfo_View_Interface{
+	
+	DetailedItemInfo_Presenter_Interface presenter;
+	
+	private PagerSlidingTabStrip tabs;
+	private ViewPager pager;
+	private PagerAdapter adapter;
+	private ProgramData item;
+	private ImageView iv_type;
+	private RelativeLayout t_map = null;
+	TMapView t_MapView;
+	@Override
+	protected void onCreate(Bundle arg0) {
+		// TODO Auto-generated method stub
+		super.onCreate(arg0);
+		setContentView(R.layout.activity_detailedinfo);
+		init();
+	}
+	
+	public void init(){
+		presenter = new DetailedItemInfo_Presenter(this);
+		item = new ProgramData();
+		Intent intent = getIntent();
+		item= (ProgramData)intent.getSerializableExtra("item");
+		presenter.validatecredential("detailedinfo", item.getP_id());
+		
+		iv_type = (ImageView)findViewById(R.id.iv_challenge_type);
+		//item�쓽 type�뿉 �뵲�씪 ImageView src �꽕�젙
+		String p_type = item.getP_type();
+		
+		if(p_type.equalsIgnoreCase("문화체험")){
+			iv_type.setImageResource(R.drawable.bg_culture_icon);
+		}else if(p_type.equalsIgnoreCase("전통음식체험")){
+			iv_type.setImageResource(R.drawable.bg_traditionalfood_icon);
+		}else if(p_type.equalsIgnoreCase("경작체험")){
+			iv_type.setImageResource(R.drawable.bg_planting_icon);
+		}else if(p_type.equalsIgnoreCase("수확체험")){
+			iv_type.setImageResource(R.drawable.bg_harvest_icon);
+		}else if(p_type.equalsIgnoreCase("공예체험")){
+			iv_type.setImageResource(R.drawable.bg_craft_icon);
+		}else if(p_type.equalsIgnoreCase("전통놀이체험")){
+			iv_type.setImageResource(R.drawable.bg_traditionalplay_icon);
+		}else if(p_type.equalsIgnoreCase("자연체험")){
+			iv_type.setImageResource(R.drawable.bg_nature_icon);
+		}else{
+			iv_type.setImageResource(R.drawable.bg_cooking_icon);
+		}
+
+	
+	}
+	
+	public void removeAllStack()///Fragment 占쏙옙占쏙옙占쏙옙 占쌕븝옙占쏙옙. 
+	{
+		FragmentManager fragmentmanager=getSupportFragmentManager();
+		FragmentTransaction fragmenttransaction=fragmentmanager.beginTransaction();
+		int cnt = fragmentmanager.getBackStackEntryCount();
+		for (int i = 0; i < cnt; i++) {
+			fragmentmanager.popBackStack();
+		}
+	}
+	
+	@Override
+	public void setViewPager(ArrayList<Afterword> afterword, ProgramData item) {
+		// TODO Auto-generated method stub
+		pager=(ViewPager)findViewById(R.id.fragment_detailediteminfo_pager);
+		tabs=(PagerSlidingTabStrip)findViewById(R.id.fragment_detailediteminfo_tabs);
+		adapter = new PagerAdapter(getSupportFragmentManager(),afterword, item);
+		pager.setAdapter(adapter);
+		pager.setOffscreenPageLimit(2);
+		final int pageMargin = (int) TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+						.getDisplayMetrics());
+		pager.setPageMargin(pageMargin);
+		tabs.setViewPager(pager);
+	}
+	
+	public class PagerAdapter extends FragmentPagerAdapter {
+		private String[] Title = { "상세정보", "후기" };
+		ProgramData item;
+		ArrayList<Afterword> afterword;
+		public PagerAdapter(FragmentManager fm,ArrayList<Afterword> afterword, ProgramData item) {
+			super(fm);
+			this.item = item;
+			this.afterword = new ArrayList<Afterword>();
+			this.afterword.addAll(afterword);
+		}
+
+		@Override
+		public int getItemPosition(Object object) {
+			return POSITION_NONE;
+		}
+
+		@Override
+		public int getCount() {
+			return Title.length;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+
+			return Title[position];
+		};
+
+		@Override
+		public Fragment getItem(int position) {
+			if (position == 0) {
+				return new DetailedItemInfo_InfoView(item);
+			} else {
+				return new DetailedItemInfo_AfterwordView(afterword);
+			}
+
+		}
+	}
+
+	@Override
+	public void setProgramList(ArrayList<Afterword> data) {
+		// TODO Auto-generated method stub
+		setViewPager(data, item);
+	}
+}

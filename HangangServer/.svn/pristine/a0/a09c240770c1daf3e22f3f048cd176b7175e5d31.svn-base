@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.ContestMapper">
+
+	<resultMap type="com.fuck.hangang.vo.ContestVo" id="contestMap">
+		<id property="p_num" column="num" />
+		<result property="t_num" column="t_num" />
+		<result property="u_id" column="u_id" />
+		<result property="p_contents" column="contents" />
+		<result property="t_name" column="t_name" />
+		<collection property="photo" ofType="com.fuck.hangang.vo.ContestPhotoVo">
+			<result property="p_index" column="p_index" />
+			<result property="photo" column="url" />
+		</collection>
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.ContestReplyVo" id="contestreplyMap">
+		<id property="num" column="num" />
+		<result property="r_num" column="r_num" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="r_content" column="r_content" />
+		<result property="r_time" column="r_time" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_photo" column="u_photo" />
+		<result property="t_name" column="t_name" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.ContestReplyOfReplyVo"
+		id="contestreplyofreplyMap">
+		<id property="num" column="num" />
+		<result property="r_num" column="r_num" />
+		<result property="rr_num" column="rr_num" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="rr_content" column="rr_content" />
+		<result property="rr_time" column="rr_time" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_photo" column="u_photo" />
+		<result property="t_name" column="t_name" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+
+
+	<resultMap type="com.fuck.hangang.vo.ContestPhotoVo" id="contestphotoMap">
+		<result property="p_index" column="p_index" />
+		<result property="photo" column="url" />
+	</resultMap>
+
+
+	<insert id="registcontest" parameterType="ContestVo">
+		insert into photo_contest values(null,#{t_num},#{u_id},#{p_contents})
+		<selectKey keyProperty="p_num" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="registcontestphoto">
+		insert into photo_contest_photourl values(#{p_num},
+		#{p_index}, #{photo})
+	</insert>
+
+	<select id="getcontestfirst" resultMap="contestMap">
+		select *
+		from( select
+		photo_contest.*, team.t_name
+		from photo_contest natural join team
+		order
+		by num DESC Limit 0,20)x1
+		natural join photo_contest_photourl;
+	</select>
+
+	<select id="getcontestlast" parameterType="int" resultMap="contestMap">
+		select *
+		from( select photo_contest.*, team.t_name
+		from photo_contest
+		natural join team
+		where num <![CDATA[<]]>
+		#{lastnum}
+		order by num DESC Limit 0,20)x1
+		natural join
+		photo_contest_photourl;
+	</select>
+
+	<select id="getcontestphoto" parameterType="int" resultMap="contestphotoMap">
+		select *
+		from
+		photo_contest_photourl
+		where num = #{p_num}
+	</select>
+
+	<select id="getcontestreplycount" resultType="int">
+		select count(*)
+		from photo_contest_reply
+		where num = #{num}
+	</select>
+
+	<select id="getcontestreplyofreplycount" resultType="int">
+		select
+		count(*)
+		from photo_contest_reply_reply
+		where r_num = #{r_num} and num = #{num}
+	</select>
+
+	<select id="getphotocontestreplyfirst" resultMap="contestreplyMap">
+		select photo_contest_reply.*, user.u_permission, user.u_photo, t_name, u_name
+		from photo_contest_reply
+		left outer join
+		team on photo_contest_reply.t_num = team.t_num
+		natural join user
+		where num = #{num}
+		order by r_time LIMIT 0, 20
+	</select>
+
+	<select id="getphotocontestreplylast" resultMap="contestreplyMap">
+		select photo_contest_reply.*, user.u_permission, user.u_photo, t_name, u_name
+		from photo_contest_reply
+		left outer join
+		team on photo_contest_reply.t_num = team.t_num
+		natural join user
+		where num = #{num} and r_num <![CDATA[<]]> #{lastnum}
+		order by r_time LIMIT 0,20
+	</select>
+	
+	<insert id="registphotocontestreplynull">
+		insert into photo_contest_reply
+		values(#{num}, null, #{u_id}, null, #{r_content}, null)
+	</insert>
+	
+	<insert id="registphotocontestreply">
+		insert into photo_contest_reply
+		values(#{num}, null, #{u_id}, #{t_num}, #{r_content}, null)
+	</insert>
+
+	<select id="getphotocontestreplyofreplyfirst" resultMap="contestreplyofreplyMap">
+		select photo_contest_reply_reply.*, user.u_permission, user.u_photo, t_name, u_name from
+		photo_contest_reply_reply
+		left outer join
+		team on photo_contest_reply_reply.t_num = team.t_num
+		natural join user
+		where num = #{num} and r_num = #{r_num}
+		order by rr_time LIMIT 0, 20
+	</select>
+	
+	<select id="getphotocontestreplyofreplylast" resultMap="contestreplyofreplyMap">
+		select photo_contest_reply_reply.*, user.u_permission, user.u_photo, t_name, u_name from
+		photo_contest_reply_reply
+		left outer join
+		team on photo_contest_reply_reply.t_num = team.t_num
+		natural join user
+		where num = #{num} and r_num = #{r_num} and rr_num <![CDATA[<]]> #{lastnum}
+		order by rr_time LIMIT 0, 20
+	</select>
+	
+	<insert id="registphotocontestreplyofreplynull">
+		insert into photo_contest_reply_reply
+		values(#{num}, #{r_num}, null, #{u_id}, null, #{rr_content}, null)
+	</insert>
+	
+	<insert id="registphotocontestreplyofreply">
+		insert into photo_contest_reply_reply
+		values(#{num}, #{r_num}, null, #{u_id}, #{t_num} #{rr_content}, null)
+	</insert>
+	
+	<update id="updatephotocontestreply">
+		update photo_contest_reply set r_content = #{r_content}
+		where num = #{num} and r_num = #{r_num}
+	</update>
+	
+	<update id="updatephotocontestreplyofreply">
+		update photo_contest_reply_reply set rr_content = #{rr_content}
+		where num = #{num} and r_num = #{r_num} and rr_num = #{rr_num}
+	</update>
+	
+	<delete id="deletephotocontestreply">
+		delete from photo_contest_reply
+		where num = #{num} and r_num = #{r_num}
+	</delete>
+	
+	<delete id="deletephotocontestreplyofreply">
+		delete from photo_contest_reply_reply
+		where num = #{num} and r_num = #{r_num} and rr_num = #{rr_num}
+	</delete>
+	
+	<delete id="deletephotocontest">
+		delete from photo_contest
+		where num = #{num}
+	</delete>
+
+
+
+
+</mapper>

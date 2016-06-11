@@ -1,0 +1,275 @@
+package ddoraemi.joining.view;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.retrofit.Retrofit;
+import ddoraemi.start.R;
+import ddoraemi.start.SplashActivity;
+
+public class Fragment_JoinThree extends Fragment implements OnClickListener,
+		OnCheckedChangeListener {
+	Button join;
+	int selctcount;
+	TextView agetv;
+	ImageView plus, minus;
+	RadioGroup sexgroup;
+	char sex;
+	boolean isSexSelected;
+	ToggleButton[] toggle;
+	int age;
+	final int COUNTINTEREST = 8;
+	private AppController app;
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_jointhree, null);
+		init(v);
+		return v;
+	}
+
+	private void init(View v) {
+		// TODO Auto-generated method stub
+
+		app = (AppController) getActivity().getApplicationContext();
+		toggle = new ToggleButton[COUNTINTEREST];
+		age = 10;
+		toggle[0] = (ToggleButton) v
+				.findViewById(R.id.join_fragmentthree_tranditionalfood);
+		toggle[1] = (ToggleButton) v
+				.findViewById(R.id.join_fragmentthree_planting);
+		toggle[2] = (ToggleButton) v
+				.findViewById(R.id.join_fragmentthree_harvest);
+		toggle[3] = (ToggleButton) v
+				.findViewById(R.id.join_fragmentthree_tranditionalplay);
+		toggle[4] = (ToggleButton) v
+				.findViewById(R.id.join_fragmentthree_cooking);
+		toggle[5] = (ToggleButton) v
+				.findViewById(R.id.join_fragmentthree_craft);
+		toggle[6] = (ToggleButton) v
+				.findViewById(R.id.join_fragmentthree_culture);
+		toggle[7] = (ToggleButton) v
+				.findViewById(R.id.join_fragmentthree_nature);
+
+		sexgroup = (RadioGroup) v
+				.findViewById(R.id.join_fragmentthree_SexRadioGroup);
+		join = (Button) v.findViewById(R.id.join_fragmentThree_ButtonNext);
+		plus = (ImageView) v.findViewById(R.id.join_fragmentthree_PlusBt);
+		minus = (ImageView) v.findViewById(R.id.join_fragmentthree_MinusBt);
+		agetv = (TextView) v.findViewById(R.id.join_fragmentthree_agetv);
+		plus.setOnClickListener(this);
+		minus.setOnClickListener(this);
+		join.setOnClickListener(this);
+		sexgroup.setOnCheckedChangeListener(this);
+		for (int i = 0; i < COUNTINTEREST; i++) {
+			toggle[i].setOnClickListener(this);
+		}
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if (v.getId() == R.id.join_fragmentThree_ButtonNext) {
+			// //통신을 통해서 회원가입정보 서버로 전송 이후 splash로 간다.
+			if (ConfirmForNext()) {
+				sendJoinRequest();
+			} else {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(getActivity(),
+						"모든 항목에 응답하셔야\n다음 단계 진행이 가능합니다.");
+				dialog.show();
+			}
+
+		} else if (v.getId() == R.id.join_fragmentthree_MinusBt) {
+			age--;
+			if (age < 0) {
+				age = 0;
+			}
+			agetv.setTextColor(Color.parseColor("#000000"));
+			agetv.setText(String.valueOf(age) + "세");
+		} else if (v.getId() == R.id.join_fragmentthree_PlusBt) {
+			age++;
+			if (age > 20) {
+				age = 20;
+			}
+			agetv.setTextColor(Color.parseColor("#000000"));
+			agetv.setText(String.valueOf(age) + "세");
+		} else if (v instanceof ToggleButton) {
+			if (((ToggleButton) v).isChecked()) {
+				selctcount++;
+			} else {
+				selctcount--;
+			}
+		}
+
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		if (checkedId == R.id.join_fragmentthree_RadioBoy) {
+			sex = 'M';
+			isSexSelected = true;
+		} else if (checkedId == R.id.join_fragmentthree_RadioGirl) {
+			sex = 'F';
+			isSexSelected = true;
+		}
+
+	}
+
+	public boolean ConfirmForNext() {
+		if (isSexSelected && selctcount>=1) {
+			return true;
+		}
+		return false;
+	}
+
+	public void sendJoinRequest() {
+		final ProgressDialog progressdialog = new ProgressDialog(getActivity());
+		progressdialog.setMessage("잠시만 기다려주세요");
+		progressdialog.setIndeterminate(true);
+		progressdialog.setCancelable(false);
+		progressdialog.show();
+
+		new Thread(new Runnable() {
+
+			public void run() {
+				try {
+					JsonObject info = new JsonObject();
+					final String u_id = ((JoinActivity) getActivity()).getId();
+					final String password = ((JoinActivity) getActivity())
+							.getPasswd();
+					final String u_phone = ((JoinActivity) getActivity())
+							.getPhone();
+					final char parent_gender = ((JoinActivity) getActivity())
+							.getParentsex();
+					final int parent_age = ((JoinActivity) getActivity())
+							.getParentage();
+					final String u_addr_1 = ((JoinActivity) getActivity())
+							.getCity();
+					final String u_addr_2 = ((JoinActivity) getActivity())
+							.getCountry();
+					final String u_addr_3 = ((JoinActivity) getActivity())
+							.getTown();
+					final char u_gender = sex;
+					final int u_age = age;
+					info.addProperty("u_id", u_id);
+					info.addProperty("password", password);
+					info.addProperty("u_phone", u_phone);
+					info.addProperty("parent_gender", parent_gender);
+					info.addProperty("parent_age", parent_age);
+					info.addProperty("u_addr_1", u_addr_1);
+					info.addProperty("u_addr_2", u_addr_2);
+					info.addProperty("u_addr_3", u_addr_3);
+					info.addProperty("u_gender", u_gender);
+					info.addProperty("u_age", u_age);
+					if( !app.getRegistrationID().equalsIgnoreCase(null))
+						info.addProperty("u_register_id", app.getRegistrationID());
+					JsonArray favorit_program = new JsonArray();
+					for (int i = 0; i < COUNTINTEREST; i++) {
+						if (toggle[i].isChecked()) {
+							JsonObject interest = new JsonObject();
+							switch (i) {
+							case 0:
+								interest.addProperty("e_name", "전통음식체험");
+								break;
+							case 1:
+								interest.addProperty("e_name", "경작체험");
+								break;
+							case 2:
+								interest.addProperty("e_name", "수확체험");
+								break;
+							case 3:
+								interest.addProperty("e_name", "전통놀이체험");
+								break;
+							case 4:
+								interest.addProperty("e_name", "요리체험");
+								break;
+							case 5:
+								interest.addProperty("e_name", "공예체험");
+								break;
+							case 6:
+								interest.addProperty("e_name", "문화체험");
+								break;
+							case 7:
+								interest.addProperty("e_name", "자연체험");
+								break;
+							}
+							favorit_program.add(interest);
+						}
+					}
+					info.add("favorit_program", favorit_program);
+					RestAdapter restAdapter = new RestAdapter.Builder()
+							.setEndpoint(Retrofit.ROOT) // call your base url
+							.build();
+					Retrofit retofit = restAdapter.create(Retrofit.class);
+					retofit.requestJoin(info, new Callback<String>() {
+						@Override
+						public void success(String result, Response response) {
+							progressdialog.dismiss();
+							if (getActivity() != null) {
+								if (result.equals("200")) {
+									app.setId(u_id);
+									Intent intent = new Intent(getActivity(),
+											SplashActivity.class);
+									getActivity().startActivity(intent);
+									getActivity().finish();
+								} else {
+									Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+											getActivity(),
+											"회원가입에 실패하였습니다.\n잠시후 다시 시도해주세요.");
+									dialog.show();
+								}
+
+							}
+						}
+
+						@Override
+						public void failure(RetrofitError retrofitError) {
+							progressdialog.dismiss();
+							if (getActivity() != null) {
+
+								Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+										getActivity(),
+										getString(R.string.failed_dialog));
+								dialog.show();
+							}
+						}
+					});
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					progressdialog.dismiss();
+					if (getActivity() != null) {
+
+						Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+								getActivity(),
+								getString(R.string.failed_dialog));
+						dialog.show();
+					}
+				}
+			}
+		}).start();
+	}
+}

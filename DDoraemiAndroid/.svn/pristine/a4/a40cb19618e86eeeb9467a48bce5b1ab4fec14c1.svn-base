@@ -1,0 +1,8 @@
+package ddoraemi.home.model;
+
+import android.support.v4.app.Fragment;
+import ddoraemi.home.presenter.OnHome_RecommendFinishedListener;
+
+public interface Home_RecommendInteractorInterface {
+	public void getData(final Fragment context, final OnHome_RecommendFinishedListener listener);
+}

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.ProgramMapper">
+
+	<resultMap id="programMap" type="com.myserver.skp.vo.ProgramVo">
+		<id property="p_id" column="p_id" />
+		<result property="p_name" column="p_name" />
+		<result property="p_info" column="p_info" />
+		<result property="e_name" column="e_name" />
+		<result property="p_cost_adult" column="p_cost_adult" />
+		<result property="p_cost_kid" column="p_cost_kid" />
+		<result property="p_min_persons" column="p_min_persons" />
+		<result property="p_max_persons" column="p_max_persons" />
+		<result property="p_available_season" column="p_available_season" />
+		<result property="p_lead_time" column="p_lead_time" />
+		<result property="p_preparation_item" column="p_preparation_item" />
+		<result property="p_town_name" column="p_town_name" />
+		<result property="p_addr_1" column="p_addr_1" />
+		<result property="p_addr_2" column="p_addr_2" />
+		<result property="p_addr_3" column="p_addr_3" />
+		<result property="p_addr_4" column="p_addr_4" />
+		<result property="p_addr_5" column="p_addr_5" />
+		<result property="p_addr_6" column="p_addr_6" />
+		<result property="p_tel" column="p_tel" />
+		<result property="p_url" column="p_url" />
+		<result property="p_photo_url" column="p_photo_url" />
+		<result property="p_is_available_overnight" column="p_is_available_overnight" />
+		<result property="p_note" column="p_note" />
+		<result property="p_grade" column="p_grade" />
+		<result property="a_id" column="a_id" />
+
+	</resultMap>
+
+	<resultMap id="gatheringPasserMap" type="java.util.HashMap">
+		<id property="g_id" column="g_id" />
+		<result property="p_id" column="p_id" />
+		<result property="u_id" column="u_id" />
+		<result property="g_name" column="g_name" />
+		<result property="g_persons" column="g_persons" />
+		<result property="g_want_persons" column="g_want_persons" />
+		<result property="g_info" column="g_info" />
+		<result property="g_status" column="g_status" />
+		<result property="g_open_year" column="g_open_year" />
+		<result property="g_open_month" column="g_open_month" />
+		<result property="g_open_day" column="g_open_day" />
+		<result property="g_close_year" column="g_close_year" />
+		<result property="g_close_month" column="g_close_month" />
+		<result property="g_close_day" column="g_close_day" />
+		<result property="g_start_year" column="g_start_year" />
+		<result property="g_start_month" column="g_start_month" />
+		<result property="g_start_day" column="g_start_day" />
+		<result property="g_start_hour" column="g_start_hour" />
+		<result property="g_start_minute" column="g_start_minute" />
+		<result property="g_end_hour" column="g_end_hour" />
+		<result property="g_end_minute" column="g_end_minute" />
+		<result property="p_name" column="p_name" />
+		<result property="p_addr" column="p_addr" />
+		<result property="p_photo_url" column="p_photo_url" />
+		<result property="e_name" column="e_name" />
+		<association property="afterword" javaType="com.myserver.skp.vo.AfterwordVo">
+			<id property="a_id" column="a_id" />
+			<result property="g_id" column="a_g_id" />
+			<result property="u_id" column="a_u_id" />
+			<result property="u_photo_url" column="a_u_photo_url" />
+			<result property="a_content" column="a_content" />
+			<result property="a_grade" column="a_grade" />
+			<result property="a_year" column="a_year" />
+			<result property="a_month" column="a_month" />
+			<result property="a_day" column="a_day" />
+			<result property="a_r_num" column="a_r_num" />
+			<collection property="a_photo_url" ofType="java.util.HashMap">
+				<result property="a_photo_url" column="a_photo_url" />
+			</collection>
+			<collection property="afterword_reply"
+				ofType="com.myserver.skp.vo.AfterwordReplyVo">
+				<id property="a_r_id" column="a_r_id" />
+				<result property="u_id" column="a_r_u_id" />
+				<result property="u_photo_url" column="a_r_u_photo_url" />
+				<result property="a_id" column="a_r_a_id" />
+				<result property="a_r_content" column="a_r_content" />
+				<result property="a_r_year" column="a_r_year" />
+				<result property="a_r_month" column="a_r_month" />
+				<result property="a_r_day" column="a_r_day" />
+			</collection>
+		</association>
+	</resultMap>
+
+	<resultMap id="afterwordPhotoUrlMap" type="java.util.HashMap">
+		<result property="a_photo_url" column="a_photo_url" />
+	</resultMap>
+
+	<resultMap id="programCurMap" type="com.myserver.skp.vo.CurriculumVo">
+		<result property="cur" column="cur" />
+	</resultMap>
+
+
+
+
+	<select id="selectAll" resultMap="programMap">
+		SELECT * FROM program
+	</select>
+
+	<select id="selectAddr" resultMap="programMap">
+		SELECT * FROM program WHERE
+		p_addr_1 = #{p_addr_1}
+	</select>
+
+	<select id="selectExperience" resultMap="programMap">
+		SELECT * FROM program
+		WHERE e_name = #{e_name}
+	</select>
+
+	<select id="selectCurriculum" resultMap="programCurMap">
+		SELECT cur FROM
+		program_curriculum where p_id=#{p_id}
+	</select>
+
+	<select id="selectAfterwordPhotoUrl" resultMap="afterwordPhotoUrlMap">
+		SELECT
+		a_photo_url
+		FROM afterword_photo, afterword, program, gathering
+		WHERE
+		program.p_id=gathering.p_id and
+		afterword_photo.a_id=afterword.a_id and
+		afterword.g_id=gathering.g_id and
+		program.p_id=#{p_id}
+	</select>
+
+	<select id="selectBookmark" resultMap="programMap">
+		SELECT program.* FROM
+		program, bookmark where program.p_id = bookmark.p_id and
+		bookmark.u_id=#{u_id}
+	</select>
+
+	<select id="selectPasser" resultMap="gatheringPasserMap">
+		SELECT gathering.*,
+		program.p_name,
+		CONCAT(program.p_addr_1,' ', program.p_addr_2,' ',
+		program.p_addr_3,' ',
+		program.p_addr_4,' ',
+		program.p_addr_5,' ',
+		program.p_addr_6) as p_addr
+		, program.e_name,
+		program.p_photo_url,
+		afterword.u_id as a_u_id, afterword.a_id, afterword.g_id as a_g_id,
+		afterword.a_content, afterword.a_grade, afterword.a_year,
+		afterword.a_month, afterword.a_day, afterword.a_r_num
+		,
+		afterword_reply.u_id as a_r_u_id, afterword_reply.a_r_id,
+		afterword_reply.a_id, afterword_reply.a_r_content,
+		afterword_reply.a_r_year, afterword_reply.a_r_month,
+		afterword_reply.a_r_day
+		, afterword_photo.*
+		, a.u_photo_url as
+		a_u_photo_url, u.u_photo_url as a_r_u_photo_url
+		FROM
+		program natural
+		join gathering
+		natural join join_gathering
+		left outer join afterword on gathering.g_id=afterword.g_id
+		left outer join user a on afterword.u_id=a.u_id
+		left outer join afterword_photo on afterword.a_id=afterword_photo.a_id
+		left outer join afterword_reply on afterword_reply.a_id=afterword.a_id
+		left outer join user u on afterword_reply.u_id=u.u_id
+		where
+		gathering.g_status=2 and
+		join_gathering.u_id=#{u_id}
+	</select>
+
+
+	<update id="updateProgramGrade">
+		update program set
+		p_grade = #{p_grade}
+		where p_id =
+		(select p_id from gathering where g_id=#{g_id})
+	</update>
+
+</mapper>

@@ -1,0 +1,38 @@
+package com.myserver.skp.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.myserver.skp.mapper.ProgramMapper;
+import com.myserver.skp.vo.CurriculumVo;
+import com.myserver.skp.vo.PhotoUrlVo;
+import com.myserver.skp.vo.ProgramVo;
+
+@Service
+public class ProgramDao {
+	@Resource
+    private ProgramMapper programMapper;
+	
+	public List<ProgramVo> getSelectAll() {
+        return this.programMapper.selectAll();
+    }
+	
+	public List<ProgramVo> getSelectAddr(String p_addr_1) {
+        return this.programMapper.selectAddr(p_addr_1);
+    }
+	
+	public List<ProgramVo> getSelectExperience(String e_name) {
+        return this.programMapper.selectExperience(e_name);
+    }
+	
+	public List<PhotoUrlVo> getSelectPhotoUrl(int p_id) {
+        return this.programMapper.selectPhotoUrl(p_id);
+    }
+	
+	public List<CurriculumVo> getSelectCurriculum(int p_id) {
+        return this.programMapper.selectCurriculum(p_id);
+    }
+}

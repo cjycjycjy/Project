@@ -1,0 +1,250 @@
+package ddoraemi.detailediteminfo.view;
+
+import java.util.ArrayList;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.google.gson.JsonArray;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.detailediteminfo.model.AfterwordReply;
+import ddoraemi.detailediteminfo.presenter.DetailedAfterword_reply_presenter;
+import ddoraemi.detailediteminfo.presenter.DetailedAfterword_reply_presenter_Interface;
+import ddoraemi.start.R;
+import ddoraemi.volley.VolleySingleton;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+public class DetailedAfterword_reply_view extends Activity
+		implements OnClickListener, DetailedAfterword_reply_view_Interface {
+	DetailedAfterword_reply_presenter_Interface presenter;
+	Afterword afterword;
+	ListView listview;
+	DetailedAfterword_replyListAdapter adapter;
+	ArrayList<AfterwordReply> afterword_reply;
+	ImageView btn_modifydelete;
+	TextView tv_detailedAfterword_u_id;
+	TextView tv_detailedAfterword_date;
+	TextView tv_detailedAfterword_text;
+
+	ImageView btn_inputreply;
+	ImageView btn_back;
+	EditText et_reply;
+
+	AppController app;
+	RequestQueue mRequestQueue;
+	ImageLoader mImageLoader;
+	PopupWindow mDropdown;
+	
+	int mposition;
+	int a_r_position;
+	boolean reply_modify_check = false;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_detailedafterword);
+		app = (AppController) getApplicationContext();
+		Intent intent = getIntent();
+		mposition = intent.getIntExtra("position", 0);
+		afterword = (Afterword) intent.getSerializableExtra("item");
+		mRequestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+		mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
+		init();
+	}
+
+	public void init() {
+		presenter = new DetailedAfterword_reply_presenter(this);
+		afterword_reply = new ArrayList<AfterwordReply>();
+		tv_detailedAfterword_u_id = (TextView) findViewById(R.id.tv_detailed_afterword_u_id);
+		tv_detailedAfterword_date = (TextView) findViewById(R.id.tv_detailed_afterword_date);
+		tv_detailedAfterword_text = (TextView) findViewById(R.id.tv_detailed_afterword_text);
+		btn_inputreply = (ImageView) findViewById(R.id.btn_inputreply);
+		et_reply = (EditText) findViewById(R.id.et_inputreply);
+		btn_back = (ImageView) findViewById(R.id.btn_detailedafterword_left_menu);
+		tv_detailedAfterword_date
+				.setText(afterword.getA_year() + "-" + afterword.getA_month() + "-" + afterword.getA_day());
+		tv_detailedAfterword_text.setText(afterword.getA_content());
+		tv_detailedAfterword_u_id.setText(afterword.getU_id());
+		
+		if(!afterword.getU_photo_url().equalsIgnoreCase("empty")){
+			NetworkImageView avatar;
+			avatar = (NetworkImageView)findViewById(R.id.detailedafterword_user_photo);
+			avatar.setImageUrl(app.getServerIp()+"/user_photo/"+afterword.getU_photo_url(),mImageLoader);
+		}
+		
+		btn_modifydelete = (ImageView) findViewById(R.id.modifydelete);
+		if (app.getId().equals(afterword.getU_id())) {
+			btn_modifydelete.setVisibility(View.VISIBLE);
+		} else {
+			btn_modifydelete.setVisibility(View.GONE);
+		}
+		btn_modifydelete.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				initPopupWindow(btn_modifydelete,tv_detailedAfterword_text,mposition);
+			}
+		});
+		
+		listview = (ListView) findViewById(R.id.lv_replylist);
+		afterword_reply = afterword.getAfterword_reply();
+		adapter = new DetailedAfterword_replyListAdapter(this, R.layout.item_afterwordlist_replylist, afterword_reply);
+		listview.setAdapter(adapter);
+		btn_back.setOnClickListener(this);
+		btn_inputreply.setOnClickListener(this);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			back();
+			return true;
+		}
+		return false;
+	}
+
+	public void setEditText(String text,boolean check,PopupWindow mDropdown,int position) {
+		et_reply.setText(text);
+		et_reply.requestFocus();
+		et_reply.setSelection(et_reply.length());
+		Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+		    public void run() {
+		        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		        mgr.showSoftInput(et_reply, InputMethodManager.SHOW_FORCED);
+		    }
+		}, 50);
+		btn_inputreply.setImageResource(R.drawable.btn_commentmodify);
+		reply_modify_check = check;
+		mDropdown.dismiss();
+		a_r_position = position;
+	}
+	
+	public void deleteReply(PopupWindow mDropdown,int position){
+		presenter.validatecredential("delete",afterword,position,afterword.getA_id(), app.getId(), et_reply.getText().toString(),
+				mposition);
+		mDropdown.dismiss();
+	}
+
+	public void back() {
+		Intent intent = new Intent();
+		// intent.putExtra("replynum", position);
+		intent.putExtra("item", afterword);
+		intent.putExtra("position", mposition);
+		this.setResult(0, intent);
+		finish();
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if (v.getId() == R.id.btn_inputreply) {
+			if (!reply_modify_check) {
+				presenter.validatecredential("setReply",afterword,0,afterword.getA_id(), app.getId(), et_reply.getText().toString(),
+						mposition);
+				et_reply.setText("");
+				v.clearFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(et_reply.getWindowToken(), 0);
+			}
+			else{
+				presenter.validatecredential("modify",afterword,a_r_position,afterword.getA_id(), app.getId(), et_reply.getText().toString(),
+						mposition);
+				et_reply.setText("");
+				btn_inputreply.setImageResource(R.drawable.btn_commentsave);
+				reply_modify_check = false;
+				v.clearFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(et_reply.getWindowToken(), 0);
+			}
+		}
+		if (v.getId() == R.id.btn_detailedafterword_left_menu) {
+			back();
+		}
+		if (v.getId() == R.id.btn_left_menu) {
+			v.clearFocus();
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(et_reply.getWindowToken(), 0);
+			finish();
+		}
+	}
+	
+	public PopupWindow initPopupWindow(ImageView pop,final TextView tv_afterword_reply_text,final int position) {
+		try {
+			LayoutInflater mInflater = (LayoutInflater)getApplicationContext().getSystemService(
+							Context.LAYOUT_INFLATER_SERVICE);
+			View layout = mInflater.inflate(R.layout.item_popupmenu, null);
+
+			// If you want to add any listeners to your textviews, these are two
+			// //textviews.
+			final ImageView itema = (ImageView) layout.findViewById(R.id.itemA);
+			itema.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					setEditText(tv_afterword_reply_text.getText().toString(),true,mDropdown,position);
+				}
+			});
+
+			final ImageView itemb = (ImageView) layout.findViewById(R.id.itemB);
+			itemb.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+
+			layout.measure(View.MeasureSpec.UNSPECIFIED,
+					View.MeasureSpec.UNSPECIFIED);
+			mDropdown = new PopupWindow(layout,
+					FrameLayout.LayoutParams.WRAP_CONTENT,
+					FrameLayout.LayoutParams.WRAP_CONTENT, true);
+			Drawable background = getApplicationContext().getResources().getDrawable(android.R.drawable.editbox_dropdown_light_frame);
+			mDropdown.setBackgroundDrawable(background);
+			mDropdown.showAsDropDown(pop, 5, 5);
+			return mDropdown;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@Override
+	public void notifyListview(ArrayList<AfterwordReply> result) {
+		// TODO Auto-generated method stub
+		afterword_reply.clear();
+		afterword_reply.addAll(result);
+		adapter.notifyDataSetChanged();
+	}
+
+}

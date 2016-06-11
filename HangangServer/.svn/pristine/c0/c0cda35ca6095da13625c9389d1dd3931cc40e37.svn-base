@@ -1,0 +1,45 @@
+package com.fuck.hangang.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.fuck.hangang.mapper.ContestMapper;
+import com.fuck.hangang.vo.ContestPhotoVo;
+import com.fuck.hangang.vo.ContestVo;
+
+@Service
+public class ContestDao {
+	@Resource
+	private ContestMapper contestMapper;
+	
+	public void registcontest(ContestVo contestVo) {
+		this.contestMapper.registcontest(contestVo);
+	}
+	
+	public void registcontestphoto(int p_num, int p_index, String photo) {
+		this.contestMapper.registcontestphoto(p_num, p_index, photo);
+	}
+	
+	public List<ContestVo> getcontestfirst() {
+		return this.contestMapper.getcontestfirst();
+	}
+	
+	public List<ContestVo> getcontestlast(int lastnum) {
+		return this.contestMapper.getcontestlast(lastnum);
+	}
+	
+	public List<ContestPhotoVo> getcontestphoto(int p_num) {
+		return this.contestMapper.getcontestphoto(p_num);
+	}
+	
+	public void deletecontestphoto(int p_num) {
+		this.contestMapper.deletecontestphoto(p_num);
+	}
+	
+	public void deletecontest(int p_num) {
+		this.contestMapper.deletecontest(p_num);
+	}
+}

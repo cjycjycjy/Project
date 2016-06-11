@@ -1,0 +1,22 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+import ddoraemi.detailedgroupinfo.view.DetailedGroupInfo_InfoView;
+import ddoraemi.home.model.Group;
+
+public class DetailedGroupInfo_InfoView_presenter implements DetailedGroupInfo_InfoView_presenter_Interface{
+
+	DetailedGroupInfo_InfoView view;
+	
+	public DetailedGroupInfo_InfoView_presenter(DetailedGroupInfo_InfoView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+	}
+	@Override
+	public void validatecredential(String event, Group group) {
+		// TODO Auto-generated method stub
+		if(event.equalsIgnoreCase("joingroup")){
+			view.goToJoinGroup(group);
+		}
+	}
+
+}

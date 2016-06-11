@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/witchhunter" >
+
+    <RelativeLayout
+        android:id="@+id/layout_title_wireless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
+        android:background="#15FFFFFF"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip" >
+
+        <Button
+            android:id="@+id/btn_cancel_wireless"
+            android:layout_width="30dip"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_title_login_wireless"
+            android:layout_alignTop="@+id/tv_title_login_wireless"
+            android:layout_marginLeft="10dip"
+            android:background="@drawable/back" />
+
+        <TextView
+            android:id="@+id/tv_title_login_wireless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="wireless control"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFFFF"
+            android:textSize="20dip" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_otherphone_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_title_wireless"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/layout_round_corner" >
+
+        <TextView
+            android:id="@+id/tv_phoneNum_wireless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="5dip"
+            android:text="접속된 휴대폰 번호 - "
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_phoneNum_wireless_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_phoneNum_wireless"
+            android:textColor="#FFFFFF"
+             android:layout_marginTop="5dip" />
+
+        <TextView
+            android:id="@+id/tv_network_wireless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_phoneNum_wireless"
+            android:layout_marginLeft="10dip"
+            android:text="기기 네트워크 상태 - "
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_network_wireless_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_phoneNum_wireless_"
+            android:layout_toRightOf="@+id/tv_network_wireless"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_battery_wireless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_network_wireless"
+            android:layout_marginLeft="10dip"
+            android:text="배터리 잔량 - "
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_battery_wireless_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_network_wireless_"
+            android:layout_toRightOf="@+id/tv_battery_wireless"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_service_wireless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_battery_wireless"
+            android:layout_marginLeft="10dip"
+            android:layout_marginBottom="5dip"
+            android:text="기기 서비스 여부 - "
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_service_wireless_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_battery_wireless_"
+            android:layout_toRightOf="@+id/tv_service_wireless"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btn_state_error"
+            android:layout_width="match_parent"
+            android:layout_height="85dip"
+            android:layout_centerVertical="true"
+            android:background="@drawable/layout_round_corner_trans"
+            android:gravity="center"
+            android:text="연결이 불가능한 상태 입니다."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFFFF"
+            android:textSize="15dip" 
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_otherphone_state_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rl_otherphone_state"
+        android:layout_below="@+id/layout_title_wireless"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/layout_round_corner_trans"
+        android:padding="10dip"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/pg_otherphone_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_otherphone_function"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_otherphone_state"
+        android:layout_margin="10dip"
+        android:background="@drawable/layout_round_corner"
+        android:padding="10dip" >
+
+        <Button
+            android:id="@+id/btn_location"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_marginBottom="10dip"
+            android:layout_marginRight="30dip"
+            android:layout_toLeftOf="@+id/line_col"
+            android:background="@android:color/transparent"
+            android:drawablePadding="4dip"
+            android:drawableTop="@drawable/location"
+            android:text="위치 추적 기록"
+            android:textColor="#FFFFFF"
+            android:textSize="8pt" />
+
+        <Button
+            android:id="@+id/btn_camera"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_alignTop="@+id/btn_location"
+            android:layout_marginBottom="10dip"
+            android:layout_marginLeft="30dip"
+            android:layout_toRightOf="@+id/line_col"
+            android:background="@android:color/transparent"
+            android:drawablePadding="4dip"
+            android:drawableTop="@drawable/photo"
+            android:text="촬영된 사진 기록"
+            android:textColor="#FFFFFF"
+            android:textSize="8pt" />
+
+        <Button
+            android:id="@+id/btn_alarm"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_below="@+id/line_row1"
+            android:layout_marginBottom="10dip"
+            android:layout_marginRight="30dip"
+            android:layout_marginTop="10dip"
+            android:layout_toLeftOf="@+id/line_col"
+            android:background="@android:color/transparent"
+            android:drawablePadding="4dip"
+            android:drawableTop="@drawable/alarmon"
+            android:text="경보 울리기"
+            android:textColor="#FFFFFF"
+            android:textSize="8pt" />
+
+        <Button
+            android:id="@+id/btn_alarmOff"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_alignTop="@+id/btn_alarm"
+            android:layout_marginBottom="10dip"
+            android:layout_marginLeft="30dip"
+            android:layout_toRightOf="@+id/line_col"
+            android:background="@android:color/transparent"
+            android:drawablePadding="4dip"
+            android:drawableTop="@drawable/alarmoff"
+            android:text="경보 STOP"
+            android:textColor="#FFFFFF"
+            android:textSize="8pt" />
+
+        <Button
+            android:id="@+id/btn_lock"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_below="@+id/line_row2"
+            android:layout_marginRight="30dip"
+            android:layout_marginTop="10dip"
+            android:layout_toLeftOf="@+id/line_col"
+            android:background="@android:color/transparent"
+            android:drawablePadding="4dip"
+            android:drawableTop="@drawable/lock"
+            android:text="휴대폰 원격 잠금"
+            android:textColor="#FFFFFF"
+            android:textSize="8pt" />
+
+        <Button
+            android:id="@+id/btn_live"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_alignTop="@+id/btn_lock"
+            android:layout_marginLeft="30dip"
+            android:layout_toRightOf="@+id/line_col"
+            android:background="@android:color/transparent"
+            android:drawablePadding="4dip"
+            android:drawableTop="@drawable/live"
+            android:text="실시간 영상 보기"
+            android:textColor="#FFFFFF"
+            android:textSize="8pt" />
+
+        <LinearLayout
+            android:id="@+id/line_col"
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btn_live"
+            android:layout_alignTop="@+id/btn_location"
+            android:layout_centerHorizontal="true"
+            android:background="#50FFFFFF"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:id="@+id/line_row1"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_below="@+id/btn_location"
+            android:layout_centerHorizontal="true"
+            android:background="#50FFFFFF"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:id="@+id/line_row2"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_below="@+id/btn_alarm"
+            android:layout_centerHorizontal="true"
+            android:background="#50FFFFFF"
+            android:orientation="horizontal" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_otherphone_function"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/button_round_corner"
+        android:text="로그아웃"
+        android:textColor="#FFFFFF"
+        android:textSize="15dip" />
+
+</RelativeLayout>

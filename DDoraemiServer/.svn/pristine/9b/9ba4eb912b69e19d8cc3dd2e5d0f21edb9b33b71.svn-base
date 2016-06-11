@@ -1,0 +1,14 @@
+package com.myserver.skp.mapper;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.myserver.skp.vo.GatheringVo;
+
+@Repository
+public interface GatheringMapper {
+	List<HashMap<String, String>> selectAll();
+	List<HashMap<String, String>> selectIsAvailable();
+}

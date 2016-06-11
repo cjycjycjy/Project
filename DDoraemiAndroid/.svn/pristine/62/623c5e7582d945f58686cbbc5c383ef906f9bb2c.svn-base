@@ -1,0 +1,208 @@
+package ddoraemi.detailedgroupinfo.view;
+
+import java.util.ArrayList;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.detailedgroupinfo.model.QnA;
+import ddoraemi.detailedgroupinfo.model.QnAReply;
+import ddoraemi.detailedgroupinfo.presenter.DetailedQnA_reply_Presenter_Interface;
+import ddoraemi.detailedgroupinfo.presenter.DetailedQnA_reply_presenter;
+import ddoraemi.detailediteminfo.view.DetailedAfterword_replyListAdapter;
+import ddoraemi.start.R;
+import ddoraemi.volley.VolleySingleton;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
+public class DetailedQnA_reply_View extends Activity implements
+		DetailedQnA_reply_View_Interface, OnClickListener {
+
+	DetailedQnA_reply_Presenter_Interface presenter;
+	QnA qna;
+	ListView listview;
+	DetailedQnA_replyListAdapter adapter;
+	ArrayList<QnAReply> qna_reply;
+	AppController app;
+
+	TextView tv_detailedqna_u_id;
+	TextView tv_detailedqna_date;
+	TextView tv_detailedqna_text;
+	TextView delete;
+	ImageView btn_inputqnareply;
+	EditText et_qnareply;
+
+	int position;
+	ImageView btn_back;
+
+	ImageLoader mImageLoader;
+	RequestQueue mRequestQueue;
+
+	int a_r_position;
+	boolean reply_modify_check = false;
+	private NetworkImageView userimg;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_detailedqna);
+		Intent intent = getIntent();
+		qna = (QnA) intent.getSerializableExtra("qna");
+		position = intent.getIntExtra("position", 0);
+		app = (AppController) getApplicationContext();
+		mRequestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+		mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
+		init();
+	}
+
+	public void init() {
+		presenter = new DetailedQnA_reply_presenter(this);
+		qna_reply = new ArrayList<QnAReply>();
+		listview = (ListView) findViewById(R.id.lv_qnareplylist);
+		qna_reply = qna.getReply();
+		adapter = new DetailedQnA_replyListAdapter(this,
+				R.layout.item_afterwordlist_replylist, qna_reply);
+		listview.setAdapter(adapter);
+		btn_back = (ImageView) findViewById(R.id.btn_detailedqna_left_menu);
+		btn_back.setOnClickListener(this);
+
+		tv_detailedqna_u_id = (TextView) findViewById(R.id.tv_detailed_qna_u_id);
+		tv_detailedqna_date = (TextView) findViewById(R.id.tv_detailed_qna_date);
+		tv_detailedqna_text = (TextView) findViewById(R.id.tv_detailed_qna_text);
+		btn_inputqnareply = (ImageView) findViewById(R.id.btn_inputqnareply);
+		et_qnareply = (EditText) findViewById(R.id.et_inputqnareply);
+		TextView tv_r_num = (TextView) findViewById(R.id.tv_qnareplynum);
+		tv_r_num.setVisibility(View.GONE);
+		tv_detailedqna_date.setText(qna.getQ_year() + "-" + qna.getQ_month()
+				+ "-" + qna.getQ_day());
+		tv_detailedqna_text.setText(qna.getQ_content());
+		tv_detailedqna_u_id.setText(qna.getU_id());
+
+		if (!qna.getU_photo_url().equalsIgnoreCase("empty")) {
+			NetworkImageView avatar;
+			avatar = (NetworkImageView) findViewById(R.id.detailedqna_user_photo);
+			avatar.setImageUrl(
+					app.getServerIp() + "/user_photo/" + qna.getU_photo_url(),
+					mImageLoader);
+		}
+		btn_inputqnareply.setOnClickListener(this);
+		delete = (TextView) findViewById(R.id.activity_detailqna_delete);
+		if (!qna.getU_id().equals(app.getId())) {
+			delete.setVisibility(View.GONE);
+		}
+		delete.setOnClickListener(this);
+
+		userimg = (NetworkImageView)findViewById(R.id.iv_inputqnareply_user);
+		userimg.setDefaultImageResId(R.drawable.usericon);
+		userimg.setImageUrl(
+				app.getServerIp() + "/user_photo/"
+						+ app.getUser().getU_photo_url(), mImageLoader);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			back();
+			return true;
+		}
+		return false;
+	}
+
+	public void back() {
+		Intent intent = new Intent();
+		// intent.putExtra("replynum", position);
+		intent.putExtra("item", qna);
+		intent.putExtra("position", position);
+		this.setResult(0, intent);
+		finish();
+	}
+
+	public void setEditText(String text, boolean check, PopupWindow mDropdown,
+			int position) {
+		et_qnareply.setText(text);
+		et_qnareply.requestFocus();
+		et_qnareply.setSelection(et_qnareply.length());
+		Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			public void run() {
+				InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				mgr.showSoftInput(et_qnareply, InputMethodManager.SHOW_FORCED);
+			}
+		}, 50);
+		btn_inputqnareply.setImageResource(R.drawable.btn_commentmodify);
+		reply_modify_check = check;
+		mDropdown.dismiss();
+		a_r_position = position;
+	}
+
+	public void deleteReply(PopupWindow mDropdown, int position) {
+		presenter.validatecredential("delete", qna, position, qna.getQ_id(),
+				app.getId(), et_qnareply.getText().toString(), position);
+		mDropdown.dismiss();
+	}
+
+	@Override
+	public void notifyListview(ArrayList<QnAReply> result) {
+		// TODO Auto-generated method stub
+		qna_reply.clear();
+		qna_reply.addAll(result);
+		adapter.notifyDataSetChanged();
+	}
+	
+	public void deleteQnA(ArrayList<QnA> data){
+		Intent intent = new Intent();
+		intent.putExtra("qna", data);
+		this.setResult(100, intent);
+		finish();
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if (v.getId() == R.id.btn_inputqnareply) {
+			if (!reply_modify_check) {
+				presenter
+						.validatecredential("setReply", qna, 0, qna.getQ_id(),
+								app.getId(), et_qnareply.getText().toString(),
+								position);
+				et_qnareply.setText("");
+				v.clearFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(et_qnareply.getWindowToken(), 0);
+			} else {
+				presenter.validatecredential("modify", qna, a_r_position, qna
+						.getQ_id(), app.getId(), et_qnareply.getText()
+						.toString(), position);
+				et_qnareply.setText("");
+				btn_inputqnareply.setImageResource(R.drawable.btn_commentsave);
+				reply_modify_check = false;
+				v.clearFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(et_qnareply.getWindowToken(), 0);
+			}
+		} else if (v.getId() == R.id.btn_detailedqna_left_menu) {
+			back();
+		} else if(v.getId()==R.id.activity_detailqna_delete)
+		{
+			presenter.deleteQnA(qna.getQ_id());
+		}
+	}
+
+}

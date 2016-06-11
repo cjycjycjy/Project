@@ -1,0 +1,451 @@
+package ddoraemi.myinfopage.view;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.util.SparseArrayCompat;
+import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.astuetz.PagerSlidingTabStrip;
+import com.nineoldandroids.view.ViewHelper;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.detailediteminfo.view.ScrollTabHolder;
+import ddoraemi.detailediteminfo.view.ScrollTabHolderFragment;
+import ddoraemi.dialog.Dialog_ProfileImgDialog;
+import ddoraemi.dialog.Dialog_logout;
+import ddoraemi.home.model.Group;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.home.view.HomeView;
+import ddoraemi.myinfopage.presenter.MyPagePresenter;
+import ddoraemi.myinfopage.presenter.MyPagePresenterInterface;
+import ddoraemi.start.LoginActivity;
+import ddoraemi.start.R;
+import ddoraemi.volley.VolleySingleton;
+
+public class MyPageView extends Fragment
+		implements MypageViewInterface, ScrollTabHolder, ViewPager.OnPageChangeListener, OnClickListener {
+	private MyPagePresenterInterface Presenter;
+	private PagerSlidingTabStrip tabs;
+	private ViewPager pager;
+	private PagerAdapter adapter;
+	private AppController app;
+	TextView tv_id;
+	NetworkImageView avatar;
+	ImageLoader mImageLoader;
+	RequestQueue mRequestQueue;
+	int curpagenum;
+	ImageView btn_modifydelete;
+
+	Dialog_ProfileImgDialog dialog_profileimg;
+
+	private int mMinHeaderHeight;//
+	private int mHeaderHeight;//
+	private int mMinHeaderTranslation;//
+	View mHeader;//
+
+	PopupWindow mDropdown = null;
+	Dialog_logout dialog;
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+		View v = inflater.inflate(R.layout.fragment_mypage, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		dialog_profileimg = new Dialog_ProfileImgDialog(this.getContext());
+		mRequestQueue = VolleySingleton.getInstance(getActivity()).getRequestQueue();
+		mImageLoader = VolleySingleton.getInstance(getActivity()).getImageLoader();
+		app = (AppController) getActivity().getApplicationContext();
+		pager = (ViewPager) v.findViewById(R.id.fragment_mypage_pager);
+		tabs = (PagerSlidingTabStrip) v.findViewById(R.id.fragment_mypage_tabs);
+		tv_id = (TextView) v.findViewById(R.id.fragment_mypage_Tv_id);
+
+		mMinHeaderHeight = getResources().getDimensionPixelSize(R.dimen.min_mypage_header_height);
+		mHeaderHeight = getResources().getDimensionPixelSize(R.dimen.mypage_headerheight);
+		mMinHeaderTranslation = -mMinHeaderHeight;
+		mHeader = v.findViewById(R.id.fragment_mypage_header);
+		tv_id.setText(app.getId());
+		Presenter = new MyPagePresenter(this);
+		Presenter.validateCredentials("getMypageInfo");
+		avatar = (NetworkImageView) v.findViewById(R.id.fragment_mypage_userprofileImg);
+		avatar.setDefaultImageResId(R.drawable.icon_user_profile);
+		avatar.setImageUrl(app.getServerIp() + "/user_photo/" + app.getUser().getU_photo_url(), mImageLoader);
+		avatar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog_profileimg.show();
+			}
+		});
+
+		dialog_profileimg.getCameraBtn().setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog_profileimg.dismiss();
+				Intent i = new Intent(getActivity(), Mypage_Profileimg_View.class);
+				i.putExtra("type", 2);
+				getActivity().startActivityForResult(i, HomeView.MYPAGEINTENTPROFILE);
+			}
+		});
+		dialog_profileimg.getAlbumBtn().setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog_profileimg.dismiss();
+				Intent i = new Intent(getActivity(), Mypage_Profileimg_View.class);
+				i.putExtra("type", 1);
+				getActivity().startActivityForResult(i, HomeView.MYPAGEINTENTPROFILE);
+			}
+		});
+
+		dialog = new Dialog_logout(this.getContext());
+		dialog.getOkBtn().setOnClickListener(this);
+		dialog.getCancelBtn().setOnClickListener(this);
+		btn_modifydelete = (ImageView) v.findViewById(R.id.icon_personal);
+		btn_modifydelete.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (mDropdown == null)
+					initPopupWindow(btn_modifydelete);
+				else {
+					mDropdown.dismiss();
+					mDropdown = null;
+					initPopupWindow(btn_modifydelete);
+				}
+			}
+		});
+	}
+
+	public void setProfileImg(Bitmap image_bitmap, String all_path) {
+		avatar.setImageBitmap(image_bitmap);
+	}
+
+	@Override
+	public void setViewPager(View v, ArrayList<Group> particiategroup, ArrayList<ProgramData> wishprogram,
+			ArrayList<Group> pastprogram, Hashtable<Integer, Afterword> afterword) {
+		adapter = new PagerAdapter(getChildFragmentManager(), particiategroup, wishprogram, pastprogram, afterword);
+		adapter.setTabHolderScrollingContent(this);
+		pager.setAdapter(adapter);
+		pager.setOffscreenPageLimit(3);
+		final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
+				getResources().getDisplayMetrics());
+		pager.setPageMargin(pageMargin);
+		tabs.setViewPager(pager);
+		tabs.setShouldExpand(true);
+		tabs.setOnPageChangeListener(this);
+	}
+
+	@Override
+	public void navigateToNext() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public MyPagePresenterInterface getPresenter() {
+		return Presenter;
+	}
+
+	public class PagerAdapter extends FragmentPagerAdapter {
+		private String[] Title = { getString(R.string.joining_group), getString(R.string.wish_program),
+				getString(R.string.past_program) };
+		ArrayList<Group> particiategroup;
+		ArrayList<ProgramData> wishprogram;
+		ArrayList<Group> pastprogram;
+		Hashtable<Integer, Afterword> afterword;
+
+		private SparseArrayCompat<ScrollTabHolder> mScrollTabHolders;
+		private ScrollTabHolder mListener;
+
+		public PagerAdapter(FragmentManager fm, ArrayList<Group> particiategroup, ArrayList<ProgramData> wishprogram,
+				ArrayList<Group> pastprogram, Hashtable<Integer, Afterword> afterword) {
+			super(fm);
+			mScrollTabHolders = new SparseArrayCompat<ScrollTabHolder>();
+			this.particiategroup = new ArrayList<Group>();
+			this.wishprogram = new ArrayList<ProgramData>();
+			this.pastprogram = new ArrayList<Group>();
+			this.afterword = new Hashtable<>();
+			this.particiategroup.addAll(particiategroup);
+			this.wishprogram.addAll(wishprogram);
+			this.pastprogram.addAll(pastprogram);
+			this.afterword.putAll(afterword);
+
+		}
+
+		public void setTabHolderScrollingContent(ScrollTabHolder listener) {
+			mListener = listener;
+		}
+
+		@Override
+		public int getItemPosition(Object object) {
+			return POSITION_NONE;
+		}
+
+		@Override
+		public int getCount() {
+			return Title.length;
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			ScrollTabHolderFragment fragment;
+			if (position == 0) {
+				fragment = new MyPage_ParticipateView(particiategroup);
+			} else if (position == 1) {
+				fragment = new MyPage_WishView(wishprogram);
+			} else {
+				fragment = new MyPage_PastView(pastprogram, afterword);
+			}
+			mScrollTabHolders.put(position, fragment);
+			fragment.setScrollTabHolder(mListener);
+			return fragment;
+
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			switch (position) {
+			case 0:
+				return Title[0];
+			case 1:
+				return Title[1];
+			case 2:
+			default:
+				return Title[2];
+			}
+		}
+
+		public SparseArrayCompat<ScrollTabHolder> getScrollTabHolders() {
+			return mScrollTabHolders;
+		}
+
+		public void setParticiate(ArrayList<Group> paArrayList) {
+			this.particiategroup.clear();
+			this.particiategroup.addAll(paArrayList);
+		}
+
+		public void setwish(ArrayList<ProgramData> wishArrayList) {
+			this.wishprogram.clear();
+			this.wishprogram.addAll(wishArrayList);
+		}
+
+		public void setpast(ArrayList<Group> pastArrayList) {
+			this.pastprogram.clear();
+			this.pastprogram.addAll(pastArrayList);
+		}
+
+		public void setAfterword(Hashtable<Integer, Afterword> afterword) {
+			this.afterword.clear();
+			this.afterword.putAll(afterword);
+		}
+	}
+
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+		// nothing
+	}
+
+	@Override
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+		// nothing
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+		curpagenum = position;
+		SparseArrayCompat<ScrollTabHolder> scrollTabHolders = adapter.getScrollTabHolders();
+		ScrollTabHolder currentHolder = scrollTabHolders.valueAt(position);
+
+		currentHolder.adjustScroll((int) (mHeader.getHeight() + ViewHelper.getTranslationY(mHeader)));
+	}
+
+	@Override
+	public void setArrayList(ArrayList<Group> partcipategroup, ArrayList<ProgramData> wishprogram,
+			ArrayList<Group> pastprogram, Hashtable<Integer, Afterword> afterword) {
+		setViewPager(getView(), partcipategroup, wishprogram, pastprogram, afterword);
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount,
+			int pagePosition) {
+		if (pager.getCurrentItem() == pagePosition) {
+			int scrollY = getScrollY(view);
+			ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
+		}
+	}
+
+	@Override
+	public void adjustScroll(int scrollHeight) {
+		// nothing
+	}
+
+	public int getScrollY(AbsListView view) {
+		View c = view.getChildAt(0);
+		if (c == null) {
+			return 0;
+		}
+
+		int firstVisiblePosition = view.getFirstVisiblePosition();
+		int top = c.getTop();
+
+		int headerHeight = 0;
+		if (firstVisiblePosition >= 1) {
+			headerHeight = mHeaderHeight;
+		}
+
+		return -top + firstVisiblePosition * c.getHeight() + headerHeight;
+	}
+
+	@Override
+	public void onScrollViewScroll(int scrollheight, int pagePosition) {
+		if (pager.getCurrentItem() == pagePosition) {
+			int scrollY = scrollheight;
+			ViewHelper.setTranslationY(mHeader, Math.max(-scrollY, mMinHeaderTranslation));
+		}
+		// TODO Auto-generated method stub
+
+	}
+
+	public PopupWindow initPopupWindow(ImageView pop) {
+		try {
+			LayoutInflater mInflater = (LayoutInflater) getActivity().getApplicationContext()
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View layout = mInflater.inflate(R.layout.item_accountsettingpopupmenu, null);
+
+			// If you want to add any listeners to your textviews, these are two
+			// //textviews.
+			final ImageView itema = (ImageView) layout.findViewById(R.id.itemA);
+			itema.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent i = new Intent(getActivity().getApplicationContext(), MyPage_AccountSettingView.class);
+					startActivity(i);
+					mDropdown.dismiss();
+				}
+			});
+
+			final ImageView itemb = (ImageView) layout.findViewById(R.id.itemB);
+			itemb.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent i = new Intent(getActivity().getApplicationContext(), MyPage_AlarmSettingView.class);
+					startActivity(i);
+					mDropdown.dismiss();
+				}
+			});
+
+			final ImageView itemc = (ImageView) layout.findViewById(R.id.itemC);
+			itemc.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					dialog.show();
+				}
+			});
+
+			layout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+			mDropdown = new PopupWindow(layout, FrameLayout.LayoutParams.WRAP_CONTENT,
+					FrameLayout.LayoutParams.WRAP_CONTENT, true);
+			Drawable background = getActivity().getResources()
+					.getDrawable(android.R.drawable.editbox_dropdown_light_frame);
+			mDropdown.setBackgroundDrawable(background);
+			mDropdown.showAsDropDown(pop, 5, 5);
+			return mDropdown;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	@Override
+	public void setPage() {
+		pager.setCurrentItem(curpagenum);
+
+	}
+
+	@Override
+	public void renew() {
+		Presenter.validateCredentials("renew");
+
+	}
+
+	@Override
+	public void renewViewPager(View v, ArrayList<Group> particiategroup, ArrayList<ProgramData> wishprogram,
+			ArrayList<Group> pastprogram, Hashtable<Integer, Afterword> afterword) {
+		pager.removeAllViews();
+		adapter.setParticiate(particiategroup);
+		adapter.setpast(pastprogram);
+		adapter.setwish(wishprogram);
+		adapter.setAfterword(afterword);
+		adapter.notifyDataSetChanged();
+		pager.setCurrentItem(curpagenum);
+
+	}
+
+	@Override
+	public void renewArrayList(ArrayList<Group> partcipateprogram, ArrayList<ProgramData> wishprogram,
+			ArrayList<Group> pastprogram, Hashtable<Integer, Afterword> afterword) {
+		renewViewPager(getView(), partcipateprogram, wishprogram, pastprogram, afterword);
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if (v.getId() == R.id.btn_dialog_confirmcancel_ok) {
+			SharedPreferences sharedpreferences = this.getActivity().getSharedPreferences("setting",
+					Context.MODE_PRIVATE);
+			Editor editor = sharedpreferences.edit();
+			editor.clear();
+			editor.commit();
+			Intent i = new Intent(this.getContext(), LoginActivity.class);
+			startActivity(i);
+			this.getActivity().finish();
+		}
+		if (v.getId() == R.id.btn_dialog_confirmcancel_cancel) {
+			dialog.dismiss();
+		}
+	}
+
+	@Override
+	public void renewprofile(Bitmap photo) {
+		// TODO Auto-generated method stub
+		avatar.setImageBitmap(photo);
+		
+	}
+}

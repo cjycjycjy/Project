@@ -1,0 +1,264 @@
+package ddoraemi.adminmodehome.view;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.skp.Tmap.TMapData;
+import com.skp.Tmap.TMapMarkerItem;
+import com.skp.Tmap.TMapPoint;
+import com.skp.Tmap.TMapView;
+import com.skp.openplatform.android.sdk.api.APIRequest;
+import com.skp.openplatform.android.sdk.common.PlanetXSDKException;
+import com.skp.openplatform.android.sdk.common.RequestBundle;
+import com.skp.openplatform.android.sdk.common.RequestListener;
+import com.skp.openplatform.android.sdk.common.ResponseMessage;
+import com.skp.openplatform.android.sdk.common.PlanetXSDKConstants.CONTENT_TYPE;
+import com.skp.openplatform.android.sdk.common.PlanetXSDKConstants.HttpMethod;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.start.R;
+import ddoraemi.volley.VolleySingleton;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.view.DragEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
+import android.view.View.OnTouchListener;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+public class AdminProgramInfoView extends Fragment implements
+		AdminProgramInfoViewInterface {
+	ProgramData data;
+	TextView tv_challengeName;
+	TextView tv_comment;
+
+	TextView tv_cost;
+	TextView tv_leadtime;
+	TextView tv_supplied;
+	TextView tv_website;
+	TextView tv_phonenum;
+	TextView tv_curriculum;
+	TextView tv_masterid;
+	AppController app;
+	NetworkImageView programimage;
+	RequestQueue mRequestQueue;
+	ImageLoader mImageLoader;
+	ImageView[] star;
+	RelativeLayout t_map;
+	TMapView t_MapView;
+	TMapData tmapdata;
+	APIRequest api;
+	RequestBundle requestBundle;
+	String URL = "https://apis.skplanetx.com/tmap/geo/geocoding";
+	Map<String, Object> param;
+	String hndResult = "";
+	JSONObject jObject;
+	JSONObject coordinateInfo;
+	private ImageView spring;
+	private ImageView summer;
+	private ImageView fall;
+	private ImageView winter;
+	Handler msgHandler = new Handler() {
+		public void dispatchMessage(Message msg) {
+			try {
+				jObject = new JSONObject(hndResult);
+				coordinateInfo = jObject.getJSONObject("coordinateInfo");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			double lat = 37.544782;
+			double lon = 126.738749;
+
+			if (coordinateInfo != null) {
+				try {
+					lat = Double.parseDouble(coordinateInfo.getString("lat"));
+				} catch (NumberFormatException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				try {
+					lon = Double.parseDouble(coordinateInfo.getString("lon"));
+				} catch (NumberFormatException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+			TMapPoint point = new TMapPoint(lat, lon);
+			TMapMarkerItem marker = new TMapMarkerItem();
+			marker.setTMapPoint(point);
+			marker.setName(data.getE_name());
+			marker.setVisible(TMapMarkerItem.VISIBLE);
+			t_MapView.addMarkerItem(data.getE_name(), marker);
+
+			t_MapView.setCenterPoint(lon, lat);
+		};
+	};
+	public AdminProgramInfoView(ProgramData programinfo) {
+		// TODO Auto-generated constructor stub
+		this.data = programinfo;
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_admin_programinfo, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		// TODO Auto-generated method stub
+		app=(AppController)getActivity().getApplicationContext();
+		mRequestQueue = VolleySingleton.getInstance(getActivity()).getRequestQueue();
+		mImageLoader = VolleySingleton.getInstance(getActivity()).getImageLoader();
+		programimage=(NetworkImageView)v.findViewById(R.id.fragment_admin_programinfo_challenge_image);
+		programimage.setDefaultImageResId(R.drawable.img_detail_default);
+		programimage.setImageUrl(app.getServerIp()+"/program_photo/"+data.getP_photo_url(), mImageLoader);
+		star=new ImageView[5];
+		star[0]=(ImageView)v.findViewById(R.id.fragment_admin_programinfo_star_fill_img1);
+		star[1]=(ImageView)v.findViewById(R.id.fragment_admin_programinfo_star_fill_img2);
+		star[2]=(ImageView)v.findViewById(R.id.fragment_admin_programinfo_star_fill_img3);
+		star[3]=(ImageView)v.findViewById(R.id.fragment_admin_programinfo_star_fill_img4);
+		star[4]=(ImageView)v.findViewById(R.id.fragment_admin_programinfo_star_fill_img5);
+		int score=(int)(data.getP_grade()+0.5);
+		for(int i=0; i<score; i++)
+		{
+			star[i].setVisibility(View.VISIBLE);
+		}
+		spring = (ImageView)v.findViewById(R.id.fragment_admin_programinfo_img_spring);
+		summer = (ImageView)v.findViewById(R.id.fragment_admin_programinfo_img_summer);
+		fall = (ImageView)v.findViewById(R.id.fragment_admin_programinfo_img_autumn);
+		winter = (ImageView)v.findViewById(R.id.fragment_admin_programinfo_img_winter);
+		if(data.getP_available_season().toString().substring(0, 1).equalsIgnoreCase("1")){
+			spring.setVisibility(View.VISIBLE);
+		}
+		if(data.getP_available_season().toString().substring(1, 2).equalsIgnoreCase("1")){
+			summer.setVisibility(View.VISIBLE);
+		}
+		if(data.getP_available_season().toString().substring(2, 3).equalsIgnoreCase("1")){
+			fall.setVisibility(View.VISIBLE);
+		}
+		if(data.getP_available_season().toString().substring(3, 4).equalsIgnoreCase("1")){
+			winter.setVisibility(View.VISIBLE);
+		}
+		tv_masterid=(TextView)v.findViewById(R.id.fragment_admin_programinfo_tv_masterid);
+		tv_masterid.setText(app.getId());
+		tv_challengeName = (TextView) v.findViewById(R.id.fragment_admin_programinfo_tv_challenge_name);
+		tv_comment = (TextView) v.findViewById(R.id.fragment_admin_programinfo_tv_comment);
+		tv_challengeName.setText(data.getP_name());
+		tv_comment.setText(data.getP_town_name());
+		
+		tv_cost =(TextView)v.findViewById(R.id.fragment_admin_programinfo_tv_cost) ;
+		tv_cost.setText(data.getP_cost_adult()+"원");
+		tv_leadtime =(TextView)v.findViewById(R.id.fragment_admin_programinfo_tv_leadtime) ;
+		tv_leadtime.setText(String.valueOf(data.getP_lead_time())+"분");
+		tv_supplied =(TextView)v.findViewById(R.id.fragment_admin_programinfo_tv_supplied) ;
+		tv_supplied.setText(data.getP_preparation_item());
+		tv_website =(TextView)v.findViewById(R.id.fragment_admin_programinfo_tv_website) ;
+		tv_website.setText(data.getP_url());
+		tv_phonenum =(TextView)v.findViewById(R.id.fragment_admin_programinfo_tv_phonenum) ;
+		tv_phonenum.setText(data.getP_tel());
+
+		t_map = (RelativeLayout) v.findViewById(R.id.fragment_admin_programinfo_rl_map);
+
+		t_MapView = new TMapView(getActivity()); // TmapView생성
+		t_map.addView(t_MapView);
+		t_MapView.setSKPMapApiKey("829de05c-a841-3a5f-98ef-d575aa7ca4e8");
+		t_MapView.setOnDragListener(new OnDragListener() {
+			@Override
+			public boolean onDrag(View v, DragEvent event) {
+				// TODO Auto-generated method stub
+				return true;
+			}
+		});
+		t_MapView.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				return true;
+			}
+		});
+		t_MapView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		commWithOpenApiServer();
+	}
+
+	public void commWithOpenApiServer() {
+		// AppKey 설정
+		api = new APIRequest();
+		APIRequest.setAppKey("829de05c-a841-3a5f-98ef-d575aa7ca4e8");
+
+		// url에 삽입되는 파라미터 설정
+		param = new HashMap<String, Object>();
+		param.put("version", "1");
+		param.put("city_do", data.getP_addr_1());
+		param.put("gu_gun", data.getP_addr_2());
+		param.put("dong", data.getP_addr_3());
+		// param.put("bunji", "430-2");
+		param.put("coordType", "WGS84GEO");
+
+		// 호출시 사용될 값 설정
+		requestBundle = new RequestBundle();
+		requestBundle.setUrl(URL);
+		requestBundle.setParameters(param);
+		requestBundle.setHttpMethod(HttpMethod.GET);
+		requestBundle.setResponseType(CONTENT_TYPE.JSON);
+
+		try {
+			// 비동기 호출
+			api.request(requestBundle, reqListener);
+		} catch (PlanetXSDKException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Opean API 통신시 사용하는 비동기 Listener
+	RequestListener reqListener = new RequestListener() {
+		@Override
+		public void onPlanetSDKException(PlanetXSDKException e) {
+			hndResult = e.toString();
+			msgHandler.sendEmptyMessage(0);
+		}
+
+		@Override
+		public void onComplete(ResponseMessage result) {
+			// 응답을 받아 메시지 핸들러에 알려준다.
+			hndResult = result.toString();
+			msgHandler.sendEmptyMessage(0);
+		}
+	};
+
+}

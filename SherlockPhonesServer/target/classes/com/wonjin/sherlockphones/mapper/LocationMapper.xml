@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wonjin.sherlockphones.mapper.LocationMapper">
+
+	<resultMap id="locationMap" type="com.wonjin.sherlockphones.vo.LocationVo">
+		<id property="l_id" column="l_id" />
+		<result property="u_phonenum" column="u_phonenum" />
+		<result property="l_long" column="l_long" />
+		<result property="l_lat" column="l_lat" />
+		<result property="l_time" column="l_time" />
+	</resultMap>
+	
+	<insert id="registerLocation">
+		insert into location values(null, #{u_phonenum}, #{l_long}, #{l_lat}, now())
+	</insert>
+	
+	<select id="selectLocation" resultMap="locationMap">
+		select * from location where u_phonenum=#{u_phonenum}
+	</select>
+	
+</mapper>

@@ -1,0 +1,139 @@
+package ddoraemi.detailediteminfo.view;
+
+import java.util.ArrayList;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.Spinner;
+import android.widget.TextView;
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.detailediteminfo.presenter.DetailedItemInfo_AfterwordView_presenter_Interface;
+import ddoraemi.start.R;
+import ddoraemi.volley.VolleySingleton;
+
+public class DetailedItemInfo_AfterwordListAdapter extends
+		ArrayAdapter<Afterword> {
+	ArrayList<Afterword> items;
+	Context context;
+
+	DetailedItemInfo_AfterwordView_presenter_Interface presenter;
+	int mPosition;
+
+	AppController app;
+	Spinner btn_modifydelete;
+	ArrayAdapter modifydelete;
+	RequestQueue mRequestQueue;
+	ImageLoader mImageLoader;
+
+	public DetailedItemInfo_AfterwordListAdapter(Context context, int resource,
+			ArrayList<Afterword> objects,
+			DetailedItemInfo_AfterwordView_presenter_Interface presenter) {
+		super(context, resource, objects);
+		this.context = context;
+		app = (AppController) context.getApplicationContext();
+		items = objects;
+		this.presenter = presenter;
+		mRequestQueue = VolleySingleton.getInstance(context).getRequestQueue();
+		mImageLoader = VolleySingleton.getInstance(context).getImageLoader();
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View v = convertView;
+		NetworkImageView avatar;
+		mPosition = position;
+
+		if (v == null) {
+			LayoutInflater vi = (LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			v = vi.inflate(R.layout.item_afterwordlist, null);
+		}
+		final Afterword p = items.get(position);
+		final int mposition = position;
+		if (p != null) {
+			final TextView tv_afterword_u_id = (TextView) v
+					.findViewById(R.id.tv_afterword_u_id);
+			final TextView tv_afterword_text = (TextView) v
+					.findViewById(R.id.tv_afterword_text);
+			final TextView tv_afterword_date = (TextView) v
+					.findViewById(R.id.tv_afterword_date);
+			final TextView tv_reply = (TextView) v
+					.findViewById(R.id.tv_add_reply);
+			tv_reply.setText("댓글(" + p.getA_r_num() + ")");
+			final ImageView btn_modifydelete = (ImageView) v
+					.findViewById(R.id.modifydelete);
+
+			if (app.getId().equals(items.get(position).getU_id())) {
+				btn_modifydelete.setVisibility(View.VISIBLE);
+			} else {
+				btn_modifydelete.setVisibility(View.GONE);
+			}
+			btn_modifydelete.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					initPopupWindow(btn_modifydelete,p);
+				}
+			});
+
+			tv_afterword_u_id.setText(p.getU_id());
+			tv_afterword_date.setText(String.valueOf(p.getA_year()) + "-"
+					+ String.valueOf(p.getA_month()) + "-"
+					+ String.valueOf(p.getA_day()));
+			tv_afterword_text.setText(p.getA_content());
+			if(!getItem(position).getU_photo_url().equalsIgnoreCase("empty")){
+				avatar = (NetworkImageView)v.findViewById(R.id.afterword_user_photo);
+				avatar.setImageUrl(app.getServerIp()+"/user_photo/"+getItem(position).getU_photo_url(),mImageLoader);
+			}
+		}
+		return v;
+
+	}
+
+	public PopupWindow initPopupWindow(ImageView pop,Afterword item) {
+		PopupWindow mDropdown;
+		try {
+			LayoutInflater mInflater = (LayoutInflater) context
+					.getApplicationContext().getSystemService(
+							Context.LAYOUT_INFLATER_SERVICE);
+			View layout = mInflater.inflate(R.layout.item_popupmenu, null);
+
+			// If you want to add any listeners to your textviews, these are two
+			// //textviews.
+			final ImageView itema = (ImageView) layout.findViewById(R.id.itemA);
+
+			final ImageView itemb = (ImageView) layout.findViewById(R.id.itemB);
+
+			layout.measure(View.MeasureSpec.UNSPECIFIED,
+					View.MeasureSpec.UNSPECIFIED);
+			mDropdown = new PopupWindow(layout,
+					FrameLayout.LayoutParams.WRAP_CONTENT,
+					FrameLayout.LayoutParams.WRAP_CONTENT, true);
+			Drawable background = context.getResources().getDrawable(android.R.drawable.editbox_dropdown_light_frame);
+			mDropdown.setBackgroundDrawable(background);
+			mDropdown.showAsDropDown(pop, 5, 5);
+			return mDropdown;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+}

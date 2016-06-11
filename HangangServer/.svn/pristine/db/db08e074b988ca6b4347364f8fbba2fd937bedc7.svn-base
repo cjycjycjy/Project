@@ -1,0 +1,95 @@
+package com.fuck.hangang.controller;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fuck.hangang.dao.UserDao;
+import com.fuck.hangang.vo.TeamVo;
+import com.fuck.hangang.vo.UserVo;
+
+@Controller
+public class UserController {
+	@Resource
+	private UserDao userDao;
+	//private Dao userDao;
+
+	//	@RequestMapping(value = "/a")
+	//	public @ResponseBody <T> HashMap<String, T> selectUser() {
+	//
+	//		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+	//		UserVo resultUserVo =  userDao.selectUser();
+	//
+	//		if(resultUserVo != null){
+	//			resultHashMap.put("result", (T)"Success");
+	//			resultHashMap.put("user", (T)resultUserVo);
+	//		}else{
+	//			resultHashMap.put("result", (T)"Failed");
+	//		}
+	//
+	//		return resultHashMap;
+	//
+	//
+	//	}
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public @ResponseBody String signup(@ModelAttribute UserVo userVo) {
+
+		try {
+			userDao.signup(userVo);
+		}catch(Exception e){
+			e.printStackTrace();
+			return "Failed";
+		}
+		return "Success";
+	}
+
+
+	@RequestMapping(value = "/signin", method = RequestMethod.POST)
+	public @ResponseBody String signin(@RequestParam("u_id") String u_id, @RequestParam("u_passwd") String u_passwd) {
+
+
+		//password = passwordEncoder.encodePassword(password, null);
+		UserVo resultUserVo = userDao.signin(u_id, u_passwd);
+
+		if(resultUserVo != null){
+			return "Success";
+		}else{
+			return "Failed";
+		}		
+	}
+	@RequestMapping(value = "/getuser", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getUser(@RequestParam("u_id") String u_id) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		UserVo resultUserVo =  userDao.getuser(u_id);
+		List<TeamVo> resultBookmarkTeamVo = userDao.getbookmarkteam(u_id);
+		if(resultUserVo != null){
+			if(resultUserVo.getU_permission() == 2){
+				TeamVo resultMyTeamVo = userDao.getteam(u_id);
+				resultHashMap.put("result", (T)"Success");
+				resultHashMap.put("user", (T)resultUserVo);
+				resultHashMap.put("team", (T)resultMyTeamVo);
+				resultHashMap.put("bookmark", (T)resultBookmarkTeamVo);
+				return resultHashMap;
+			}else{
+				resultHashMap.put("result", (T)"Success");
+				resultHashMap.put("user", (T)resultUserVo);
+				resultHashMap.put("bookmark", (T)resultBookmarkTeamVo);
+				return resultHashMap;
+			}
+		}else{
+			resultHashMap.put("result", (T)"Error");
+			return resultHashMap;
+		}
+
+	}
+
+}

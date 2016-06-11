@@ -1,0 +1,26 @@
+package ddoraemi.detailediteminfo.presenter;
+
+import ddoraemi.detailediteminfo.view.DetailedItemInfo_View;
+
+public class DetailedItemInfo_Presenter implements DetailedItemInfo_Presenter_Interface{
+
+	DetailedItemInfo_View view;
+	
+	public DetailedItemInfo_Presenter(DetailedItemInfo_View view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+	}
+	
+	@Override
+	public void createGroup() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showMap() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

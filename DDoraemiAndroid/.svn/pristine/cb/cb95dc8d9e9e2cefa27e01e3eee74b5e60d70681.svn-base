@@ -1,0 +1,46 @@
+package ddoraemi.detailediteminfo.presenter;
+
+import ddoraemi.detailediteminfo.model.DetailedItemInfo_View_Interactor;
+import ddoraemi.detailediteminfo.model.DetailedItemInfo_View_Interactor_interface;
+import ddoraemi.detailediteminfo.view.DetailedItemInfo_InfoView;
+import ddoraemi.detailediteminfo.view.DetailedItemInfo_View;
+import ddoraemi.home.model.ProgramData;
+
+public class DetailedItemInfo_ViewPresenter implements DetailedItemInfo_ViewPresenter_Interface,
+OnDetailedItemInfo_View_FinishedListener
+{
+	
+	DetailedItemInfo_InfoView view;
+	DetailedItemInfo_View_Interactor_interface interactor;
+	
+	public DetailedItemInfo_ViewPresenter(DetailedItemInfo_InfoView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		interactor = new DetailedItemInfo_View_Interactor();
+	}
+	@Override
+	public void validatecredential(String event, ProgramData item) {
+		// TODO Auto-generated method stub
+		if(event.equalsIgnoreCase("createGroup")){
+			view.goToCreateGroup(item);
+		}
+		interactor.getData(view, this);
+		
+	}
+	@Override
+	public void getDataSuccess() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void goToWebsite() {
+		// TODO Auto-generated method stub
+		view.goToWebsite();
+	}
+	@Override
+	public void callToAdmin() {
+		// TODO Auto-generated method stub
+		view.callToAdmin();
+	}
+
+}

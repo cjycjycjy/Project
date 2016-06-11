@@ -1,0 +1,114 @@
+package com.fuck.hangang.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.fuck.hangang.mapper.QnaMapper;
+import com.fuck.hangang.vo.CheerfulVo;
+import com.fuck.hangang.vo.QnaReplyOfReplyVo;
+import com.fuck.hangang.vo.QnaVo;
+import com.fuck.hangang.vo.QnareplyVo;
+import com.fuck.hangang.vo.RegistrationIdVo;
+
+@Service
+public class QnaDao {
+	@Resource
+	QnaMapper qnaMapper;
+
+	public List<QnaVo> getqnafirst() {
+		return this.qnaMapper.getqnafirst();
+	}
+	
+	public List<QnaVo> getqnalast(int lastnum) {
+		return this.qnaMapper.getqnalast(lastnum);
+	}
+	
+	public int getqnareplycount(int q_num) {
+		return this.qnaMapper.getqnareplycount(q_num);
+	}
+	
+	public List<QnareplyVo> getqnareplyfirst(int q_num) {
+		return this.qnaMapper.getqnareplyfirst(q_num);
+	}
+	
+	public List<QnareplyVo> getqnareplylast(int q_num, int lastnum) {
+		return this.qnaMapper.getqnareplylast(q_num, lastnum);
+	}
+	
+	public int getqnareplyofreplycount(int q_num, int q_r_num) {
+		return this.qnaMapper.getqnareplyofreplycount(q_num, q_r_num);
+	}
+	
+	public void registqna(String u_id, String title, String content) {
+		this.qnaMapper.registqna(u_id, title, content);
+	}
+
+	public void registqnareply(int q_num, String u_id, String q_r_content) {
+		this.qnaMapper.registqnareply(q_num, u_id, q_r_content);
+	}
+	
+	public List<QnaReplyOfReplyVo> getqnareplyofreplyfirst(int q_num, int q_r_num) {
+		return this.qnaMapper.getqnareplyofreplyfirst(q_num, q_r_num);
+	}
+	
+	public List<QnaReplyOfReplyVo> getqnareplyofreplylast(int q_num, int q_r_num, int lastnum) {
+		return this.qnaMapper.getqnareplyofreplylast(q_num, q_r_num, lastnum);
+	}
+	
+
+	
+	public void registqnareplyofreply(int q_num, int q_r_num, String u_id, String q_rr_content) {
+		this.qnaMapper.registqnareplyofreply(q_num, q_r_num, u_id, q_rr_content);
+	}
+	
+	public void updateqnareply(int q_num, int q_r_num, String q_r_content) {
+		this.qnaMapper.updateqnareply(q_num, q_r_num, q_r_content);
+	}
+	
+	public void updateqnareplyofreply(int q_num, int q_r_num, int q_rr_num, String q_rr_content) {
+		this.qnaMapper.updateqnareplyofreply(q_num, q_r_num, q_rr_num, q_rr_content);
+	}
+	
+	public void deleteqnareplyofreply(int q_num, int q_r_num, int q_rr_num) {
+		this.qnaMapper.deleteqnareplyofreply(q_num, q_r_num, q_rr_num);
+	}
+
+	public void deleteqnareply(int q_num, int q_r_num) {
+		this.qnaMapper.deleteqnareply(q_num, q_r_num);
+	}
+	
+	public void deleteqna(int q_num) {
+		this.qnaMapper.deleteqna(q_num);
+	}
+	
+	public RegistrationIdVo getRegiIdOfUser(int q_num){
+		return this.qnaMapper.getRegiIdOfUser(q_num);
+	}
+	public RegistrationIdVo getRegiIdOfUserComment(int q_r_num){
+		return this.qnaMapper.getRegiIdOfUserComment(q_r_num);
+	}
+	public QnaVo getQnAOne(int q_num){
+		return this.qnaMapper.getQnAOne(q_num);
+	}
+	public String checkReplyUser(int q_num){
+		return this.qnaMapper.checkReplyUser(q_num);
+	}
+	public int checkPushUser(String id) {
+		return this.qnaMapper.checkPushUser(id);
+	}
+	public QnareplyVo getqnareplyone(int q_num, int q_r_num){
+		return this.qnaMapper.getqnareplyone(q_num, q_r_num);
+	}
+	
+	public void registPushListAboutReply(String id, String u_id, int flag, int num) {
+		this.qnaMapper.registPushListAboutReply(id, u_id, flag, num);
+	}
+	public void registPushListAboutReplyOfReply(String id, String u_id, int flag, int num, int reply_num) {
+		this.qnaMapper.registPushListAboutReplyOfReply(id, u_id, flag, num, reply_num);
+	}
+	
+
+}

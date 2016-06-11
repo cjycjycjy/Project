@@ -1,0 +1,29 @@
+package ddoraemi.programlist.presenter;
+
+import ddoraemi.programlist.model.Programlist_type_Interactor;
+import ddoraemi.programlist.model.Programlist_type_Interactor_Interface;
+import ddoraemi.programlist.view.Programlist_type_View;
+
+public class Programlist_type_presenter implements Programlist_type_presenter_Interface, OnProgramlist_type_FinishedListener{
+
+	Programlist_type_View view;
+	Programlist_type_Interactor_Interface interactor;
+	
+	public Programlist_type_presenter(Programlist_type_View view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		this.interactor = new Programlist_type_Interactor();
+		
+	}
+	@Override
+	public void validatecredential(String event) {
+		// TODO Auto-generated method stub
+		interactor.getData(view,this,event);
+	}
+	@Override
+	public void getDataSuccess(String event) {
+		// TODO Auto-generated method stub
+		view.goToList(event);
+	}
+
+}

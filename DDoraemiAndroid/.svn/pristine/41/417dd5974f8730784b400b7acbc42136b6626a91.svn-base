@@ -1,0 +1,118 @@
+package ddoraemi.home.presenter;
+
+import java.util.ArrayList;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import ddoraemi.home.model.Group;
+import ddoraemi.home.model.Home_MainViewInteractor;
+import ddoraemi.home.model.Home_MainViewInteractorInterface;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.home.view.Home_MainView;
+import android.view.View;
+
+public class Home_MainViewPresenter implements Home_MainViewPresenterInterface, OnHome_MainViewFinishedListener{
+
+	Home_MainView view;
+	Home_MainViewInteractorInterface interactor;
+	ArrayList<ProgramData> programList;
+	ArrayList<Group> groupList;
+	public Home_MainViewPresenter(Home_MainView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		interactor = new Home_MainViewInteractor();
+		programList = new ArrayList<ProgramData>();
+		groupList = new ArrayList<Group>();
+
+	}
+	@Override
+	public void validateCredentials(String event) {
+		// TODO Auto-generated method stub
+		if(event.toString().equalsIgnoreCase("getdata")){
+			interactor.getData(view.getActivity(),this);
+		}
+
+	}
+	@Override
+	public void OnGetDataSuccess(JsonObject data) {
+		// TODO Auto-generated method stub
+		programList.clear();
+		groupList.clear();
+		///////////////////////////////////////////////////////////////
+		// 異�泥� ��怨�由ъ� ���⑺�댁�� 由ъ�ㅽ�� 留��ㅼ�대�닿린!!!!!!!!!!!
+		///////////////////////////////////////////////////////////////
+		
+		JsonArray program = data.getAsJsonArray("program");
+		JsonArray group = data.getAsJsonArray("gathering");
+			
+		for(int i=0; i<program.size(); i++){
+			JsonObject dataobj = (JsonObject)program.get(i);
+			int p_id = (dataobj.get("p_id")).getAsInt();
+			String p_name = (dataobj.get("p_name")).getAsString();
+			String p_town_name = (dataobj.get("p_town_name")).getAsString();
+			int cost = (dataobj.get("p_cost")).getAsInt();
+			int p_min_persons = (dataobj.get("p_min_persons")).getAsInt();
+			int p_max_persons = (dataobj.get("p_max_persons")).getAsInt();
+			int p_lead_time = (dataobj.get("p_read_time")).getAsInt();		
+			int p_is_possible = (dataobj.get("p_is_possible")).getAsInt();
+			String p_note = (dataobj.get("p_note")).getAsString();
+			String p_addr_1 = (dataobj.get("p_addr_1")).getAsString();
+			String p_addr_2 = (dataobj.get("p_addr_2")).getAsString();
+			String p_addr_3 = (dataobj.get("p_addr_3")).getAsString();
+			String p_addr_4 = (dataobj.get("p_addr_4")).getAsString();
+			String p_addr_5 = (dataobj.get("p_addr_5")).getAsString();
+			String p_addr_6 = (dataobj.get("p_addr_6")).getAsString();
+			String p_type = (dataobj.get("e_name")).getAsString();
+			int a_id = (dataobj.get("a_id")).getAsInt();
+			String p_url = (dataobj.get("p_url")).getAsString();
+			
+			programList.add(new ProgramData(p_id, p_name, 
+					p_town_name, p_addr_1, p_addr_2, p_addr_3, p_addr_4, p_addr_5, 
+					p_addr_6, cost, p_min_persons, p_max_persons, p_lead_time, p_note, p_is_possible,p_type,
+					a_id,p_url));			
+		}
+		
+		for(int i=0; i<group.size(); i++){
+			JsonObject dataobj = (JsonObject)group.get(i);
+			int p_id = (dataobj.get("p_id")).getAsInt();
+			String p_name = (dataobj.get("p_name")).getAsString();
+			String p_addr = (dataobj.get("p_addr")).getAsString();
+			int g_id= (dataobj.get("g_id")).getAsInt();
+			String g_name= (dataobj.get("g_name")).getAsString();
+			
+		
+			String g_info= (dataobj.get("g_info")).getAsString();
+			int g_status= (dataobj.get("g_status")).getAsInt();
+			int g_persons= (dataobj.get("g_persons")).getAsInt();
+			String e_name = (dataobj.get("e_name")).getAsString();
+			
+
+			String u_id = (dataobj.get("u_id")).getAsString();
+
+			int g_want_persons= (dataobj.get("g_want_persons")).getAsInt();
+
+			int g_open_year= (dataobj.get("g_open_year")).getAsInt();
+			int g_open_month= (dataobj.get("g_open_month")).getAsInt();
+			int g_open_day= (dataobj.get("g_open_day")).getAsInt();
+			int g_close_year= (dataobj.get("g_close_year")).getAsInt();
+			int g_close_month= (dataobj.get("g_close_month")).getAsInt();
+			int g_close_day= (dataobj.get("g_close_day")).getAsInt();
+			int g_start_year= (dataobj.get("g_start_year")).getAsInt();
+			int g_start_month= (dataobj.get("g_start_month")).getAsInt();
+			int g_start_day= (dataobj.get("g_start_day")).getAsInt();
+			int g_start_hour= (dataobj.get("g_start_hour")).getAsInt();
+			int g_start_minute= (dataobj.get("g_start_minute")).getAsInt();
+			int g_end_hour= (dataobj.get("g_end_hour")).getAsInt();
+			int g_end_minute= (dataobj.get("g_end_minute")).getAsInt();
+			
+			groupList.add(new Group(g_id, p_id, u_id, g_name, g_persons, g_want_persons,
+					g_info, g_status, g_open_year, g_open_month, g_open_day, g_close_year, g_close_month, 
+					g_close_day, g_start_year, g_start_month, g_start_day, g_start_hour, g_start_minute, g_end_hour, 
+					g_end_minute, e_name, p_name, p_addr));
+		}
+
+		view.setProgramList(programList,groupList);
+	}
+
+}

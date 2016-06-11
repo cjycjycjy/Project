@@ -1,0 +1,6 @@
+package ddoraemi.creategroup.view;
+
+public interface CreateGroup_view_Interface {
+	public void showDatePopUp();
+	public void createGroup();
+}

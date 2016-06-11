@@ -1,0 +1,6 @@
+package ddoraemi.detailediteminfo.presenter;
+
+public interface DetailedItemInfo_ViewPresenter_Interface {
+	public void validatecredential(String event);
+	
+}

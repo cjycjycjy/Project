@@ -1,0 +1,5 @@
+package ddoraemi.join;
+
+public interface JoinPresenterInterface {
+	public void validateCredentials(String address, String nickname,String serverIp);
+}

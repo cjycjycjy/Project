@@ -1,0 +1,14 @@
+package com.myserver.skp.mapper;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.myserver.skp.vo.UserVo;
+
+@Repository
+public interface UserMapper {
+	public void insertBase(UserVo user);
+	public UserVo idCheck(@Param("u_id") String u_id);
+	public void insertFavoritProgram(@Param("u_id") String u_id, @Param("e_name") String e_name);
+	public String login(@Param("u_id") String u_id,@Param("password")  String password);
+}

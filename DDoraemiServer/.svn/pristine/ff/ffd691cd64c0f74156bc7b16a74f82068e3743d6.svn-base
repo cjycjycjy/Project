@@ -1,0 +1,76 @@
+package com.myserver.skp.vo;
+
+public class OpenProgramVo {
+	int o_p_id;
+	int p_id;
+	int o_p_year;
+	int o_p_month;
+	int o_p_day;
+	int o_p_start_hour;
+	int o_p_start_minute;
+	int o_p_end_hour;
+	int o_p_end_minute;
+	int o_p_status;
+	
+	public int getO_p_id() {
+		return o_p_id;
+	}
+	public void setO_p_id(int o_p_id) {
+		this.o_p_id = o_p_id;
+	}
+	public int getP_id() {
+		return p_id;
+	}
+	public void setP_id(int p_id) {
+		this.p_id = p_id;
+	}
+	public int getO_p_year() {
+		return o_p_year;
+	}
+	public void setO_p_year(int o_p_year) {
+		this.o_p_year = o_p_year;
+	}
+	public int getO_p_month() {
+		return o_p_month;
+	}
+	public void setO_p_month(int o_p_month) {
+		this.o_p_month = o_p_month;
+	}
+	public int getO_p_day() {
+		return o_p_day;
+	}
+	public void setO_p_day(int o_p_day) {
+		this.o_p_day = o_p_day;
+	}
+	public int getO_p_start_hour() {
+		return o_p_start_hour;
+	}
+	public void setO_p_start_hour(int o_p_start_hour) {
+		this.o_p_start_hour = o_p_start_hour;
+	}
+	public int getO_p_start_minute() {
+		return o_p_start_minute;
+	}
+	public void setO_p_start_minute(int o_p_start_minute) {
+		this.o_p_start_minute = o_p_start_minute;
+	}
+	public int getO_p_end_hour() {
+		return o_p_end_hour;
+	}
+	public void setO_p_end_hour(int o_p_end_hour) {
+		this.o_p_end_hour = o_p_end_hour;
+	}
+	public int getO_p_end_minute() {
+		return o_p_end_minute;
+	}
+	public void setO_p_end_minute(int o_p_end_minute) {
+		this.o_p_end_minute = o_p_end_minute;
+	}
+	public int getO_p_status() {
+		return o_p_status;
+	}
+	public void setO_p_status(int o_p_status) {
+		this.o_p_status = o_p_status;
+	}
+	
+}

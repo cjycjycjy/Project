@@ -1,0 +1,22 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+import ddoraemi.detailedgroupinfo.model.QnA;
+import ddoraemi.detailedgroupinfo.view.DetailedGroupInfo_QnA_View;
+
+public class DetailedGroupInfo_QnA_presenter implements DetailedGroupInfo_QnA_presenter_Interface{
+
+	DetailedGroupInfo_QnA_View view;
+
+
+
+	public DetailedGroupInfo_QnA_presenter(DetailedGroupInfo_QnA_View view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+	}
+	@Override
+	public void validatecredential(QnA qna, int position) {
+		// TODO Auto-generated method stub
+		view.goToDetailedQnA(qna, position);
+	}
+
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.QuestionMapper">
+
+	<resultMap id="questionMap" type="com.myserver.skp.vo.QuestionVo">
+		<id property="q_id" column="q_id" />
+		<result property="g_id" column="g_id" />
+		<result property="q_content" column="q_content" />
+		<result property="q_year" column="q_year" />
+		<result property="q_month" column="q_month" />
+		<result property="q_day" column="q_day" />
+		<result property="q_r_num" column="q_r_num" />
+		<association property="q_user" javaType="com.myserver.skp.vo.UserVo">
+			<id property="u_id" column="u_id" />
+			<result property="u_photo_url" column="u_photo_url" />
+		</association>
+		<collection property="question_reply" ofType="com.myserver.skp.vo.QuestionReplyVo">
+			<id property="q_r_id" column="q_r_id" />
+			<result property="q_r_content" column="q_r_content" />
+			<result property="q_r_year" column="q_r_year" />
+			<result property="q_r_month" column="q_r_month" />
+			<result property="q_r_day" column="q_r_day" />
+			<association property="q_r_user" javaType="com.myserver.skp.vo.UserVo">
+				<id property="u_id" column="q_r_u_id" />
+				<result property="u_photo_url" column="q_r_u_photo_url" />
+			</association>
+		</collection>
+	</resultMap>
+
+
+	<select id="selectAllofQuestion" resultMap="questionMap">
+		SELECT question.*,
+		q_user.u_id, q_user.u_photo_url, q_r.*
+
+		FROM question natural join user q_user
+		left outer join
+			(SELECT question_reply.*, q_r_user.u_id as q_r_u_id,
+			q_r_user.u_photo_url as q_r_u_photo_url
+			FROM question_reply natural join user q_r_user
+			WHERE question_reply.q_id=43) q_r
+		ON q_r.q_id=question.q_id
+		WHERE
+		question.g_id=#{g_id};
+
+
+	</select>
+
+
+
+	<update id="updateQuestionReplyNum">
+		update question set
+		q_r_num = q_r_num+1
+		where q_id =
+		#{q_id}
+	</update>
+
+	<insert id="insertQuestion" parameterType="QuestionVo">
+		insert into question
+		values(null, #{q_user.u_id}, #{g_id},
+		#{q_content},
+		#{q_year},
+		#{q_month},
+		#{q_day}, 0)
+	</insert>
+
+</mapper>

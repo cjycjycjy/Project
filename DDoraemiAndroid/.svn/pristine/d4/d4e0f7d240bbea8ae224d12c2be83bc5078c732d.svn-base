@@ -1,0 +1,104 @@
+package ddoraemi.detailedgroupinfo.view;
+
+import org.w3c.dom.Text;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnScrollChangedListener;
+import android.widget.AbsListView;
+import android.widget.ScrollView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.TextView;
+import ddoraemi.detailediteminfo.view.ScrollTabHolderFragment;
+import ddoraemi.home.model.Group;
+import ddoraemi.start.R;
+
+public class DetailedGroupInfo_InfoView extends ScrollTabHolderFragment implements OnScrollListener,
+OnScrollChangedListener,DetailedGroupInfo_InfoView_Interface{
+	
+	Group group;
+	ScrollView content;
+	
+	public DetailedGroupInfo_InfoView(Group group) {
+		// TODO Auto-generated constructor stub
+		this.group = group;
+		
+	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_detailedgroupinfo, null);
+		init(v);
+		return v;
+	}
+	
+	public void init(View v){
+		content = (ScrollView) v
+				.findViewById(R.id.fragment_detailedgroupinfo_scrollview);
+		content.getViewTreeObserver().addOnScrollChangedListener(this);
+		TextView tv_p_name = (TextView)v.findViewById(R.id.fragment_detailedgroupinfo_tv_challenge_name);
+		TextView tv_g_name = (TextView)v.findViewById(R.id.tv_groupname);
+		TextView tv_g_comment = (TextView)v.findViewById(R.id.fragment_detailedgroupinfo_tv_comment);
+		TextView tv_g_date = (TextView)v.findViewById(R.id.fragment_detailedgroupinfo_tv_dateinfo);
+		
+		tv_g_comment.setText(group.getG_info());
+		tv_g_name.setText(group.getG_name());
+		tv_p_name.setText(group.getP_name());
+		tv_g_date.setText(group.getG_start_year()+"-"+group.getG_start_month()+"-"+group.getG_start_day());
+		
+	}
+	
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		if (mScrollTabHolder != null)
+			mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount,
+					totalItemCount, 0);
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// nothing
+	}
+	
+	@Override
+	public void adjustScroll(int scrollHeight) {
+		// TODO Auto-generated method stub
+		content.setScrollY(0);
+
+	}
+	@Override
+	public void onScrollViewScroll(int scrollheight, int spageCount) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onScrollChanged() {
+		// TODO Auto-generated method stub
+		if (mScrollTabHolder != null)
+		{
+			int scrollY=content.getScrollY();
+			mScrollTabHolder.onScrollViewScroll(scrollY, 0);
+		}
+	}
+	@Override
+	public void showMap() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void showDetailedChallengeInfo() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void goToJoinGroup() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+
+}

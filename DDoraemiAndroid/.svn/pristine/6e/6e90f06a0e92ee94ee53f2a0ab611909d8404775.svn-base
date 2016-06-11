@@ -1,0 +1,81 @@
+package ddoraemi.adminmodehome.view;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import android.graphics.LinearGradient;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import ddoraemi.creategroup.view.CalData;
+import ddoraemi.dialog.DateAdapter;
+import ddoraemi.home.model.Group;
+import ddoraemi.start.R;
+
+public class AdminScheduleView extends Fragment implements AdminScheduleViewInterface {
+
+	ArrayList<CalData> arrData;
+	ArrayList<Group> groups;
+
+	int startday;
+	Adapter_AdminSchedule adapter;
+	Calendar mCal;
+	GridView gridview;
+	LinearLayout next;
+	LinearLayout prev;
+	TextView tv_date;
+
+	int todayyear;
+	int todaymonth;
+	int todaydate;
+	int thisMonth;
+	int thisYear;
+	public AdminScheduleView(ArrayList<Group> groups)
+	{
+		this.groups=groups;
+		mCal = Calendar.getInstance();
+		todayyear = mCal.get(Calendar.YEAR);
+		todaymonth = mCal.get(Calendar.MONTH) + 1;
+		todaydate = mCal.get(Calendar.DATE);
+		thisMonth = todaymonth;
+		thisYear = todayyear;
+	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_admin_schedule, null);
+		tv_date=(TextView)v.findViewById(R.id.fragment_admin_schedule_date);
+		next=(LinearLayout)v.findViewById(R.id.fragment_admin_schedule_next);
+		prev=(LinearLayout)v.findViewById(R.id.fragment_admin_schedule_prev);
+		gridview=(GridView)v.findViewById(R.id.fragment_admin_schedule_gridview);
+		arrData=new ArrayList<>();
+		setCalendarDate(thisYear, thisMonth);
+		return v;
+	}
+	public void setCalendarDate(int year, int month) {
+		arrData.clear();
+		mCal.set(year, month - 1, 1);
+		startday = mCal.get(Calendar.DAY_OF_WEEK);
+		if (startday != 1) {
+			for (int i = 0; i < startday - 1; i++) {
+				arrData.add(null);
+			}
+		}
+
+		for (int i = 0; i < mCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+			mCal.set(mCal.get(Calendar.YEAR), month - 1, (i + 1));
+			arrData.add(new CalData((i + 1), mCal.get(Calendar.DAY_OF_WEEK),
+					year, month));
+		}
+		adapter = new Adapter_AdminSchedule(getActivity(), arrData, todayyear, todaymonth,
+				todaydate);
+		gridview.setAdapter(adapter);
+		tv_date.setText(year + "년 " + month + "월");
+	}
+}

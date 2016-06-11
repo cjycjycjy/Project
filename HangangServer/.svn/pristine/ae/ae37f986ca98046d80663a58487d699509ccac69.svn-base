@@ -1,0 +1,355 @@
+package com.fuck.hangang.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fuck.hangang.dao.QnaDao;
+import com.fuck.hangang.util.GCMSender;
+import com.fuck.hangang.vo.CheerfulReplyOfReplyVo;
+import com.fuck.hangang.vo.CheerfulReplyVo;
+import com.fuck.hangang.vo.CheerfulVo;
+import com.fuck.hangang.vo.PushVo;
+import com.fuck.hangang.vo.QnaReplyOfReplyVo;
+import com.fuck.hangang.vo.QnaVo;
+import com.fuck.hangang.vo.QnareplyVo;
+import com.fuck.hangang.vo.RegistrationIdVo;
+
+@Controller
+public class QnaController {
+	@Resource
+	private QnaDao qnaDao;
+
+	@RequestMapping(value = "/getqna", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getQna(@RequestParam("lastnum") int lastnum) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		List<QnaVo> resultQnaVo = new ArrayList<QnaVo>();
+
+		if (lastnum == -1) {
+			resultQnaVo = qnaDao.getqnafirst();
+		}
+
+		else {
+			resultQnaVo = qnaDao.getqnalast(lastnum);
+		}
+
+		if (resultQnaVo != null) {
+
+			for (int i = 0; i < resultQnaVo.size(); i++) {
+				int c_count = qnaDao.getqnareplycount(resultQnaVo.get(i).getQ_num());
+				resultQnaVo.get(i).setC_count(c_count);
+			}
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("qnalist", (T) resultQnaVo);
+			return resultHashMap;
+
+		} else {
+			resultHashMap.put("result", (T) "Error");
+			return resultHashMap;
+		}
+
+	}
+
+	@RequestMapping(value = "/registqna", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> registqna(@RequestParam("u_id") String u_id,
+			@RequestParam("title") String title, @RequestParam("content") String content) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		try {
+			qnaDao.registqna(u_id, title, content);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/getqnareply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getqnareply(@RequestParam("q_num") int q_num,
+			@RequestParam("lastnum") int lastnum) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		try {
+
+			if (lastnum == -1) {
+				List<QnareplyVo> resultQnaReplyVo = qnaDao.getqnareplyfirst(q_num);
+				for (int i = 0; i < resultQnaReplyVo.size(); i++) {
+					int cc_count = qnaDao.getqnareplyofreplycount(resultQnaReplyVo.get(i).getQ_num(),
+							resultQnaReplyVo.get(i).getQ_r_num());
+					resultQnaReplyVo.get(i).setCc_count(cc_count);
+				}
+				resultHashMap.put("result", (T) "Success");
+				resultHashMap.put("qnareplylist", (T) resultQnaReplyVo);
+				return resultHashMap;
+			} else {
+				List<QnareplyVo> resultQnaReplyVo = qnaDao.getqnareplylast(q_num, lastnum);
+				for (int i = 0; i < resultQnaReplyVo.size(); i++) {
+					int cc_count = qnaDao.getqnareplyofreplycount(resultQnaReplyVo.get(i).getQ_num(),
+							resultQnaReplyVo.get(i).getQ_r_num());
+					resultQnaReplyVo.get(i).setCc_count(cc_count);
+				}
+				resultHashMap.put("result", (T) "Success");
+				resultHashMap.put("qnareplylist", (T) resultQnaReplyVo);
+				return resultHashMap;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+
+	}
+
+	@RequestMapping(value = "/getqnareplyone", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getqnareplyone(@RequestParam("q_num") int q_num,
+			@RequestParam("q_r_num") int q_r_num, @RequestParam("pm_num") int pm_num) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		QnareplyVo resultQnaReplyVo = qnaDao.getqnareplyone(q_num, q_r_num);
+
+		if (resultQnaReplyVo != null) {
+			int cc_count = qnaDao.getqnareplyofreplycount(resultQnaReplyVo.getQ_num(), resultQnaReplyVo.getQ_r_num());
+			resultQnaReplyVo.setCc_count(cc_count);
+			
+			
+			qnaDao.updatePushisChecked(pm_num);
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("comment", (T) resultQnaReplyVo);
+
+			List<QnaReplyOfReplyVo> resultQnaReplyOfReplyVo = qnaDao.getqnareplyofreplyfirst(q_num, q_r_num);
+
+			resultHashMap.put("commentofcomment", (T) resultQnaReplyOfReplyVo);
+			
+			// resultHashMap.put("cheerfulreply",(T) replyVo );
+		} else {
+			resultHashMap.put("result", (T) "Failed");
+		}
+		return resultHashMap;
+
+	}
+
+	@RequestMapping(value = "/registqnareply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> registqnareply(@RequestParam("q_num") int q_num,
+			@RequestParam("u_id") String u_id, @RequestParam("q_r_content") String q_r_content) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		try {
+
+			qnaDao.registqnareply(q_num, u_id, q_r_content);
+
+			String c_count = Integer.toString(qnaDao.getqnareplycount(q_num));
+			List<QnareplyVo> resultQnaReplyVo = qnaDao.getqnareplyfirst(q_num);
+			for (int i = 0; i < resultQnaReplyVo.size(); i++) {
+				int cc_count = qnaDao.getqnareplyofreplycount(resultQnaReplyVo.get(i).getQ_num(),
+						resultQnaReplyVo.get(i).getQ_r_num());
+				resultQnaReplyVo.get(i).setCc_count(cc_count);
+			}
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("qnareplylist", (T) resultQnaReplyVo);
+			resultHashMap.put("c_count", (T) c_count);
+
+			String id = qnaDao.checkReplyUser(q_num);
+			PushVo pushVo = new PushVo();
+			pushVo.setU_id(id); pushVo.setReply_writer(u_id);
+			pushVo.setFlag(5); pushVo.setNum(q_num);
+			if(!id.equalsIgnoreCase(u_id))
+				qnaDao.registPushListAboutReply(pushVo);
+			int push = qnaDao.checkPushUser(id);
+			if (push != 0) {
+				if (!id.equalsIgnoreCase(u_id)) {
+					RegistrationIdVo resultRegiId = qnaDao.getRegiIdOfUser(q_num);
+					GCMSender gs = new GCMSender();
+					gs.sendGCMToOneUser(resultRegiId, q_num, 5, pushVo.getPm_num());
+				}
+			}
+
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/getqnaone", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getcheerfulone(@RequestParam("q_num") int q_num, @RequestParam("pm_num") int pm_num) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		QnaVo resultQnaVo = qnaDao.getQnAOne(q_num);
+
+		if (resultQnaVo != null) {
+			int c_count = qnaDao.getqnareplycount(resultQnaVo.getQ_num());
+			resultQnaVo.setC_count(c_count);
+			
+			qnaDao.updatePushisChecked(pm_num);
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("qna", (T) resultQnaVo);
+			// resultHashMap.put("cheerfulreply",(T) replyVo );
+		} else {
+			resultHashMap.put("result", (T) "Failed");
+		}
+		return resultHashMap;
+
+	}
+
+	@RequestMapping(value = "/getqnareplyofreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getqnareplyofreply(@RequestParam("q_num") int q_num,
+			@RequestParam("q_r_num") int q_r_num, @RequestParam("lastnum") int lastnum) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		List<QnaReplyOfReplyVo> resultQnaReplyOfReplyVo = new ArrayList<QnaReplyOfReplyVo>();
+
+		try {
+
+			if (lastnum == -1) {
+				resultQnaReplyOfReplyVo = qnaDao.getqnareplyofreplyfirst(q_num, q_r_num);
+				resultHashMap.put("result", (T) "Success");
+				resultHashMap.put("qnareplyofreplylist", (T) resultQnaReplyOfReplyVo);
+				return resultHashMap;
+			} else {
+				resultQnaReplyOfReplyVo = qnaDao.getqnareplyofreplylast(q_num, q_r_num, lastnum);
+				resultHashMap.put("result", (T) "Success");
+				resultHashMap.put("qnareplyofreplylist", (T) resultQnaReplyOfReplyVo);
+				return resultHashMap;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+
+	}
+
+	@RequestMapping(value = "/registqnareplyofreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> registqnareplyofreply(@RequestParam("q_num") int q_num,
+			@RequestParam("q_r_num") int q_r_num, @RequestParam("u_id") String u_id,
+			@RequestParam("q_rr_content") String q_rr_content) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		try {
+
+			qnaDao.registqnareplyofreply(q_num, q_r_num, u_id, q_rr_content);
+
+			List<QnaReplyOfReplyVo> resultQnaReplyOfReplyVo = qnaDao.getqnareplyofreplyfirst(q_num, q_r_num);
+			String cc_count = Integer.toString(qnaDao.getqnareplyofreplycount(q_num, q_r_num));
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("qnareplyofreplylist", (T) resultQnaReplyOfReplyVo);
+			resultHashMap.put("cc_count", (T) cc_count);
+
+			String id = qnaDao.checkReplyOfReplyUser(q_num, q_r_num);
+			
+			PushVo pushVo = new PushVo();
+			pushVo.setU_id(id); pushVo.setReply_writer(u_id);
+			pushVo.setFlag(6); pushVo.setNum(q_num); pushVo.setReply_num(q_r_num);
+
+			
+			
+			if(!id.equalsIgnoreCase(u_id))
+				qnaDao.registPushListAboutReplyOfReply(pushVo);
+			int push = qnaDao.checkPushUser(id);
+			if (push != 0) {
+				if (!id.equalsIgnoreCase(u_id)) {
+					RegistrationIdVo resultRegiId = qnaDao.getRegiIdOfUserComment(q_r_num);
+					GCMSender gs = new GCMSender();
+					gs.sendGCMToOneUserAboutCommentOfComment(resultRegiId, q_num, q_r_num, 6, pushVo.getPm_num());
+				}
+			}
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/updateqnareply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> updateqnareply(@RequestParam("q_num") int q_num,
+			@RequestParam("q_r_num") int q_r_num, @RequestParam("q_r_content") String q_r_content) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		try {
+			qnaDao.updateqnareply(q_num, q_r_num, q_r_content);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/updateqnareplyofreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> updateqnareplyofreply(@RequestParam("q_num") int q_num,
+			@RequestParam("q_r_num") int q_r_num, @RequestParam("q_rr_num") int q_rr_num,
+			@RequestParam("q_rr_content") String q_rr_content) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		try {
+			qnaDao.updateqnareplyofreply(q_num, q_r_num, q_rr_num, q_rr_content);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/deleteqnareplyofreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> deleteqnareplyofreply(@RequestParam("q_num") int q_num,
+			@RequestParam("q_r_num") int q_r_num, @RequestParam("q_rr_num") int q_rr_num) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		try {
+			qnaDao.deleteqnareplyofreply(q_num, q_r_num, q_rr_num);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/deleteqnareply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> deleteqnareply(@RequestParam("q_num") int q_num,
+			@RequestParam("q_r_num") int q_r_num) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		try {
+			qnaDao.deleteqnareply(q_num, q_r_num);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+	@RequestMapping(value = "/deleteqna", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> deleteqna(@RequestParam("q_num") int q_num) {
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		try {
+			qnaDao.deleteqna(q_num);
+			resultHashMap.put("result", (T) "Success");
+			return resultHashMap;
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultHashMap.put("result", (T) "Failed");
+			return resultHashMap;
+		}
+	}
+
+}

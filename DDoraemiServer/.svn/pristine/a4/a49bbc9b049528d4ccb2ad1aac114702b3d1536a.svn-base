@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.GatheringMapper">
+
+	<resultMap id="gatheringMap" type="java.util.HashMap">
+		<id property="g_id" column="g_id" />
+		<result property="p_id" column="p_id" />
+		<result property="u_id" column="u_id" />
+		<result property="g_name" column="g_name" />
+		<result property="g_persons" column="g_persons" />
+		<result property="g_want_persons" column="g_want_persons" />
+		<result property="g_info" column="g_info" />
+		<result property="g_status" column="g_status" />
+		<result property="g_open_year" column="g_open_year" />
+		<result property="g_open_month" column="g_open_month" />
+		<result property="g_open_day" column="g_open_day" />
+		<result property="g_close_year" column="g_close_year" />
+		<result property="g_close_month" column="g_close_month" />
+		<result property="g_close_day" column="g_close_day" />
+		<result property="g_start_year" column="g_start_year" />
+		<result property="g_start_month" column="g_start_month" />
+		<result property="g_start_day" column="g_start_day" />
+		<result property="g_start_hour" column="g_start_hour" />
+		<result property="g_start_minute" column="g_start_minute" />
+		<result property="g_end_hour" column="g_end_hour" />
+		<result property="g_end_minute" column="g_end_minute"/>
+		<result property="p_name" column="p_name"/>
+		<result property="p_addr" column="p_addr"/>
+		<result property="e_name" column="e_name" />
+	</resultMap>
+
+	<select id="selectAllofGathering" resultMap="gatheringMap">
+		SELECT gathering.*,
+		program.p_name, CONCAT(program.p_addr_1,' ', program.p_addr_2,' ',
+		program.p_addr_3,' ', program.p_addr_4,' ', program.p_addr_5,' ',
+		program.p_addr_6) as p_addr , program.e_name
+		FROM program, gathering 
+		WHERE gathering.p_id = #{p_id}
+	</select>
+
+	<select id="selectIsAvailable" resultMap="gatheringMap">
+		SELECT gathering.*,
+		program.p_name, CONCAT(program.p_addr_1,' ', program.p_addr_2,' ',
+		program.p_addr_3,' ', program.p_addr_4,' ', program.p_addr_5,' ',
+		program.p_addr_6) as p_addr , program.e_name
+		FROM program, gathering
+		WHERE program.p_id = gathering.p_id and g_status=1
+	</select>
+
+</mapper>

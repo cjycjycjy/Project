@@ -1,0 +1,12 @@
+package ddoraemi.detailediteminfo.view;
+
+import java.util.ArrayList;
+
+import android.support.v4.app.Fragment;
+import ddoraemi.detailediteminfo.model.Afterword;
+
+public class DetailedItemInfo_AfterwordView extends Fragment{
+	public DetailedItemInfo_AfterwordView(ArrayList<Afterword> afterword) {
+		// TODO Auto-generated constructor stub
+	}
+}

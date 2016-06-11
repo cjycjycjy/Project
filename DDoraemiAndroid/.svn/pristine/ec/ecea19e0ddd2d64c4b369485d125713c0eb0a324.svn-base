@@ -1,0 +1,22 @@
+package ddoraemi.detailediteminfo.view;
+
+import ddoraemi.detailediteminfo.presenter.DetailedItemInfo_Presenter;
+import ddoraemi.detailediteminfo.presenter.DetailedItemInfo_Presenter_Interface;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+
+public class DetailedItemInfo_View extends FragmentActivity implements DetailedIteminfo_View_Interface{
+	
+	DetailedItemInfo_Presenter_Interface presenter;
+	
+	@Override
+	protected void onCreate(Bundle arg0) {
+		// TODO Auto-generated method stub
+		super.onCreate(arg0);
+		init();
+	}
+	
+	public void init(){
+		presenter = new DetailedItemInfo_Presenter(this);
+	}
+}

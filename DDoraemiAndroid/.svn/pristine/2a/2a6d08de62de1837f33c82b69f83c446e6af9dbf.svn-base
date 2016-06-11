@@ -1,0 +1,116 @@
+package ddoraemi.detailediteminfo.view;
+
+import java.util.ArrayList;
+
+import com.astuetz.PagerSlidingTabStrip;
+
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.detailediteminfo.presenter.DetailedItemInfo_Presenter;
+import ddoraemi.detailediteminfo.presenter.DetailedItemInfo_Presenter_Interface;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.start.R;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.LinearLayout;
+
+public class DetailedItemInfo_View extends FragmentActivity implements DetailedIteminfo_View_Interface{
+	
+	DetailedItemInfo_Presenter_Interface presenter;
+	
+	private PagerSlidingTabStrip tabs;
+	private ViewPager pager;
+	private PagerAdapter adapter;
+
+	
+	@Override
+	protected void onCreate(Bundle arg0) {
+		// TODO Auto-generated method stub
+		super.onCreate(arg0);
+		setContentView(R.layout.activity_detailedinfo);
+		init();
+	}
+	
+	public void init(){
+		presenter = new DetailedItemInfo_Presenter(this);
+	
+	}
+	
+	public void removeAllStack()///Fragment 스텍을 다비운다. 
+	{
+		FragmentManager fragmentmanager=getSupportFragmentManager();
+		FragmentTransaction fragmenttransaction=fragmentmanager.beginTransaction();
+		int cnt = fragmentmanager.getBackStackEntryCount();
+		for (int i = 0; i < cnt; i++) {
+			fragmentmanager.popBackStack();
+		}
+	}
+	
+	@Override
+	public void setViewPager(View v, ArrayList<Afterword> afterword, ProgramData item) {
+		// TODO Auto-generated method stub
+		pager=(ViewPager)v.findViewById(R.id.fragment_detailediteminfo_pager);
+		tabs=(PagerSlidingTabStrip)v.findViewById(R.id.fragment_detailediteminfo_tabs);
+		adapter = new PagerAdapter(getSupportFragmentManager(),afterword, item);
+		pager.setAdapter(adapter);
+		pager.setOffscreenPageLimit(2);
+		final int pageMargin = (int) TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+						.getDisplayMetrics());
+		pager.setPageMargin(pageMargin);
+		tabs.setViewPager(pager);
+	}
+	
+	public class PagerAdapter extends FragmentPagerAdapter {
+		private String[] Title = { "상세정보", "후기" };
+		ProgramData item;
+		ArrayList<Afterword> afterword;
+		public PagerAdapter(FragmentManager fm,ArrayList<Afterword> afterword, ProgramData item) {
+			super(fm);
+			this.item=new ProgramData(item.getP_id(),item.getP_name(),item.getP_town_name(),item.getP_addr_1(),
+					item.getP_addr_2(),item.getP_addr_3(),item.getP_addr_4(),item.getP_addr_5(),item.getP_addr_6(),
+					item.getCost(),item.getP_min_persons(),item.getP_max_persons(),item.getP_lead_time(),
+					item.getP_note(),item.isP_is_possible());
+			this.afterword = new ArrayList<Afterword>();
+			this.afterword.addAll(afterword);
+		}
+
+		@Override
+		public int getItemPosition(Object object) {
+			return POSITION_NONE;
+		}
+
+		@Override
+		public int getCount() {
+			return Title.length;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+
+			return Title[position];
+		};
+
+		@Override
+		public Fragment getItem(int position) {
+			if (position == 0) {
+				return new DetailedItemInfo_InfoView(item);
+			} else {
+				return new DetailedItemInfo_AfterwordView(afterword);
+			}
+
+		}
+	}
+
+	@Override
+	public void setProgramList(ArrayList<Afterword> data) {
+		// TODO Auto-generated method stub
+		
+	}
+}

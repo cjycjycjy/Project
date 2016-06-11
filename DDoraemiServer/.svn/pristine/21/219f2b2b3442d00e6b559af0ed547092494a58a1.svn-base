@@ -1,0 +1,19 @@
+package com.myserver.skp.mapper;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.myserver.skp.vo.CurriculumVo;
+import com.myserver.skp.vo.ProgramVo;
+
+@Repository
+public interface ProgramMapper {
+	List<ProgramVo> selectAll();
+	List<ProgramVo> selectAddr(@Param("p_addr_1") String p_addr_1);
+	List<ProgramVo> selectExperience(@Param("e_name") String e_name);
+	List<HashMap<String, String>> selectAfterwordPhotoUrl(@Param("p_id") int p_id);
+	List<CurriculumVo> selectCurriculum(@Param("p_id") int p_id);
+}

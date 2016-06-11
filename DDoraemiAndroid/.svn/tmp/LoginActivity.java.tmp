@@ -1,0 +1,281 @@
+package ddoraemi.start;
+
+import java.security.MessageDigest;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.gson.JsonObject;
+import com.kakao.auth.Session;
+import com.kakao.auth.SessionCallback;
+import com.kakao.usermgmt.LoginButton;
+import com.kakao.util.exception.KakaoException;
+
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.joining.view.JoinActivity;
+import ddoraemi.retrofit.Retrofit;
+
+<<<<<<< .mine
+
+public class LoginActivity extends Activity implements OnClickListener{
+	Button bt_join,bt_login;
+=======
+public class LoginActivity extends Activity implements OnClickListener {
+	Button bt_join, bt_login, bt_kakaojoin;
+>>>>>>> .r196
+	TextView find_passwd;
+	EditText id, passwd;
+	AppController app;
+
+	
+	LoginButton loginButton;
+	Session session;
+	 private final SessionCallback mySessionCallback = new SessionCallback() {
+		
+		@Override
+		public void onSessionOpening() {
+			// TODO Auto-generated method stub
+			
+			
+		}
+		
+		@Override
+		public void onSessionOpened() {
+			// TODO Auto-generated method stub
+		    final Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+            startActivity(intent);
+            finish();
+		}
+		
+		@Override
+		public void onSessionClosed(KakaoException exception) {
+			// TODO Auto-generated method stub
+			  loginButton.setVisibility(View.VISIBLE);
+		}
+	};
+	 
+	 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_login);
+		init();
+	}
+<<<<<<< .mine
+	public void init()
+	{
+		//getAppKeyHash();
+		app=(AppController)getApplicationContext();
+		bt_login=(Button)findViewById(R.id.login_activity_LoginButton);
+		bt_join=(Button)findViewById(R.id.login_activity_JoinButton);
+		loginButton=(LoginButton)findViewById(R.id.com_kakao_login);
+		find_passwd=(TextView)findViewById(R.id.login_activity_FindPasswd);
+		id=(EditText)findViewById(R.id.login_activity_IDEditText);
+		passwd=(EditText)findViewById(R.id.login_activity_PasswordEditText);
+=======
+
+	public void init() {
+		app = (AppController) getApplicationContext();
+		bt_login = (Button) findViewById(R.id.login_activity_LoginButton);
+		bt_join = (Button) findViewById(R.id.login_activity_JoinButton);
+		bt_kakaojoin = (Button) findViewById(R.id.login_activity_KAKAOJoinButton);
+		find_passwd = (TextView) findViewById(R.id.login_activity_FindPasswd);
+		id = (EditText) findViewById(R.id.login_activity_IDEditText);
+		passwd = (EditText) findViewById(R.id.login_activity_PasswordEditText);
+>>>>>>> .r196
+		bt_login.setOnClickListener(this);
+		bt_join.setOnClickListener(this);
+		
+		find_passwd.setOnClickListener(this);
+		
+		session = Session.getCurrentSession();
+        session.addCallback(mySessionCallback);
+
+        if (session.isClosed()){
+            // 세션이 완전 종료된 상태로 갱신도 할 수 없으므로 명시적 오픈을 위한 로그인 버튼을 보여준다.
+            loginButton.setVisibility(View.VISIBLE);
+        } else {
+            // 세션을 가지고 있거나, 갱신할 수 있는 상태로 명시적 오픈을 위한 로그인 버튼을 보여주지 않는다.
+            loginButton.setVisibility(View.GONE);
+            session.implicitOpen();
+          
+        }
+	}
+<<<<<<< .mine
+
+//	private class MySessionStatusCallback implements SessionCallback {
+//        @Override
+//        public void onSessionOpened() {
+//            // 프로그레스바 종료
+//
+//            // 세션 오픈후 보일 페이지로 이동
+//            final Intent intent = new Intent(LoginActivity.this, SampleSignupActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
+//
+//        @Override
+//        public void onSessionClosed(final KakaoException exception) {
+//            // 프로그레스바 종료
+//            // 세션 오픈을 못했으니 다시 로그인 버튼 노출.
+//            loginButton.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        public void onSessionOpening() {
+//            //프로그레스바 시작
+//        }
+//    }
+//	private void getAppKeyHash() {
+//	    try {
+//	        PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+//	        for (Signature signature : info.signatures) {
+//	            MessageDigest md;
+//	            md = MessageDigest.getInstance("SHA");
+//	            md.update(signature.toByteArray());
+//	            String something = new String(Base64.encode(md.digest(), 0));
+//	            Log.d("Hash key", something);
+//	        }
+//	    } catch (Exception e) {
+//	        // TODO Auto-generated catch block
+//	        Log.e("name not found", e.toString());
+//	    }
+//	}
+=======
+>>>>>>> .r196
+
+	@Override
+	public void onClick(View v) {
+<<<<<<< .mine
+		if(v.getId()==R.id.login_activity_LoginButton)//�α��� ������
+=======
+		if (v.getId() == R.id.login_activity_LoginButton)// �α��� ������
+>>>>>>> .r196
+		{
+			requestLogin();
+		} else if (v.getId() == R.id.login_activity_JoinButton) {
+			Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
+			startActivity(intent);
+<<<<<<< .mine
+		}
+		
+		else if(v.getId()==R.id.login_activity_FindPasswd)
+		{
+			
+		}
+		else;
+=======
+		} else if (v.getId() == R.id.login_activity_KAKAOJoinButton) {
+
+		} else if (v.getId() == R.id.login_activity_FindPasswd) {
+
+		} else
+			;
+>>>>>>> .r196
+	}
+
+	public void requestLogin() {
+		final String u_id = id.getText().toString();
+		final String password = passwd.getText().toString();
+		final ProgressDialog progressdialog = new ProgressDialog(this);
+<<<<<<< .mine
+		progressdialog.setMessage("��ø� ��ٷ��ּ���");
+=======
+		progressdialog.setMessage("로그인 중입니다.");
+>>>>>>> .r196
+		progressdialog.setIndeterminate(true);
+		progressdialog.setCancelable(false);
+		progressdialog.show();
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					RestAdapter restAdapter = new RestAdapter.Builder()
+							.setEndpoint(Retrofit.ROOT) // call your base url
+							.build();
+					Retrofit retofit = restAdapter.create(Retrofit.class);
+					retofit.requestLogin(u_id, password,
+							new Callback<String>() {
+								@Override
+								public void success(String result,
+										Response response) {
+									progressdialog.dismiss();
+									if (result.equals("500")) {
+										app.setId(u_id);
+										Intent intent = new Intent(
+												LoginActivity.this,
+												SplashActivity.class);
+										LoginActivity.this
+												.startActivity(intent);
+										LoginActivity.this.finish();
+									} else {
+										Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+												LoginActivity.this,
+												"로그인에 실패하였습니다.\n아이디와 비밀번호를 확인해주세요.");
+										dialog.show();
+									}
+
+								}
+
+								@Override
+								public void failure(RetrofitError retrofitError) {
+									progressdialog.dismiss();
+
+									Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+											LoginActivity.this,
+<<<<<<< .mine
+										"�α��ο� �����Ͽ����ϴ�.\n���̵�� ��й�ȣ�� �������ּ���.");
+=======
+											getString(R.string.failed_dialog));
+>>>>>>> .r196
+									dialog.show();
+
+<<<<<<< .mine
+								Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+										LoginActivity.this,
+										"������ ��ſ� �����Ͽ����ϴ�.\n����� �ٽ� �õ����ּ���.");
+								dialog.show();
+							
+						}
+					});
+=======
+								}
+							});
+>>>>>>> .r196
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					progressdialog.dismiss();
+					if (LoginActivity.this != null) {
+
+						Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+								LoginActivity.this,
+<<<<<<< .mine
+								"������ ��ſ� �����Ͽ����ϴ�.\n����� �ٽ� �õ����ּ���.");
+=======
+								getString(R.string.failed_dialog));
+>>>>>>> .r196
+						dialog.show();
+					}
+				}
+			}
+		}).start();
+	}
+}

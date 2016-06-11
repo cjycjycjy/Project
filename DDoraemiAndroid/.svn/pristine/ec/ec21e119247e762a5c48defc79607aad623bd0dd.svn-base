@@ -1,0 +1,13 @@
+package ddoraemi.adminmodehome.view;
+
+import java.util.ArrayList;
+
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.home.model.Group;
+import ddoraemi.home.model.ProgramData;
+
+public interface AdminHomeMainViewInterface {
+	public void setFragment(ProgramData data,ArrayList<Group> groups,ArrayList<Afterword> afterword);
+	public void showFailureDialog();
+
+}

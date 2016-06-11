@@ -1,0 +1,5 @@
+package ddoraemi.adminmodehome.view;
+
+public interface AdminScheduleViewInterface {
+	public void setCalendarDate(int year, int month);
+}

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.ScheduleMapper">
+
+	<resultMap id="scheduleMap" type="com.fuck.hangang.vo.ScheduleVo">
+		<id property="s_num" column="s_num" />
+		<result property="s_year" column="s_year" />
+		<result property="s_month" column="s_month" />
+		<result property="s_day" column="s_day" />
+		<result property="start_hour" column="start_hour" />
+		<result property="start_min" column="start_min" />
+		<result property="end_hour" column="end_hour" />
+		<result property="end_min" column="end_min" />
+		<result property="t_num" column="t_num" />
+		<result property="s_lat" column="s_lat" />
+		<result property="s_long" column="s_long" />
+		<result property="s_park" column="s_park" />
+		<result property="flag" column="flag" />
+		<result property="car_num" column="car_num" />
+		<result property="t_logo" column="t_logo" />
+		<result property="t_name" column="t_name" />
+	</resultMap>
+
+	<resultMap id="realtimeScheduleMap" type="com.fuck.hangang.vo.RealtimeScheduleVo">
+		<id property="r_num" column="r_s_num" />
+		<result property="r_year" column="r_s_year" />
+		<result property="r_month" column="r_s_month" />
+		<result property="r_day" column="r_s_day" />
+		<result property="start_hour" column="start_hour" />
+		<result property="start_min" column="start_min" />
+		<result property="end_hour" column="end_hour" />
+		<result property="end_min" column="end_min" />
+		<result property="t_num" column="t_num" />
+		<result property="r_lat" column="s_lat" />
+		<result property="r_long" column="s_long" />
+		<result property="r_park" column="s_park" />
+		<result property="flag" column="flag" />
+		<result property="t_logo" column="t_logo" />
+		<result property="t_name" column="t_name" />
+	</resultMap>
+
+
+	<select id="getschedule" resultMap="scheduleMap">
+		select
+		schedules.*,team.t_logo,team.t_name from schedules inner join team
+		where team.t_num =schedules.t_num and s_year = #{year} and (s_month =
+		#{month} or s_month = #{nextmonth})
+		order by schedules.s_park
+	</select>
+
+	<select id="checkschedule" resultMap="scheduleMap">
+		select
+		schedules.*,team.t_logo,team.t_name from schedules inner join team
+		where team.t_num =schedules.t_num and s_year = #{s_year} and s_month =
+		#{s_month} and s_day = #{s_day}
+		order by schedules.s_park
+	</select>
+
+
+	<select id="checklocation" resultMap="scheduleMap">
+		select
+		schedules.*,team.t_logo,team.t_name from schedules inner join team
+		where team.t_num =schedules.t_num and s_year = #{s_year} and s_month =
+		#{s_month} and s_day = #{s_day} and s_park = #{s_park}
+	</select>
+
+	<insert id="registschedule" parameterType="ScheduleVo">
+		insert into schedules
+		values(null,#{s_year},#{s_month},#{s_day},#{start_hour},#{start_min}
+		,#{end_hour},#{end_min},#{t_num},#{s_lat},#{s_long},#{s_park},0,#{car_num})
+	</insert>
+
+	<delete id="deleteschedule" parameterType="ScheduleVo">
+		delete from schedules
+		where s_num = #{s_num}
+	</delete>
+
+	<select id="getscheduleofteam" resultMap="scheduleMap">
+		select
+		schedules.*,team.t_logo,team.t_name
+		from schedules inner join team
+		where team.t_num =#{t_num} and schedules.t_num = #{t_num} and s_year =
+		#{s_year} and (s_month = #{s_month} or s_month = #{nextmonth}) order
+		by schedules.s_park
+	</select>
+
+	<select id="getscheduleofallteam" resultMap="scheduleMap">
+		select
+		schedules.*,team.t_logo,team.t_name from schedules inner join team
+		where team.t_num = schedules.t_num order by schedules.s_park
+	</select>
+
+	<select id="gettodayteamschedule" resultMap="scheduleMap">
+		select schedules.*,
+		t_logo, t_name from schedules inner join team
+		where s_year = #{s_year}
+		and s_month = #{s_month} and s_day = #{s_day}
+		and
+		schedules.t_num =
+		#{t_num} and team.t_num = #{t_num} and flag = 0
+		order by
+		schedules.s_park
+	</select>
+
+	<select id="gettodayrealtimeschedule" resultMap="realtimeScheduleMap">
+		select
+		realtime_schedules.*, t_logo, t_name
+		from realtime_schedules inner join team
+		where r_s_year = #{s_year} and r_s_month = #{s_month} and r_s_day =
+		#{s_day} and
+		realtime_schedules.t_num = #{t_num} and team.t_num = #{t_num} and flag = 1 order by
+		realtime_schedules.s_park
+	</select>
+
+
+</mapper>

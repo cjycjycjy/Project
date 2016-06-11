@@ -1,0 +1,126 @@
+package ddoraemi.applyadmin.view;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.applyadmin.presenter.Apply_Admin_Presenter;
+import ddoraemi.applyadmin.presenter.Apply_Admin_Presenter_Interface;
+import ddoraemi.dialog.Dialog_Admin_SelectProgramName;
+import ddoraemi.dialog.Dialog_Admin_Selectlocation;
+import ddoraemi.dialog.Dialog_ApplyAdmin;
+import ddoraemi.start.R;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class Apply_Admin_View extends Activity implements
+Apply_Admin_View_Interface,OnClickListener {
+	AppController app;
+	ImageView btn_apply;
+	Dialog_ApplyAdmin dialog;
+	Dialog_Admin_Selectlocation dialog_location;
+	Dialog_Admin_SelectProgramName dialog_program;
+	Apply_Admin_Presenter_Interface presenter;
+	EditText a_name, a_phonenum, a_p_phonenum, a_email;
+	String selectedLocation;
+	TextView tv_admin_selectlocation, tv_admin_selectprogram;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_applyadmin);
+		app = (AppController) getApplicationContext();
+		init();
+	}
+	public void init()
+	{
+		presenter = new Apply_Admin_Presenter(this);
+		btn_apply = (ImageView)findViewById(R.id.iv_sendrequest);
+		btn_apply.setOnClickListener(this);
+		selectedLocation = "empty";
+		dialog = new Dialog_ApplyAdmin(this, "계정인증 신청이 전송되었습니다.\n조금만 기다려주세요!");
+		dialog_location = new Dialog_Admin_Selectlocation(this);
+		
+		dialog.getBtnOk().setOnClickListener(this);
+		dialog_location.getSeoul().setOnClickListener(this);
+		dialog_location.getChungcheong().setOnClickListener(this);
+		dialog_location.getGangwon().setOnClickListener(this);
+		dialog_location.getJeonla().setOnClickListener(this);
+		dialog_location.getKyungsang().setOnClickListener(this);
+		dialog_location.getJeju().setOnClickListener(this);
+		a_name = (EditText)findViewById(R.id.et_admin_name);
+		a_phonenum = (EditText)findViewById(R.id.et_admin_phonenum);
+		a_p_phonenum = (EditText)findViewById(R.id.et_program_phonenum);
+		a_email = (EditText)findViewById(R.id.et_admin_email);
+		tv_admin_selectlocation = (TextView)findViewById(R.id.tv_select_location);
+		tv_admin_selectprogram = (TextView)findViewById(R.id.tv_select_programname);
+		tv_admin_selectlocation.setOnClickListener(this);
+		tv_admin_selectprogram.setOnClickListener(this);
+
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if(v.getId() == R.id.iv_sendrequest){
+			presenter.validatecredentail("sendrequest",app.getUser().getU_id() ,a_name.getText().toString(), a_phonenum.getText().toString(),
+					a_p_phonenum.getText().toString(), a_email.getText().toString());
+		}else if(v.getId() == R.id.dialog_basedialog_btnok){
+			presenter.validatecredentail("dismissdialog",null, null, null, null, null);
+		}else if(v.getId()== R.id.tv_select_location){
+			dialog_location.show();
+		}else if(v.getId()== R.id.tv_select_programname){
+			if(!selectedLocation.equalsIgnoreCase("empty"))
+				dialog_program.show();
+		}else if(v.getId() == R.id.tv_admin_select_chungcheong ){
+			selectedLocation = "충청도";
+			dismissSelectLocationDialog();
+			tv_admin_selectlocation.setText(selectedLocation);
+			dialog_program = new Dialog_Admin_SelectProgramName(this, selectedLocation);
+		}else if(v.getId() == R.id.tv_admin_select_seoul){
+			selectedLocation = "서울";
+			dismissSelectLocationDialog();
+			tv_admin_selectlocation.setText(selectedLocation);
+			dialog_program = new Dialog_Admin_SelectProgramName(this, selectedLocation);
+		}else if(v.getId() == R.id.tv_admin_select_gangwon){
+			selectedLocation = "강원도";
+			dismissSelectLocationDialog();
+			tv_admin_selectlocation.setText(selectedLocation);
+			dialog_program = new Dialog_Admin_SelectProgramName(this, selectedLocation);
+		}else if(v.getId() == R.id.tv_admin_select_jeonla){
+			selectedLocation = "전라도";
+			dismissSelectLocationDialog();
+			tv_admin_selectlocation.setText(selectedLocation);
+			dialog_program = new Dialog_Admin_SelectProgramName(this, selectedLocation);
+		}else if(v.getId() == R.id.tv_admin_select_kyungsang){
+			selectedLocation = "경상도";
+			dismissSelectLocationDialog();
+			tv_admin_selectlocation.setText(selectedLocation);
+			dialog_program = new Dialog_Admin_SelectProgramName(this, selectedLocation);
+		}else if(v.getId() == R.id.tv_admin_select_jeju){
+			selectedLocation = "제주도";
+			dismissSelectLocationDialog();
+			tv_admin_selectlocation.setText(selectedLocation);
+			dialog_program = new Dialog_Admin_SelectProgramName(this, selectedLocation);
+		}
+	}
+	public void showSelectLocationDialog(){
+		dialog_location.show();
+	}
+	public void dismissSelectLocationDialog(){
+		dialog_location.dismiss();
+	}
+	@Override
+	public void showApplyDialog() {
+		// TODO Auto-generated method stub
+		dialog.show();
+	}
+	@Override
+	public void dismissDialog() {
+		// TODO Auto-generated method stub
+		dialog.dismiss();
+		this.setResult(600, null);
+		finish();
+	}
+}

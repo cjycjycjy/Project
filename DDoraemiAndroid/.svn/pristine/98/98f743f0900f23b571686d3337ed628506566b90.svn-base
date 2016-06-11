@@ -1,0 +1,7 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+import ddoraemi.detailedgroupinfo.model.QnA;
+
+public interface DetailedGroupInfo_QnA_presenter_Interface {
+	public void validatecredential(QnA qna, int position);
+}

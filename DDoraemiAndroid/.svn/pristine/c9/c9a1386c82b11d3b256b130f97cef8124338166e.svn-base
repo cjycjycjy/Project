@@ -1,0 +1,75 @@
+package ddoraemi.detailediteminfo.model;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.v4.app.FragmentActivity;
+import ddoraemi.detailediteminfo.presenter.OnDetailedItemInfo_FinishedListener;
+import ddoraemi.retrofit.Retrofit;
+
+public class DetailedItemInfo_Interactor implements DetailedItemInfo_Interactor_Interface{
+
+	@Override
+	public void getData(final FragmentActivity context,
+			final OnDetailedItemInfo_FinishedListener listener, final int p_id) {
+		// TODO Auto-generated method stub
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					RestAdapter restAdapter = new RestAdapter.Builder()
+							.setEndpoint(Retrofit.ROOT) // call your base url
+							.build();
+					Retrofit retrofit = restAdapter.create(Retrofit.class); 
+					JsonObject info=new JsonObject();
+					info.addProperty("p_id", p_id);			
+					retrofit.getAfterword(info,new Callback<JsonArray>() {
+						@Override
+						public void success(JsonArray result//통신결과
+								,Response response) {
+							if (context != null) {
+								listener.OnDataGetSuccess(result);
+							}
+						}
+
+						@Override
+						public void failure(RetrofitError retrofitError) {
+							new AlertDialog.Builder(context)
+									.setMessage("데이터를 받아오는데 실패하였습니다.")
+									.setPositiveButton(
+											"확인",
+											new DialogInterface.OnClickListener() {
+												@Override
+												public void onClick(
+														DialogInterface dia,
+														int which) {
+													dia.dismiss();
+												}
+											}).show();
+						}
+					});
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					new AlertDialog.Builder(context)
+							.setMessage("데이터를 받아오는데 실패하였습니다.")
+							.setPositiveButton("확인",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dia, int which) {
+											dia.dismiss();
+										}
+									}).show();
+				}
+			}
+		}).start();
+	}
+
+}

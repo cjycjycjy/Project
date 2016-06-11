@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FFCC00" >
+
+        <ImageView
+            android:id="@+id/btn_detailedafterword_left_menu"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/normal_horizontal_margin"
+            android:scaleType="fitXY"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/tv_creategroup_titlebars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:text="댓글 상세"
+            android:textColor="#ffffff"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center_horizontal" >
+
+                <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/detailedafterword_user_photo"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_user" />
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/circle_yellow" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_detailed_afterword_u_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp" >
+
+                <FrameLayout
+                    android:layout_width="58dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentLeft="true" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:id="@+id/star_fill_img1"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginRight="1dp"
+                            android:src="@drawable/star_fill" />
+
+                        <ImageView
+                            android:id="@+id/star_fill_img2"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginRight="1dp"
+                            android:src="@drawable/star_fill" />
+
+                        <ImageView
+                            android:id="@+id/star_fill_img3"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginRight="1dp"
+                            android:src="@drawable/star_fill" />
+
+                        <ImageView
+                            android:id="@+id/star_fill_img4"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginRight="1dp"
+                            android:src="@drawable/star_fill" />
+
+                        <ImageView
+                            android:id="@+id/star_fill_img5"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="1dp"
+                            android:src="@drawable/star_fill" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:id="@+id/star_stroke_img1"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginRight="1dp"
+                            android:src="@drawable/star_stroke" />
+
+                        <ImageView
+                            android:id="@+id/star_stroke_img2"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginRight="1dp"
+                            android:src="@drawable/star_stroke" />
+
+                        <ImageView
+                            android:id="@+id/star_stroke_img3"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginRight="1dp"
+                            android:src="@drawable/star_stroke" />
+
+                        <ImageView
+                            android:id="@+id/star_stroke_img4"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginRight="1dp"
+                            android:src="@drawable/star_stroke" />
+
+                        <ImageView
+                            android:id="@+id/star_stroke_img5"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="1dp"
+                            android:src="@drawable/star_stroke" />
+                    </LinearLayout>
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_detailed_afterword_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="2015.08.12" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_detailed_afterword_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp" >
+
+                <TextView
+                    android:id="@+id/tv_replynum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="7dp"
+                    android:text="댓글"
+                    android:textColor="#000000"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/modifydelete"
+                    android:layout_width="20dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/btn_modifydelete" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="6dp"
+        android:background="#868585" >
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ListView
+            android:id="@+id/lv_replylist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rl_inputarea" >
+        </ListView>
+
+        <RelativeLayout
+            android:id="@+id/rl_inputarea"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" >
+
+            <ImageView
+                android:id="@+id/iv_inputreply_user"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_user" />
+
+            <ImageView
+                android:id="@+id/btn_inputreply"
+                android:layout_width="49dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/btn_commentsave" />
+
+            <EditText
+                android:id="@+id/et_inputreply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/btn_inputreply"
+                android:layout_toRightOf="@+id/iv_inputreply_user" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

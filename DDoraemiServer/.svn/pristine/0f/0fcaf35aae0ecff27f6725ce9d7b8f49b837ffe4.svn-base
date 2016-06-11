@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.ProgramMapper">
+
+    <resultMap id="programMap" type="com.myserver.skp.vo.ProgramVo">
+        <id    		property="p_id"   			column="p_id" />
+        <result     property="p_name"   		column="p_name" />
+        <result     property="p_info"    		column="p_info" />
+        <result     property="p_town_name"  	column="p_town_name" />
+        <result     property="p_addr_1"   		column="p_addr_1" />
+        <result     property="p_addr_2"    		column="p_addr_2" />
+        <result     property="p_addr_3"    		column="p_addr_3" />
+        <result     property="p_addr_4"   		column="p_addr_4" />
+        <result     property="p_addr_5"   		column="p_addr_5" />
+        <result     property="p_addr_6"   		column="p_addr_6" />
+        <result     property="p_cost"   		column="p_cost" />
+        <result     property="p_min_persons"    column="p_min_persons" />
+        <result     property="p_max_persons"    column="p_max_persons" />
+        <result     property="p_read_time"    	column="p_read_time" />
+        <result     property="p_note"    		column="p_note" />
+        <result     property="p_is_possible"    column="p_is_possible" />
+        <result     property="a_id"    			column="a_id" />
+        <result     property="e_name"    		column="e_name" />
+        <result     property="p_url"    		column="p_url" />
+
+    </resultMap>
+
+    <select id="selectAll" resultMap="programMap">
+        SELECT  * FROM program
+    </select>
+    
+    <select id="selectAddr" resultMap="programMap">
+        SELECT  * FROM program WHERE p_addr_1 = #{p_addr_1}
+    </select>
+    
+    <select id="selectExperience" resultMap="programMap">
+        SELECT  * FROM program WHERE e_id = #{e_name}
+    </select>
+
+</mapper>

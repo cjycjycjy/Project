@@ -1,0 +1,51 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+import java.util.ArrayList;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import ddoraemi.detailedgroupinfo.model.DetailedQnA_reply_Interactor;
+import ddoraemi.detailedgroupinfo.model.DetailedQnA_reply_Interactor_Interface;
+import ddoraemi.detailedgroupinfo.model.QnAReply;
+import ddoraemi.detailedgroupinfo.view.DetailedQnA_reply_View;
+
+
+public class DetailedQnA_reply_presenter implements DetailedQnA_reply_Presenter_Interface, OnDetailedQnA_reply_FinishedListener{
+
+	DetailedQnA_reply_View view;
+	DetailedQnA_reply_Interactor_Interface interactor;
+	ArrayList<QnAReply> reply;
+	
+	public DetailedQnA_reply_presenter(DetailedQnA_reply_View view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		this.reply = new ArrayList<>();
+		this.interactor = new DetailedQnA_reply_Interactor();
+	}
+	@Override
+	public void validatecredential(int q_id, String u_id, String q_r_content) {
+		// TODO Auto-generated method stub
+		interactor.setReply(view, q_id, u_id, q_r_content, this);
+	}
+	@Override
+	public void onDataSetSuccess(JsonArray result) {
+		// TODO Auto-generated method stub
+		reply.clear();
+
+		for(int j=0; j<result.size(); j++){
+			JsonObject obj = (JsonObject)result.get(j);
+			int q_r_id = (obj.get("q_r_id")).getAsInt();
+			int q_id2 = (obj.get("q_id")).getAsInt();
+			String q_r_content= (obj.get("q_r_content")).getAsString();
+			int q_r_year = (obj.get("q_r_year")).getAsInt();
+			int q_r_month = (obj.get("q_r_month")).getAsInt();
+			int q_r_day = (obj.get("q_r_day")).getAsInt();
+			String u_id2 = (obj.get("u_id")).getAsString();
+
+			reply.add(new QnAReply(q_r_id, q_id2, q_r_content, q_r_year, q_r_month, q_r_day, u_id2));
+		}
+		view.notifyListview(reply);
+	}
+
+}

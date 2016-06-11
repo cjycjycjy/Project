@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.GatheringMapper">
+
+	<resultMap id="gatheringMap" type="java.util.HashMap">
+		<id property="g_id" column="g_id" />
+		<result property="p_id" column="p_id" />
+		<result property="u_id" column="u_id" />
+		<result property="g_name" column="g_name" />
+		<result property="g_persons" column="g_persons" />
+		<result property="g_want_persons" column="g_want_persons" />
+		<result property="g_info" column="g_info" />
+		<result property="g_status" column="g_status" />
+		<result property="g_open_year" column="g_open_year" />
+		<result property="g_open_month" column="g_open_month" />
+		<result property="g_open_day" column="g_open_day" />
+		<result property="g_close_year" column="g_close_year" />
+		<result property="g_close_month" column="g_close_month" />
+		<result property="g_close_day" column="g_close_day" />
+		<result property="g_start_year" column="g_start_year" />
+		<result property="g_start_month" column="g_start_month" />
+		<result property="g_start_day" column="g_start_day" />
+		<result property="g_start_hour" column="g_start_hour" />
+		<result property="g_start_minute" column="g_start_minute" />
+		<result property="g_end_hour" column="g_end_hour" />
+		<result property="g_end_minute" column="g_end_minute" />
+		<result property="p_name" column="p_name" />
+		<result property="p_addr" column="p_addr" />
+		<result property="p_photo_url" column="p_photo_url" />
+		<result property="e_name" column="e_name" />
+	</resultMap>
+
+
+
+	<resultMap id="gIdMap" type="java.util.HashMap">
+		<result property="g_id" column="g_id" />
+	</resultMap>
+
+	<select id="selectAllofGathering" resultMap="gatheringMap">
+		SELECT gathering.*,
+		program.p_name, CONCAT(program.p_addr_1,' ', program.p_addr_2,' ',
+		program.p_addr_3,' ', program.p_addr_4,' ', program.p_addr_5,' ',
+		program.p_addr_6) as p_addr , program.e_name, program.p_photo_url
+		FROM
+		program, gathering
+		WHERE gathering.p_id = #{p_id} and
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status=1
+	</select>
+	
+	<select id="selectGathering" resultMap="gatheringMap">
+		SELECT gathering.*,
+		program.p_name, CONCAT(program.p_addr_1,' ', program.p_addr_2,' ',
+		program.p_addr_3,' ', program.p_addr_4,' ', program.p_addr_5,' ',
+		program.p_addr_6) as p_addr , program.e_name, program.p_photo_url
+		FROM
+		program, gathering
+		WHERE gathering.p_id = program.p_id and
+		gathering.g_id = #{g_id}
+	</select>
+	
+	<select id="selectAllofGatheringAdmin" resultMap="gatheringMap">
+		SELECT gathering.*,
+		program.p_name, CONCAT(program.p_addr_1,' ', program.p_addr_2,' ',
+		program.p_addr_3,' ', program.p_addr_4,' ', program.p_addr_5,' ',
+		program.p_addr_6) as p_addr , program.e_name, program.p_photo_url
+		FROM
+		program, gathering
+		WHERE gathering.p_id = #{p_id} and
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status!=0
+	</select>
+
+	<select id="selectIsAvailable" resultMap="gatheringMap">
+		SELECT gathering.*,
+		program.p_name, CONCAT(program.p_addr_1,' ', program.p_addr_2,' ',
+		program.p_addr_3,' ', program.p_addr_4,' ', program.p_addr_5,' ',
+		program.p_addr_6) as p_addr , program.e_name, program.p_photo_url
+		FROM
+		program, gathering
+		WHERE program.p_id = gathering.p_id and g_status=1
+	</select>
+
+
+	<insert id="insertGathering" parameterType="GatheringVo"
+		useGeneratedKeys="true" keyProperty="g_id">
+		insert into gathering
+		values(null, #{p_id}, #{u_id},
+		#{g_name},
+		1,
+		#{g_want_persons},
+		#{g_info}, 1, #{g_open_year}, #{g_open_month},
+		#{g_open_day}
+		, #{g_close_year}, #{g_close_month}, #{g_close_day}
+		,
+		#{g_start_year}, #{g_start_month}, #{g_start_day}
+		, #{g_start_hour},
+		#{g_start_minute}
+		, #{g_end_hour}, #{g_end_minute})
+		<selectKey keyProperty="g_id" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<delete id="deleteGathering">
+		delete from gathering
+		where g_id=#{g_id}
+
+	</delete>
+
+	<insert id="insertJoinGathering">
+		insert into join_gathering
+		values(#{g_id}, #{u_id},
+		#{j_g_persons})
+	</insert>
+
+	<delete id="deleteJoinGathering">
+		delete from join_gathering
+		where g_id=#{g_id} and
+		u_id= #{u_id}
+
+	</delete>
+
+	<delete id="deleteJoinGatheringAll">
+		delete from join_gathering
+		where g_id=#{g_id}
+
+	</delete>
+
+	<select id="selectJoinGatheringPersons" resultType="int">
+		select
+		j_g_persons from join_gathering where g_id=#{g_id} and u_id=#{u_id}
+	</select>
+
+	<update id="updateJonGatheringNumAdd">
+		update gathering set
+		g_persons =
+		g_persons+#{j_g_persons}
+		where g_id
+		=
+		#{g_id}
+	</update>
+
+	<update id="updateJonGatheringNumSub">
+		update gathering set
+		g_persons =
+		g_persons-#{j_g_persons}
+		where g_id
+		=
+		#{g_id}
+	</update>
+
+	<select id="selectJoinGathering" resultMap="gatheringMap">
+		SELECT
+		gathering.*,program.p_name, CONCAT(program.p_addr_1,' ',
+		program.p_addr_2,' ',
+		program.p_addr_3,' ', program.p_addr_4,' ',
+		program.p_addr_5,' ',
+		program.p_addr_6) as p_addr, program.e_name,
+		program.p_photo_url
+		from gathering, join_gathering, program
+		WHERE
+		gathering.g_id=join_gathering.g_id and
+		join_gathering.u_id=#{u_id} and
+		program.p_id=gathering.p_id and
+		gathering.g_status=1
+	</select>
+
+	<select id="selectJoinGatheringId" resultMap="gIdMap">
+		SELECT
+		gathering.g_id
+		from gathering, join_gathering, program
+		WHERE
+		gathering.g_id=join_gathering.g_id and
+		join_gathering.u_id=#{u_id} and
+		program.p_id=gathering.p_id and
+		gathering.g_status=1
+	</select>
+
+	<update id="updateGathering">
+		UPDATE
+		gathering inner join program on gathering.p_id=program.p_id
+		SET
+		gathering.g_status=CASE
+		WHEN
+		gathering.g_close_year = #{year} and
+		gathering.g_close_month = #{month} and 
+		gathering.g_close_day <![CDATA[ < ]]> #{day} and
+		gathering.g_persons <![CDATA[ < ]]> program.p_min_persons and
+		gathering.g_status=1
+		THEN 0
+		WHEN
+		gathering.g_close_year = #{year} and
+		gathering.g_close_month = #{month} and
+		gathering.g_close_day <![CDATA[ < ]]> #{day} and
+		gathering.g_persons >= program.p_min_persons and
+		gathering.g_status=1
+		THEN 2
+		ELSE gathering.g_status
+		END
+	</update>
+	
+	<select id="selectGatheringUId" resultType="String">
+		select u_id from gathering where g_id=#{g_id}
+	</select>
+	
+	<select id="selectSearch" resultMap="gatheringMap">
+		SELECT gathering.*,
+		program.p_name, CONCAT(program.p_addr_1,' ', program.p_addr_2,' ',
+		program.p_addr_3,' ', program.p_addr_4,' ', program.p_addr_5,' ',
+		program.p_addr_6) as p_addr , program.e_name, program.p_photo_url
+		FROM
+		program, gathering
+		WHERE 
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status=1 and
+		gathering.g_name like #{content} or
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status=1 and
+		gathering.g_info like #{content} or
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status=1 and
+		gathering.u_id like #{content} or
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status=1 and
+		program.p_addr_1 like #{content} or
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status=1 and
+		program.p_addr_2 like #{content} or
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status=1 and
+		program.p_addr_3 like #{content} or
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status=1 and
+		program.p_addr_4 like #{content} or
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status=1 and
+		program.p_addr_5 like #{content} or
+		gathering.p_id =
+		program.p_id and
+		gathering.g_status=1 and
+		program.p_addr_6 like #{content}
+	</select>
+
+
+
+
+</mapper>

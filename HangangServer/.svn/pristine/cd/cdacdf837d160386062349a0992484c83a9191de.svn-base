@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.TeamListMapper">
+
+
+	<resultMap type="com.fuck.hangang.vo.TeamVo" id="teamMap">
+		<id property="t_num" column="t_num" />
+		<result property="t_name" column="t_name" />
+		<result property="t_info" column="t_info" />
+		<result property="t_facebook" column="t_facebook" />
+		<result property="t_youtube" column="t_youtube" />
+		<result property="t_logo" column="t_logo" />
+		<result property="t_background_img" column="t_background_img" />
+
+	</resultMap>
+	
+	<resultMap type="com.fuck.hangang.vo.CheerfulVo" id="cheerfulMap">
+		<id property="c_num" column="c_num" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="c_content" column="c_content" />
+		<result property="c_photourl" column="c_photourl" />
+		<result property="c_time" column="c_time" />
+	</resultMap>
+	
+	<resultMap type="com.fuck.hangang.vo.TeamGalleryVo" id="teamgalleryMap">
+		<id property="num" column="num" />
+		<result property="t_num" column="t_num" />
+		<result property="p_url" column="p_url" />
+	</resultMap>
+	
+	<resultMap id="scheduleMap" type="com.fuck.hangang.vo.ScheduleVo">
+		<id property="s_num" column="s_num" />
+		<result property="s_year" column="s_year" />
+		<result property="s_month" column="s_month" />
+		<result property="s_day" column="s_day" />
+		<result property="start_hour" column="start_hour" />
+		<result property="start_min" column="start_min" />
+		<result property="end_hour" column="end_hour" />
+		<result property="end_min" column="end_min" />
+		<result property="t_num" column="t_num" />
+		<result property="s_lat" column="s_lat" />
+		<result property="s_long" column="s_long" />
+		<result property="s_park" column="s_park" />
+		<result property="flag" column="flag" />
+		<result property="car_num" column="car_num" />
+		<result property="t_logo" column="t_logo" />
+		<result property="t_name" column="t_name" />
+	</resultMap>
+
+	<select id="getteaminfo" resultMap="teamMap">
+		select * from team order by t_name
+	</select>
+	
+	<select id="getteamschedule" resultMap="scheduleMap">
+		select schedules.*,team.t_logo,team.t_name from schedules inner join team
+		 where team.t_num = #{t_num} and schedules.t_num= #{t_num} and s_year = #{year} and (s_month = #{month} or s_month = #{nextmonth}) 
+		 order by schedules.s_park
+	</select>
+	
+	<select id="getteamdata" resultMap="teamMap">
+		select * from team where t_num = #{t_num}
+	</select>
+	
+	<select id="getteamcheerful" resultMap="cheerfulMap">
+		select cheerful.*, team.t_name from cheerful inner join team 
+		where team.t_num =#{t_num} and cheerful.t_num = #{t_num} order by c_time DESC Limit 0,20
+	</select>
+	
+	<select id="getcheerfulcommentnum" resultType="int">
+		select count(c_num) from cheerful_reply where c_num = #{c_num}
+	</select>
+	
+	<select id="getteamgallery" resultMap="teamgalleryMap">
+		select * from team_gallery where t_num = #{t_num} order by num DESC Limit 0,20
+	</select>
+
+</mapper>

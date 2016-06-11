@@ -1,0 +1,102 @@
+package ddoraemi.home.view;
+
+import java.util.ArrayList;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.Toast;
+import ddoraemi.detailedgroupinfo.view.DetailedGroupInfo_View;
+import ddoraemi.home.model.Group;
+import ddoraemi.home.presenter.Home_AvailableGroupPresenter;
+import ddoraemi.home.presenter.Home_AvailableGroupPresenter_Interface;
+import ddoraemi.start.R;
+
+public class Home_AvailableGroupView extends Fragment implements Home_AvailableGroupView_Interface,
+OnItemClickListener,OnItemSelectedListener{
+	ListView listview;//�������� ���� ����Ʈ��
+	ArrayList<Group> list;
+
+	Spinner select_sortmode;
+	Home_MainViewGroupListAdapter adapter;
+	ArrayAdapter spinnerdapter;
+	
+	Home_AvailableGroupPresenter_Interface presenter;
+	int s_pos;
+	public Home_AvailableGroupView(ArrayList<Group> list)
+	{
+		this.list=new ArrayList<Group>();
+		this.list.addAll(list);
+	}
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_availablegroupview, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		presenter = new Home_AvailableGroupPresenter(this);
+		select_sortmode= (Spinner)v.findViewById(R.id.fragment_recommend_spinner);
+		spinnerdapter = ArrayAdapter.createFromResource(getActivity(), R.array.recommend_spinner_items,R.layout.item_spinnerrecommend);
+		spinnerdapter.setDropDownViewResource(R.layout.item_spinnerrecommend);
+		select_sortmode.setAdapter(spinnerdapter);
+		select_sortmode.setOnItemSelectedListener(this);
+		listview=(ListView)v.findViewById(R.id.fragment_available_listview);
+		adapter=new Home_MainViewGroupListAdapter(getActivity(), R.layout.item_grouplist, list);
+		listview.setAdapter(adapter);
+		listview.setOnItemClickListener(this);
+	}
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		Group group = (Group)parent.getItemAtPosition(position);
+		s_pos = position;
+		presenter.validatecredential(group);
+		
+	}
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
+		// TODO Auto-generated method stub
+		///여기다가 정렬구문만들기.
+		Toast.makeText(getActivity(), String.valueOf(arg2), Toast.LENGTH_SHORT).show();
+		
+	}
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	public int get_s_pos(){
+		return s_pos;
+	}
+
+	public void deleteGroup(Group group){
+		for(int i=0; i<list.size(); i++){
+			if(list.get(i).getG_id() == group.getG_id()){
+				list.remove(i);
+				break;
+			}
+		}
+		adapter.notifyDataSetChanged();
+	}
+	@Override
+	public void goToDetailedGroupInfo(Group group) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(this.getActivity(),DetailedGroupInfo_View.class);
+		intent.putExtra("group", group);
+		getActivity().startActivityForResult(intent, 50);
+		
+	}
+}

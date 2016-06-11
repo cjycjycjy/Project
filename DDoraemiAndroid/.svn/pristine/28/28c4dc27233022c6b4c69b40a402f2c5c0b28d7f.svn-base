@@ -1,0 +1,8 @@
+package ddoraemi.home.presenter;
+
+
+import com.google.gson.JsonArray;
+
+public interface OnHome_MainViewFinishedListener {
+	public void OnGetDataSuccess(JsonArray data);
+}

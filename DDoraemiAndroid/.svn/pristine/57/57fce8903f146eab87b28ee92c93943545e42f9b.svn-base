@@ -1,0 +1,8 @@
+package ddoraemi.detailediteminfo.presenter;
+
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.detailediteminfo.model.AfterwordReply;
+
+public interface DetailedAfterword_reply_presenter_Interface {
+	public void validatecredential(Afterword afterword, int a_id, String u_id, String a_r_content,int position);
+}

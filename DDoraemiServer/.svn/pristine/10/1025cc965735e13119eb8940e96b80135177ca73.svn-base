@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.TestMapper">
+
+    <resultMap id="testMap" type="com.myserver.skp.vo.TestVo">
+        <id     property="p_id"    column="p_id" />
+
+    </resultMap>
+
+    <select id="select" resultMap="testMap">
+        SELECT  * FROM program
+    </select>
+    
+    <select id="selectP" resultType="String">
+        SELECT  photo_name FROM photo_set where num = #{p_id} 
+    </select>
+    
+    
+    <update id="photoSet">
+    	update program set p_photo_url = #{p_photo_url} where p_id = #{p_id}
+    </update>
+
+</mapper>

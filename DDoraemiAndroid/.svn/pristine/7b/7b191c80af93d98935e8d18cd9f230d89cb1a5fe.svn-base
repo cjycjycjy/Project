@@ -1,0 +1,8 @@
+package ddoraemi.detailediteminfo.presenter;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+public interface OnDetailedItemInfo_FinishedListener {
+	public void OnDataGetSuccess(JsonObject data);
+}

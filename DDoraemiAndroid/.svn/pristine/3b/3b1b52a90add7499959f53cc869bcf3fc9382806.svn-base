@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFCC00" >
+
+            <ImageView
+                android:id="@+id/btn_left_menu"
+                android:layout_width="20dp"
+                android:layout_height="18dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/normal_horizontal_margin"
+                android:scaleType="fitXY"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:id="@+id/tv_titlebars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_vertical"
+                android:text="모임 신청"
+                android:textColor="#ffffff"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_join_programname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="74dp"
+            android:text="체험 이름"
+            android:textColor="#474747"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_join_programaddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:text="체험 주소"
+            android:textColor="#474747"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dip"
+            android:text="날짜"
+            android:textColor="#474747"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:id="@+id/rl_datebox"
+            android:layout_width="209dp"
+            android:layout_height="57dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/date_box"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_join_date_inbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="2000.12.12"
+                android:textColor="#474747"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_join_time_inbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_date_inbox"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dip"
+                android:text="오후1시-오후3시"
+                android:textColor="#474747"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_persons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="34dp"
+            android:text="참여 인원"
+            android:textColor="#474747"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tv_selectpersons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:text="프로그램에 참여하는 인원을 선택해주세요."
+            android:textColor="#7e7e7e"
+            android:textSize="11sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="14dp" >
+
+            <FrameLayout
+                android:layout_width="49dp"
+                android:layout_height="40dp" >
+
+                <ImageView
+                    android:id="@+id/activity_joingroup_persons_minusdisable"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/countpeople_minus_gray" />
+
+                <ImageView
+                    android:id="@+id/activity_joingroup_persons_minus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/number_box_minus"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="111dp"
+                android:layout_height="40dp" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/number_box_middle" />
+
+                <TextView
+                    android:id="@+id/activity_joingroup_minpersons_creategroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="1명"
+                    android:textColor="#474747"
+                    android:textSize="14sp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="49dp"
+                android:layout_height="40dp" >
+
+                <ImageView
+                    android:id="@+id/activity_joingroup_persons_plusdisable"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/countpeople_plus_gray" />
+
+                <ImageView
+                    android:id="@+id/activity_joingroup_persons_plus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/number_box_plus" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_joingroupbutton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/btn_bottom"
+        android:text="모임을 신청합니다."
+        android:textColor="#FFFFFF" >
+    </Button>
+
+</RelativeLayout>

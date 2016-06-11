@@ -1,0 +1,88 @@
+package com.myserver.skp.vo;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+
+public class UserVo {
+String u_id;
+String password;
+String u_phone;
+char parent_gender;
+int parent_age;
+String u_addr_1;
+String u_addr_2;
+String u_addr_3;
+char u_gender;
+int u_age;
+LinkedHashMap<String, String> favorit_program;
+
+
+public String getU_id() {
+	return u_id;
+}
+public void setU_id(String u_id) {
+	this.u_id = u_id;
+}
+public String getPassword() {
+	return password;
+}
+public void setPassword(String password) {
+	this.password = password;
+}
+public String getU_phone() {
+	return u_phone;
+}
+public void setU_phone(String u_phone) {
+	this.u_phone = u_phone;
+}
+public char getParent_gender() {
+	return parent_gender;
+}
+public void setParent_gender(char parent_gender) {
+	this.parent_gender = parent_gender;
+}
+public int getParent_age() {
+	return parent_age;
+}
+public void setParent_age(int parent_age) {
+	this.parent_age = parent_age;
+}
+public String getU_addr_1() {
+	return u_addr_1;
+}
+public void setU_addr_1(String u_addr_1) {
+	this.u_addr_1 = u_addr_1;
+}
+public String getU_addr_2() {
+	return u_addr_2;
+}
+public void setU_addr_2(String u_addr_2) {
+	this.u_addr_2 = u_addr_2;
+}
+public String getU_addr_3() {
+	return u_addr_3;
+}
+public void setU_addr_3(String u_addr_3) {
+	this.u_addr_3 = u_addr_3;
+}
+public char getU_gender() {
+	return u_gender;
+}
+public void setU_gender(char u_gender) {
+	this.u_gender = u_gender;
+}
+public int getU_age() {
+	return u_age;
+}
+public void setU_age(int u_age) {
+	this.u_age = u_age;
+}
+public LinkedHashMap<String, String> getFavorit_program() {
+	return favorit_program;
+}
+public void setFavorit_program(LinkedHashMap<String, String> favorit_program) {
+	this.favorit_program = favorit_program;
+}
+
+
+}

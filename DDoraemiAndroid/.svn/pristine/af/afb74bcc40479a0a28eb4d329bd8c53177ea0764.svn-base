@@ -1,0 +1,80 @@
+package ddoraemi.detailediteminfo.view;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.detailediteminfo.presenter.DetailedItemInfo_AfterwordView_presenter_Interface;
+import ddoraemi.start.R;
+
+public class DetailedItemInfo_AfterwordListAdapter extends ArrayAdapter<Afterword> {
+	ArrayList<Afterword> items;
+	Context context;
+
+	DetailedItemInfo_AfterwordView_presenter_Interface presenter;
+	int mPosition;
+
+	AppController app;
+	Spinner btn_modifydelete;
+	ArrayAdapter modifydelete;
+
+	public DetailedItemInfo_AfterwordListAdapter(Context context, int resource, ArrayList<Afterword> objects,
+			DetailedItemInfo_AfterwordView_presenter_Interface presenter) {
+		super(context, resource, objects);
+		this.context = context;
+		items = objects;
+		this.presenter = presenter;
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View v = convertView;
+
+		mPosition = position;
+
+		if (v == null) {
+			LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			v = vi.inflate(R.layout.item_afterwordlist, null);
+
+			app = (AppController) v.getContext().getApplicationContext();
+
+			btn_modifydelete = (Spinner) v.findViewById(R.id.modifydelete);
+			String[] option = v.getResources().getStringArray(R.array.modify_spinner_items);
+			modifydelete = new SpinnerAdapter(v.getContext(),R.layout.item_spinnerrecommend,option);
+			modifydelete.setDropDownViewResource(R.layout.item_spinnerrecommend);
+			btn_modifydelete.setAdapter(modifydelete);
+			if (app.getId().equals(items.get(position).getU_id())) {
+				btn_modifydelete.setVisibility(View.VISIBLE);
+			} else {
+				btn_modifydelete.setVisibility(View.INVISIBLE);
+			}
+
+		}
+		Afterword p = items.get(position);
+		if (p != null) {
+			TextView tv_afterword_u_id = (TextView) v.findViewById(R.id.tv_afterword_u_id);
+			TextView tv_afterword_text = (TextView) v.findViewById(R.id.tv_afterword_text);
+			TextView tv_afterword_date = (TextView) v.findViewById(R.id.tv_afterword_date);
+			TextView tv_reply = (TextView) v.findViewById(R.id.tv_add_reply);
+			tv_reply.setText("댓글(" + p.getA_r_num() + ")");
+			tv_afterword_u_id.setText(p.getU_id());
+			tv_afterword_date.setText(String.valueOf(p.getA_year()) + "-" + String.valueOf(p.getA_month()) + "-"
+					+ String.valueOf(p.getA_day()));
+			tv_afterword_text.setText(p.getA_content());
+
+		}
+		return v;
+
+	}
+
+
+}

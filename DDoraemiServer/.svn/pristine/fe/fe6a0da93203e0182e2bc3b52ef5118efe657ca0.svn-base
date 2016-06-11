@@ -1,0 +1,145 @@
+package com.myserver.skp.controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.myserver.skp.dao.GatheringDao;
+import com.myserver.skp.dao.ProgramDao;
+import com.myserver.skp.vo.GatheringVo;
+import com.myserver.skp.vo.ProgramVo;
+
+@Controller
+public class ProgramController {
+	private static final Logger logger = LoggerFactory.getLogger(ProgramController.class);
+
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+
+	@Resource
+	private ProgramDao programDao;
+	@Resource
+	private GatheringDao gatheringDao;
+
+	@RequestMapping(value = "/getprogram", params="!category")
+	public @ResponseBody JSONObject getProgram(){
+		
+			JSONObject json = new JSONObject();
+
+			List<ProgramVo> programList = this.programDao.getSelectAll();
+			List<GatheringVo> gatheringList = this.gatheringDao.getSelectIsAvailable();
+
+			for(int i=0; i<programList.size(); i++){
+				if(programList.get(i).getP_addr_1()==null){
+					programList.get(i).setP_addr_1("");
+				}
+				if(programList.get(i).getP_addr_2()==null){
+					programList.get(i).setP_addr_2("");
+				}
+				if(programList.get(i).getP_addr_3()==null){
+					programList.get(i).setP_addr_3("");
+				}
+				if(programList.get(i).getP_addr_4()==null){
+					programList.get(i).setP_addr_4("");
+				}
+				if(programList.get(i).getP_addr_5()==null){
+					programList.get(i).setP_addr_5("");
+				}
+				if(programList.get(i).getP_addr_6()==null){
+					programList.get(i).setP_addr_6("");
+				}
+
+				if(programList.get(i).getP_note()==null){
+					programList.get(i).setP_note("");
+				}
+			}
+			json.put("program", programList);
+			json.put("gathering", gatheringList);
+
+			return json;
+		
+	}
+	
+	
+	@RequestMapping(value = "/getprogram", method = RequestMethod.GET)
+	public @ResponseBody List<ProgramVo> getProgramCategory(@RequestParam("category") int category, HttpServletRequest req){
+		if(req.getParameter("p_addr_1") == null){
+			return null;
+		}
+		List<ProgramVo> programList = null;
+		if(category == 1){
+			String p_addr_1 = req.getParameter("p_addr_1");
+			 programList = this.programDao.getSelectAddr(p_addr_1);
+
+			for(int i=0; i<programList.size(); i++){
+				if(programList.get(i).getP_addr_1()==null){
+					programList.get(i).setP_addr_1("");
+				}
+				if(programList.get(i).getP_addr_2()==null){
+					programList.get(i).setP_addr_2("");
+				}
+				if(programList.get(i).getP_addr_3()==null){
+					programList.get(i).setP_addr_3("");
+				}
+				if(programList.get(i).getP_addr_4()==null){
+					programList.get(i).setP_addr_4("");
+				}
+				if(programList.get(i).getP_addr_5()==null){
+					programList.get(i).setP_addr_5("");
+				}
+				if(programList.get(i).getP_addr_6()==null){
+					programList.get(i).setP_addr_6("");
+				}
+
+				if(programList.get(i).getP_note()==null){
+					programList.get(i).setP_note("");
+				}
+			}
+		}else if(category == 2){
+			String e_name = req.getParameter("e_name");
+			programList = this.programDao.getSelectExperience(e_name);
+
+			for(int i=0; i<programList.size(); i++){
+				if(programList.get(i).getP_addr_1()==null){
+					programList.get(i).setP_addr_1("");
+				}
+				if(programList.get(i).getP_addr_2()==null){
+					programList.get(i).setP_addr_2("");
+				}
+				if(programList.get(i).getP_addr_3()==null){
+					programList.get(i).setP_addr_3("");
+				}
+				if(programList.get(i).getP_addr_4()==null){
+					programList.get(i).setP_addr_4("");
+				}
+				if(programList.get(i).getP_addr_5()==null){
+					programList.get(i).setP_addr_5("");
+				}
+				if(programList.get(i).getP_addr_6()==null){
+					programList.get(i).setP_addr_6("");
+				}
+
+				if(programList.get(i).getP_note()==null){
+					programList.get(i).setP_note("");
+				}
+			}
+			
+		}
+		return programList;
+		
+	}
+}

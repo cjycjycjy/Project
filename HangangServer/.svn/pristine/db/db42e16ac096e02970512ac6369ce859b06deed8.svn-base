@@ -1,0 +1,229 @@
+package com.fuck.hangang.util;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import com.fuck.hangang.dao.UserDao;
+import com.fuck.hangang.vo.RegistrationIdVo;
+import com.google.android.gcm.server.InvalidRequestException;
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.Result;
+import com.google.android.gcm.server.Sender;
+
+
+@Service
+public class GCMSender {
+	final String API_KEY = "AIzaSyC0Pz5TBMA_9MRHCKhGHPe-vM9s_9lYLys";
+	final int retries = 5;
+	
+	
+
+	@Resource
+	UserDao userDao;
+
+	public <T> HashMap<String, T> sendGCMSchedule(int s_year,
+			int s_month,
+			int s_day,
+			int start_hour,
+			int start_min,
+			int end_hour,
+			int end_min,
+			String s_park,
+			int t_num,
+			String t_name,
+			String u_id,
+			String u_registrationid){
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		Sender sender = new Sender(API_KEY);
+		Message msg = new Message.Builder().addData("title", "°ø¿¬").addData("type", "1")
+				.addData("s_park", s_park)
+				.addData("t_name", t_name)
+				.addData("s_year", String.valueOf(s_year))
+				.addData("s_month", String.valueOf(s_month))
+				.addData("s_day", String.valueOf(s_day))
+				.addData("start_hour", String.valueOf(start_hour))
+				.addData("start_min", String.valueOf(start_min))
+				.addData("end_hour", String.valueOf(end_hour))
+				.addData("end_min", String.valueOf(end_min))
+
+				.addData("u_id", u_id)
+				.addData("message", "").build();
+		try {
+
+			Result result = sender.send(msg, u_registrationid, retries);
+
+			if (StringUtils.isEmpty(result.getErrorCodeName())) {
+				System.out.println(msg.toString() + "GCM Notification is sent successfully" + result.toString());
+				//userDao.updateRegisterId(register_id, register_id);
+
+				if(!StringUtils.isEmpty(result.getCanonicalRegistrationId())){
+					String new_register_id = result.getCanonicalRegistrationId();
+					System.out.println(new_register_id);
+					resultHashMap.put("new_register_id", (T)new_register_id);
+					userDao.updateRegisterId(u_registrationid, new_register_id);
+				}
+				resultHashMap.put("result", (T)"Success");
+				return resultHashMap;
+			}
+
+			System.out.println("Error occurred while sending push notification :" + result.getErrorCodeName());
+
+		} catch (InvalidRequestException e) {
+			System.out.println("Invalid Request");
+		} catch (IOException e) {
+			System.out.println("IO Exception");
+		}
+		resultHashMap.put("result", (T)"Failed");
+		return resultHashMap;
+	}
+
+	public <T> HashMap<String, T> sendGCMToAllUser(List<RegistrationIdVo> resultVo, int n_num){
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		Sender sender = new Sender(API_KEY);
+		Message msg = new Message.Builder()
+				.addData("type", String.valueOf("1"))
+				.addData("n_num", String.valueOf(n_num)).build();
+		try {
+			for(int i =0; i<resultVo.size(); i++){
+				Result result = sender.send(msg, resultVo.get(i).getU_registrationid().toString(), retries);
+
+
+				if (StringUtils.isEmpty(result.getErrorCodeName())) {
+					System.out.println(msg.toString() + "GCM Notification is sent successfully" + result.toString());
+					//userDao.updateRegisterId(register_id, register_id);
+
+					if(!StringUtils.isEmpty(result.getCanonicalRegistrationId())){
+						String new_register_id = result.getCanonicalRegistrationId();
+						System.out.println(new_register_id);
+						resultHashMap.put("new_register_id", (T)new_register_id);
+						userDao.updateRegisterId(resultVo.get(i).getU_registrationid().toString(), new_register_id);
+					}
+
+				}
+
+				System.out.println("Error occurred while sending push notification :" + result.getErrorCodeName());
+			}
+
+		} catch (InvalidRequestException e) {
+			System.out.println("Invalid Request");
+		} catch (IOException e) {
+			System.out.println("IO Exception");
+		}
+		resultHashMap.put("result", (T)"Success");
+		return resultHashMap;
+	}
+	
+	public <T> HashMap<String, T> sendGCMToOneUser(RegistrationIdVo resultVo, int c_num){
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		Sender sender = new Sender(API_KEY);
+		Message msg = new Message.Builder()
+				.addData("type", String.valueOf("3"))
+				.addData("c_num", String.valueOf(c_num)).build();
+		try {
+			
+				Result result = sender.send(msg, resultVo.getU_registrationid().toString(), retries);
+
+
+				if (StringUtils.isEmpty(result.getErrorCodeName())) {
+					System.out.println(msg.toString() + "GCM Notification is sent successfully" + result.toString());
+					//userDao.updateRegisterId(register_id, register_id);
+
+					if(!StringUtils.isEmpty(result.getCanonicalRegistrationId())){
+						String new_register_id = result.getCanonicalRegistrationId();
+						System.out.println(new_register_id);
+						resultHashMap.put("new_register_id", (T)new_register_id);
+						userDao.updateRegisterId(resultVo.getU_registrationid().toString(), new_register_id);
+					}
+
+				}
+
+				System.out.println("Error occurred while sending push notification :" + result.getErrorCodeName());
+			
+
+		} catch (InvalidRequestException e) {
+			System.out.println("Invalid Request");
+		} catch (IOException e) {
+			System.out.println("IO Exception");
+		}
+		resultHashMap.put("result", (T)"Success");
+		return resultHashMap;
+	}
+	
+	
+	public <T> HashMap<String, T> sendGCMToAllTeam(List<RegistrationIdVo> resultVo, int a_num){
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		Sender sender = new Sender(API_KEY);
+		Message msg = new Message.Builder()
+				.addData("type", String.valueOf("2"))
+				.addData("a_num", String.valueOf(a_num)).build();
+		try {
+			for(int i =0; i<resultVo.size(); i++){
+				Result result = sender.send(msg, resultVo.get(i).getU_registrationid().toString(), retries);
+
+
+				if (StringUtils.isEmpty(result.getErrorCodeName())) {
+					System.out.println(msg.toString() + "GCM Notification is sent successfully" + result.toString());
+					//userDao.updateRegisterId(register_id, register_id);
+
+					if(!StringUtils.isEmpty(result.getCanonicalRegistrationId())){
+						String new_register_id = result.getCanonicalRegistrationId();
+						System.out.println(new_register_id);
+						resultHashMap.put("new_register_id", (T)new_register_id);
+						userDao.updateRegisterId(resultVo.get(i).getU_registrationid().toString(), new_register_id);
+					}
+
+				}
+
+				System.out.println("Error occurred while sending push notification :" + result.getErrorCodeName());
+			}
+
+		} catch (InvalidRequestException e) {
+			System.out.println("Invalid Request");
+		} catch (IOException e) {
+			System.out.println("IO Exception");
+		}
+		resultHashMap.put("result", (T)"Success");
+		return resultHashMap;
+	}
+
+
+	public <T> HashMap<String, T> sendGCM(){
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		Sender sender = new Sender(API_KEY);
+		Message msg = new Message.Builder()
+				.addData("message", "asdads")
+				.addData("n_num", "27").build();
+		try {
+
+			Result result = sender.send(msg, "APA91bEuwJMwS7GHbrqSIqEYq86FqJ95oKkp1Si_arlWmNT0tGL-xeO9FLCkbCfxHsjOQkZFJYr4qFvW4pX8PAvc1x5Drzm-RNEQ4ypO30jHNm2pHguf-2_nxfKReyMO4U8juoBmpWY7", retries);
+
+			if (StringUtils.isEmpty(result.getErrorCodeName())) {
+				System.out.println(msg.toString() + "GCM Notification is sent successfully" + result.toString());
+				if(!StringUtils.isEmpty(result.getCanonicalRegistrationId())){
+					String new_register_id = result.getCanonicalRegistrationId();
+					System.out.println(new_register_id);
+					resultHashMap.put("new_register_id", (T)new_register_id);
+				}
+				resultHashMap.put("result", (T)"Success");
+				return resultHashMap;
+			}
+
+			System.out.println("Error occurred while sending push notification :" + result.getErrorCodeName());
+
+		} catch (InvalidRequestException e) {
+			System.out.println("Invalid Request");
+		} catch (IOException e) {
+			System.out.println("IO Exception");
+		}
+		resultHashMap.put("result", (T)"Failed");
+		return resultHashMap;
+	}
+
+
+}

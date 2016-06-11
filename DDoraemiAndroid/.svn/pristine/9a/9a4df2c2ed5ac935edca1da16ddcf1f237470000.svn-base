@@ -1,0 +1,261 @@
+package ddoraemi.dialog;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Hashtable;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import ddoraemi.creategroup.view.CalData;
+import ddoraemi.home.model.Group;
+import ddoraemi.start.R;
+
+public class Dialog_GroupDateSelect extends Dialog implements
+		android.view.View.OnClickListener {
+	Context mContext;
+	Calendar mCal;
+	TextView title;
+	LinearLayout next, prev;
+	ArrayList<CalData> arrData;
+	GridView gridview;
+	ListView listview;
+	DateAdapter adapter;
+	Hashtable<String, ArrayList<Group>> scheduletable;
+	int nullcount;
+	ImageView amorpmup, amorpmdown, hourup, hourdown, minup, mindown, btn_add;
+	int hour, min;
+	TextView tvamorpm;
+	EditText tvhour, tvmin;
+	boolean amorpm;
+	int startday;
+	int todayyear;
+	int todaymonth;
+	int todaydate;
+	int thisYear;
+	int thisMonth;
+	int selpo = -1;
+	int afterweektodayvalue;
+	String timeregex = "^[0-9]{1,2}$";// 핸드폰조건
+
+	public Dialog_GroupDateSelect(Context context) {
+		super(context);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.dialog_groupdateselect);
+		getWindow().setBackgroundDrawable(
+				new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		this.setCanceledOnTouchOutside(false);
+		this.setCancelable(true);
+		mContext = context;
+		initComponent();
+	}
+
+	private void initComponent() {
+		// TODO Auto-generated method stub
+		nullcount = 3;
+		hour = 2;
+		min = 0;
+		amorpm = false;// true면 오전
+		mCal = Calendar.getInstance();
+		todayyear = mCal.get(Calendar.YEAR);
+		todaymonth = mCal.get(Calendar.MONTH) + 1;
+		todaydate = mCal.get(Calendar.DATE);
+		thisMonth = todaymonth;
+		thisYear = todayyear;
+		mCal.add(Calendar.DATE, 7);
+		afterweektodayvalue = (mCal.get(Calendar.YEAR) * 10000)
+				+ ((mCal.get(Calendar.MONTH) + 1) * 100)
+				+ mCal.get(Calendar.DATE);
+		arrData = new ArrayList<CalData>();
+		gridview = (GridView) findViewById(R.id.dialog_groupdateselect_gridview);
+		title = (TextView) findViewById(R.id.dialog_groupdateselect_date);
+		next = (LinearLayout) findViewById(R.id.dialog_groupdateselect_next);
+		prev = (LinearLayout) findViewById(R.id.dialog_groupdateselect_prev);
+		next.setOnClickListener(this);
+		prev.setOnClickListener(this);
+		setCalendarDate(thisYear, thisMonth);
+		amorpmup = (ImageView) findViewById(R.id.dialog_groupdateselect_AMorPMup);
+		amorpmdown = (ImageView) findViewById(R.id.dialog_groupdateselect_AMorPMdown);
+		hourup = (ImageView) findViewById(R.id.dialog_groupdateselect_Hourup);
+		hourdown = (ImageView) findViewById(R.id.dialog_groupdateselect_Hourdown);
+		minup = (ImageView) findViewById(R.id.dialog_groupdateselect_Minup);
+		mindown = (ImageView) findViewById(R.id.dialog_groupdateselect_Mindown);
+		tvamorpm = (TextView) findViewById(R.id.dialog_groupdateselect_AMPM);
+		tvhour = (EditText) findViewById(R.id.dialog_groupdateselect_Edit_Hour);
+		tvhour.addTextChangedListener(hourTextWatcher);
+		tvmin = (EditText) findViewById(R.id.dialog_groupdateselect_Edit_min);
+		tvmin.addTextChangedListener(minTextWatcher);
+		amorpmup.setOnClickListener(this);
+		amorpmdown.setOnClickListener(this);
+		hourup.setOnClickListener(this);
+		hourdown.setOnClickListener(this);
+		minup.setOnClickListener(this);
+		mindown.setOnClickListener(this);
+		tvhour.setText(String.valueOf(hour));
+		tvmin.setText(String.valueOf(min));
+
+	}
+
+	public void setCalendarDate(int year, int month) {
+		arrData.clear();
+		mCal.set(year, month - 1, 1);
+		startday = mCal.get(Calendar.DAY_OF_WEEK);
+		if (startday != 1) {
+			for (int i = 0; i < startday - 1; i++) {
+				arrData.add(null);
+			}
+		}
+
+		for (int i = 0; i < mCal.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+			mCal.set(mCal.get(Calendar.YEAR), month - 1, (i + 1));
+			arrData.add(new CalData((i + 1), mCal.get(Calendar.DAY_OF_WEEK),
+					year, month));
+		}
+		adapter = new DateAdapter(mContext, arrData, todayyear, todaymonth,
+				todaydate, afterweektodayvalue);
+		gridview.setAdapter(adapter);
+		title.setText(year + "년 " + month + "월");
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if (v.getId() == R.id.dialog_groupdateselect_next) {
+			selpo = -1;
+			if (thisMonth < 12) {
+				thisMonth++;
+				setCalendarDate(thisYear, thisMonth);
+			} else {
+				thisYear++;
+				thisMonth = 1;
+				setCalendarDate(thisYear, thisMonth);
+			}
+
+		} else if (v.getId() == R.id.dialog_groupdateselect_prev) {
+			selpo = -1;
+			if (thisMonth > 1) {
+				thisMonth--;
+				setCalendarDate(thisYear, thisMonth);
+			} else {
+				thisYear--;
+				thisMonth = 12;
+				setCalendarDate(thisYear, thisMonth);
+			}
+		} else if (v.getId() == R.id.dialog_groupdateselect_AMorPMdown
+				|| v.getId() == R.id.dialog_groupdateselect_AMorPMup) {
+			amorpm = !amorpm;
+			setAmPmText();
+
+		}
+
+		else if (v.getId() == R.id.dialog_groupdateselect_Hourup) {
+			hour++;
+			if (hour > 12) {
+				hour = 1;
+			}
+			tvhour.setText(String.valueOf(hour));
+		} else if (v.getId() == R.id.dialog_groupdateselect_Hourdown) {
+			hour--;
+			if (hour < 1) {
+				hour = 12;
+			}
+			tvhour.setText(String.valueOf(hour));
+
+		} else if (v.getId() == R.id.dialog_groupdateselect_Minup) {
+			min++;
+			if (min > 59) {
+				min = 0;
+			}
+			tvmin.setText(String.valueOf(min));
+
+		} else if (v.getId() == R.id.dialog_groupdateselect_Mindown) {
+
+			min--;
+			if (min < 0) {
+				min = 59;
+			}
+			tvmin.setText(String.valueOf(min));
+		}
+
+	}
+
+	public void setAmPmText() {
+		if (amorpm) {
+			tvamorpm.setText("오전");
+		} else {
+			tvamorpm.setText("오후");
+		}
+	}
+
+	private TextWatcher minTextWatcher = new TextWatcher() {
+
+		public void afterTextChanged(Editable s) {
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+		}
+
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			if (s.length() == 0) {
+
+			} else if (s.toString().matches(timeregex)) {
+				min = Integer.parseInt(s.toString());
+			}
+
+			else {
+				tvmin.setText(String.valueOf(min));
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(mContext,
+						"잘못된 입력입니다");
+				dialog.show();
+
+			}
+
+		}
+
+	};
+	private TextWatcher hourTextWatcher = new TextWatcher() {
+
+		public void afterTextChanged(Editable s) {
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+		}
+
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			if (s.length() == 0) {
+
+			} else if (s.toString().matches(timeregex)) {
+				hour = Integer.parseInt(s.toString());
+			}
+
+			else {
+				tvhour.setText(String.valueOf(hour));
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(mContext,
+						"잘못된 입력입니다");
+				dialog.show();
+
+			}
+
+		}
+
+	};
+}

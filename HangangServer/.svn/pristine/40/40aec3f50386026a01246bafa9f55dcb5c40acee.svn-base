@@ -1,0 +1,44 @@
+package com.fuck.hangang.vo;
+
+public class QnaVo {
+	
+	int u_id;
+	int q_num;
+	String title;
+	String contents;
+	String q_time;
+	
+	public int getU_id() {
+		return u_id;
+	}
+	public void setU_id(int u_id) {
+		this.u_id = u_id;
+	}
+	public int getQ_num() {
+		return q_num;
+	}
+	public void setQ_num(int q_num) {
+		this.q_num = q_num;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getContents() {
+		return contents;
+	}
+	public void setContents(String contents) {
+		this.contents = contents;
+	}
+	public String getQ_time() {
+		return q_time;
+	}
+	public void setQ_time(String q_time) {
+		this.q_time = q_time;
+	}
+	
+	
+
+}

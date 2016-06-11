@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FFCC00" >
+
+        <ImageView
+            android:id="@+id/FindPasswordDoneActivity_ImgBack"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="17dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/join_tv_titlebars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:text="비밀번호 찾기"
+            android:textColor="#ffffff"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="43dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="276dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:textColor="#868585"
+            android:text="임시비밀번호가 문자로 전송되었습니다.\n로그인 후,마이페이지에서 변경해주세요."
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="276dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="9dp"
+            android:background="#868585" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/FindPasswordDoneActivity_Imggotologin"
+        android:layout_width="218dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/btn_login" />
+
+</LinearLayout>

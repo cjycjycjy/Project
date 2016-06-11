@@ -1,0 +1,50 @@
+package ddoraemi.myinfopage.view;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import ddoraemi.detailediteminfo.view.ScrollTabHolderFragment;
+import ddoraemi.start.R;
+
+public class MyPage_WishView extends ScrollTabHolderFragment implements OnScrollListener{
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_mypage_listpage, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		
+	}
+
+	@Override
+	public void adjustScroll(int scrollHeight) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onScrollViewScroll(int scrollheight, int spageCount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

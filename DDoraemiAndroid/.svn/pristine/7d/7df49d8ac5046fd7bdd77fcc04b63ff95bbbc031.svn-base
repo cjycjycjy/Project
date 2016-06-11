@@ -1,0 +1,102 @@
+package ddoraemi.programlist.view;
+
+import java.util.ArrayList;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.programlist.presenter.Programlist_type_presenter;
+import ddoraemi.programlist.presenter.Programlist_type_presenter_Interface;
+import ddoraemi.start.R;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+public class Programlist_type_View extends Fragment implements Programlist_type_View_Interface, OnClickListener{
+
+	Button btn_traditionalfood;
+	Button btn_planting;
+	Button btn_harvest;
+	Button btn_traditionalplay;
+	Button btn_cooking;
+	Button btn_craft;
+	Button btn_culture;
+	Button btn_nature;
+
+
+	Programlist_type_presenter_Interface presenter;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_programlist_type, null);
+
+		init(v);
+		return v;
+	}
+	public void init(View v){
+		btn_cooking = (Button)v.findViewById(R.id.btn_cooking);
+		btn_nature = (Button)v.findViewById(R.id.btn_nature);
+		btn_culture = (Button)v.findViewById(R.id.btn_culture);
+		btn_craft = (Button)v.findViewById(R.id.btn_craft);
+		btn_traditionalplay = (Button)v.findViewById(R.id.btn_traditionalplay);
+		btn_harvest = (Button)v.findViewById(R.id.btn_harvest);
+		btn_planting = (Button)v.findViewById(R.id.btn_planting);
+		btn_traditionalfood = (Button)v.findViewById(R.id.btn_traditionalfood);
+
+		btn_cooking.setOnClickListener(this);
+		btn_traditionalfood.setOnClickListener(this);
+		btn_planting.setOnClickListener(this);
+		btn_harvest.setOnClickListener(this);
+		btn_traditionalplay.setOnClickListener(this);
+		btn_craft.setOnClickListener(this);
+		btn_culture.setOnClickListener(this);
+		btn_nature.setOnClickListener(this);
+
+		presenter = new Programlist_type_presenter(this);
+
+
+	}
+	@Override
+	public void goToList(ArrayList<ProgramData> list, String type) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(getActivity(),Programlist_type_list_view.class);
+		intent.putExtra("list", list);
+		intent.putExtra("type", type);
+		getActivity().startActivityForResult(intent, 50);
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if(v.getId()==R.id.btn_nature){
+			presenter.validatecredential("자연체험");
+		}
+		if(v.getId()==R.id.btn_cooking){
+			presenter.validatecredential("요리체험");
+		}
+		if(v.getId()==R.id.btn_craft){
+			presenter.validatecredential("공예체험");
+		}
+		if(v.getId()==R.id.btn_harvest){
+			presenter.validatecredential("수확체험");
+		}
+		if(v.getId()==R.id.btn_planting){
+			presenter.validatecredential("경작체험");
+		}
+		if(v.getId()==R.id.btn_traditionalfood){
+			presenter.validatecredential("전통음식체험");
+		}
+		if(v.getId()==R.id.btn_traditionalplay){
+			presenter.validatecredential("전통놀이체험");
+		}
+		if(v.getId()==R.id.btn_culture){
+			presenter.validatecredential("문화체험");
+		}
+
+	}
+
+}

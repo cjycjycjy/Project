@@ -1,0 +1,34 @@
+package ddoraemi.detailediteminfo.presenter;
+
+import com.google.gson.JsonArray;
+
+import ddoraemi.detailediteminfo.model.AfterwordReply;
+import ddoraemi.detailediteminfo.model.DetailedAfterword_reply_Interactor;
+import ddoraemi.detailediteminfo.model.DetailedAfterword_reply_Interactor_Interface;
+import ddoraemi.detailediteminfo.view.DetailedAfterword_reply_view;
+
+public class DetailedAfterword_reply_presenter implements DetailedAfterword_reply_presenter_Interface,
+OnDetailedAfterword_reply_FinishedListener{
+	DetailedAfterword_reply_view view;
+	DetailedAfterword_reply_Interactor_Interface interactor;
+	
+
+	public DetailedAfterword_reply_presenter(DetailedAfterword_reply_view view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		this.interactor = new DetailedAfterword_reply_Interactor();
+	}
+	@Override
+	public void validatecredential(int a_id, String u_id, String a_r_content) {
+		// TODO Auto-generated method stub
+		interactor.setReply(view, a_id,u_id,a_r_content, this);
+	}
+
+
+	@Override
+	public void onDataSetSuccess(JsonArray result) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

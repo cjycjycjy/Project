@@ -1,0 +1,9 @@
+package ddoraemi.detailediteminfo.presenter;
+
+import android.content.Intent;
+import ddoraemi.detailediteminfo.model.Afterword;
+
+public interface DetailedAfterword_reply_presenter_Interface {
+	public void validatecredential(String type,Afterword afterword,int a_r_id, int a_id, String u_id, String a_r_content,int position);
+	public void validatecredential(Intent intent);
+}

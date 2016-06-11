@@ -1,0 +1,64 @@
+package ddoraemi.home.presenter;
+
+import ddoraemi.home.model.HomeInteractor;
+import ddoraemi.home.model.HomeInteractorInterface;
+import ddoraemi.home.view.HomeView;
+
+public class HomePresenter implements HomePresenterInterface, OnHomeFinishedListener{
+	private HomeView view;
+	private HomeInteractorInterface homeInteractor;
+	
+	public HomePresenter(HomeView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		this.homeInteractor = new HomeInteractor();
+	}
+
+	@Override
+	public void onSuccess() {
+		// TODO Auto-generated method stub
+	
+	}
+
+	@Override
+	public void validateCredentials(String event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goToMyPage() {
+		// TODO Auto-generated method stub
+		view.goMyPage();
+	}
+
+	@Override
+	public void goToHome() {
+		// TODO Auto-generated method stub
+		view.goToHome();
+		
+	}
+
+	@Override
+	public void goToShowMenu() {
+		// TODO Auto-generated method stub
+		view.goToshowMenu();
+		
+	}
+
+	@Override
+	public void goToChallenge() {
+		// TODO Auto-generated method stub
+		view.goChallenge();
+		
+	}
+
+	@Override
+	public void goToLocationChallenge() {
+		// TODO Auto-generated method stub
+		view.goLocationChallenge();
+	}
+
+
+	
+}

@@ -1,0 +1,5 @@
+package ddoraemi.applyadmin.model;
+
+public class Apply_Admin_Interactor_Interface {
+
+}

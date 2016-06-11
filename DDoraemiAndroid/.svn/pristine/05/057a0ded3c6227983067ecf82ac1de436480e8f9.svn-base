@@ -1,0 +1,31 @@
+package ddoraemi.detailediteminfo.presenter;
+
+import ddoraemi.detailediteminfo.model.DetailedItemInfo_MainView_Interactor;
+import ddoraemi.detailediteminfo.model.DetailedItemInfo_MainView_Interactor_interface;
+import ddoraemi.detailediteminfo.view.DetailedItemInfo_MainView;
+
+public class DetailedItemInfo_MainViewPresenter implements DetailedItemInfo_MainViewPresenter_Interface,
+OnDetailedItemInfo_MainView_FinishedListener
+{
+	
+	DetailedItemInfo_MainView view;
+	DetailedItemInfo_MainView_Interactor_interface interactor;
+	
+	public DetailedItemInfo_MainViewPresenter(DetailedItemInfo_MainView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		interactor = new DetailedItemInfo_MainView_Interactor();
+	}
+	@Override
+	public void validatecredential(String event) {
+		// TODO Auto-generated method stub
+		interactor.getData(view.getActivity(), this);
+		
+	}
+	@Override
+	public void getDataSuccess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

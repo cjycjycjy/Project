@@ -1,0 +1,23 @@
+package com.fuck.hangang.dao;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.fuck.hangang.mapper.AdminMapper;
+import com.fuck.hangang.vo.AdminBoardVo;
+
+@Service
+public class AdminDao {
+
+	@Resource
+	private AdminMapper adminMapper;
+	
+	public void registadminboard(AdminBoardVo adminboardVo) {
+		this.adminMapper.registadminboard(adminboardVo);
+	}
+	
+	public void registadminboardphoto(int a_num, int a_index, String a_photo_url) {
+		this.adminMapper.registadminboardphoto(a_num, a_index, a_photo_url);
+	}
+}

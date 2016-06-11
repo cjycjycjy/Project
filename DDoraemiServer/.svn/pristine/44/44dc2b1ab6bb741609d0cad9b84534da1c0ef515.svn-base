@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.UserMapper">
+
+	<resultMap id="userMap" type="com.myserver.skp.vo.UserVo">
+		<id property="u_id" column="u_id" />
+		<result property="password" column="password" />
+		<result property="u_phone" column="u_phone" />
+		<result property="parent_gender" column="parent_gender" />
+		<result property="parent_age" column="parent_age" />
+		<result property="u_addr_1" column="u_addr_1" />
+		<result property="u_addr_1" column="u_addr_1" />
+		<result property="u_addr_1" column="u_addr_1" />
+		<result property="u_gender" column="u_gender" />
+		<result property="u_age" column="u_age" />
+
+
+	</resultMap>
+
+	<insert id="insertBase" parameterType="UserVo">
+		insert into user
+		values(#{u_id}, #{password}, #{u_phone},
+		#{parent_gender}, #{parent_age}, #{u_addr_1},
+		#{u_addr_2}, #{u_addr_3},
+		#{u_gender},
+		#{u_age})
+	</insert>
+
+	<insert id="insertFavoritProgram" parameterType="String">
+		<selectKey keyProperty="e_id" resultType="int" order="BEFORE">
+			select e_id FROM experience WHERE e_name=#{e_name}
+		</selectKey>
+		insert into favorit_program
+		values(#{u_id}, #{e_id})
+	</insert>
+
+	<select id="idCheck" resultMap="userMap" parameterType="String">
+		select *
+		from user where u_id = #{u_id}
+	</select>
+	
+	<select id="login" resultType="String" parameterType="String">
+		select u_id
+		from user where u_id = #{u_id} and password = #{password}
+	</select>
+
+</mapper>

@@ -1,0 +1,24 @@
+package ddoraemi.join;
+
+public class JoinPresenter implements JoinPresenterInterface, OnJoinFinishedListnerInterface{
+
+	private JoinView view;
+	private JoinInteractorInterface joinInteractor;
+	
+	public JoinPresenter(JoinView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		this.joinInteractor = new JoinInteractor();
+	}
+	@Override
+	public void validateCredentials(String address, String nickname, String serverIp) {
+		// TODO Auto-generated method stub
+		joinInteractor.join(address, nickname, serverIp);
+	}
+	@Override
+	public void onSuccess() {
+		// TODO Auto-generated method stub
+		view.navigateToNext();
+	}
+
+}

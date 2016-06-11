@@ -1,0 +1,7 @@
+package ddoraemi.detailediteminfo.view;
+
+import com.google.gson.JsonArray;
+
+public interface DetailedAfterword_reply_view_Interface {
+	public void notifyListview(JsonArray result);
+}

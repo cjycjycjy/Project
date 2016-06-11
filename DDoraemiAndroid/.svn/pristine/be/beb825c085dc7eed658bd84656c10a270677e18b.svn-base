@@ -1,0 +1,5 @@
+package ddoraemi.home.view;
+
+public interface Home_RecommendViewInterface {
+	public void goToDetailedItemInfo();
+}

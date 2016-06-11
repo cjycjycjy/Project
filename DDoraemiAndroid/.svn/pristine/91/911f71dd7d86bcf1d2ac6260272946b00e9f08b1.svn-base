@@ -1,0 +1,43 @@
+package ddoraemi.home.view;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import ddoraemi.start.R;
+
+public class Home_AvailableGroupView extends Fragment implements OnItemClickListener{
+	ListView listview;//�������� ���� ����Ʈ��
+	ArrayList list;
+	Home_MainViewGroupListAdapter adapter;
+	public Home_AvailableGroupView(ArrayList list)
+	{
+		this.list=new ArrayList();
+		this.list.addAll(list);
+	}
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_availablegroupview, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		listview=(ListView)v.findViewById(R.id.fragment_available_listview);
+		adapter=new Home_MainViewGroupListAdapter(getActivity(), R.layout.item_grouplist, list);
+		listview.setAdapter(adapter);
+		listview.setOnItemClickListener(this);
+	}
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		
+	}
+}

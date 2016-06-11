@@ -1,0 +1,40 @@
+package ddoraemi.adminmodehome.view;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.start.R;
+import ddoraemi.volley.VolleySingleton;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+public class AdminHomeView extends FragmentActivity{
+	private SlidingMenu slidingMenu;// �����̵� �޴� ���� ����
+	private ImageView leftmenu;
+	private ImageView btn_gotoUsermode;
+	private TextView sidemeun_id;
+	AppController app;
+	NetworkImageView avatar;
+	ImageLoader mImageLoader;
+	RequestQueue mRequestQueue;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.fragmentactivity_adminhome);
+		app = (AppController) getApplicationContext();
+		mRequestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+		mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
+		init();// �ʱ�ȭ �Լ� ȣ��
+	}
+	
+	public void init(){
+		
+	}
+}

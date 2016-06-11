@@ -1,0 +1,53 @@
+package ddoraemi.home.view;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.home.presenter.Home_RecommendPresenter;
+import ddoraemi.home.presenter.Home_RecommendPresenterInterface;
+import ddoraemi.start.R;
+
+public class Home_RecommendView extends Fragment implements Home_RecommendViewInterface, OnItemClickListener{
+	ListView listview;//추천 모임 리스트뷰
+	ArrayList list;///통신으로 넘어온 리스트
+	Home_MainViewChallengeListAdapter adapter;
+	Home_RecommendPresenterInterface presenter;
+	
+	public Home_RecommendView(ArrayList list)
+	{
+		this.list=new ArrayList();
+		this.list.addAll(list);
+		presenter = new Home_RecommendPresenter(this);
+	}
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_recommendview, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		listview=(ListView)v.findViewById(R.id.fragment_recommend_listview);
+		adapter=new Home_MainViewChallengeListAdapter(getActivity(), R.layout.item_challengelist, list);
+		listview.setAdapter(adapter);
+
+	}
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		ProgramData item = (ProgramData)parent.getItemAtPosition(position);
+		presenter.validatecredential("getItemInfo",item.getP_name());	
+	}
+	
+	
+	
+}

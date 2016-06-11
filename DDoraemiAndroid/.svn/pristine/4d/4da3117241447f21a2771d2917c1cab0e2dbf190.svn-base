@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="225dp"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/tv_admin_select_seoul"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:background="@drawable/selector_adminselectlocation_seoul_dialog"
+         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="#a0a0a0" >
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/tv_admin_select_chungcheong"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:background="@drawable/selector_adminselectlocation_chungcheong_dialog"
+         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="#a0a0a0" >
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/tv_admin_select_gangwon"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:background="@drawable/selector_adminselectlocation_gangwon_dialog"
+       />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="#a0a0a0" >
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/tv_admin_select_jeonla"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:background="@drawable/selector_adminselectlocation_jeonla_dialog"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="#a0a0a0" >
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/tv_admin_select_kyungsang"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:background="@drawable/selector_adminselectlocation_kyungsang_dialog"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="#a0a0a0" >
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/tv_admin_select_jeju"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:background="@drawable/selector_adminselectlocation_jeju_dialog"
+       />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="#a0a0a0" >
+    </LinearLayout>
+
+</LinearLayout>

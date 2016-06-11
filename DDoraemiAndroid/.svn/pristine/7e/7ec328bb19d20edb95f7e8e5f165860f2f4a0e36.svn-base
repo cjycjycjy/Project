@@ -1,0 +1,62 @@
+package ddoraemi.home;
+
+import java.util.ArrayList;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import android.view.View;
+
+public class Home_MainViewPresenter implements Home_MainViewPresenterInterface, OnHome_MainViewFinishedListener{
+	
+	Home_MainView view;
+	Home_MainViewInteractorInterface interactor;
+	ArrayList<ProgramData> programList;
+	public Home_MainViewPresenter(Home_MainView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		interactor = new Home_MainViewInteractor();
+		
+	}
+	@Override
+	public void validateCredentials(String event) {
+		// TODO Auto-generated method stub
+		if(event.toString().equalsIgnoreCase("getdata")){
+			interactor.getData(view.getActivity(),this);
+		}
+		
+	}
+	@Override
+	public void OnGetDataSuccess(JsonArray data) {
+		// TODO Auto-generated method stub
+		programList.clear();
+		///////////////////////////////////////////////////////////////
+		// 추천 알고리즘 적용해서 ArrayList 만드는 부분!!!!!!!!!!!!!!!!!!!!!/////
+		///////////////////////////////////////////////////////////////
+		for(int i=0; i<data.size(); i++){
+			JsonObject dataobj = (JsonObject)data.get(i);
+			int p_id = (dataobj.get("p_id")).getAsInt();
+			String p_name = (dataobj.get("p_name")).getAsString();
+			String p_town_name = (dataobj.get("p_town_name")).getAsString();
+			String p_addr_1 = (dataobj.get("p_addr_1")).getAsString();
+			String p_addr_2 = (dataobj.get("p_addr_2")).getAsString();
+			String p_addr_3 = (dataobj.get("p_addr_3")).getAsString();
+			String p_addr_4 = (dataobj.get("p_addr_4")).getAsString();
+			String p_addr_5 = (dataobj.get("p_addr_5")).getAsString();
+			String p_addr_6 = (dataobj.get("p_addr_6")).getAsString();
+			int cost = (dataobj.get("cost")).getAsInt();
+			int p_min_persons = (dataobj.get("p_min_persons")).getAsInt();
+			int p_max_persons = (dataobj.get("p_max_persons")).getAsInt();
+			int p_lead_time = (dataobj.get("p_lead_time")).getAsInt();
+			String p_note = (dataobj.get("p_note")).getAsString();
+			int p_is_possible = (dataobj.get("p_is_possible")).getAsInt();
+			
+			programList.add(new ProgramData(p_id, p_name, 
+					p_town_name, p_addr_1, p_addr_2, p_addr_3, p_addr_4, p_addr_5, 
+					p_addr_6, cost, p_min_persons, p_max_persons, p_lead_time, p_note, p_is_possible));			
+		}
+		
+		view.setProgramList(programList);
+	}
+	
+}

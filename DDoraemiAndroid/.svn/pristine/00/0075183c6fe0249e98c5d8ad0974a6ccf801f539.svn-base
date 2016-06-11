@@ -1,0 +1,7 @@
+package ddoraemi.detailedgroupinfo.view;
+
+public interface DetailedGroupInfo_InfoView_Interface {
+	public void showMap();
+	public void showDetailedChallengeInfo();
+	public void goToJoinGroup();
+}

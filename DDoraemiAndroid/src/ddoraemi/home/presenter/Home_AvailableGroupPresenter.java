@@ -1,0 +1,30 @@
+package ddoraemi.home.presenter;
+
+import ddoraemi.home.model.Group;
+import ddoraemi.home.view.Home_AvailableGroupView;
+
+public class Home_AvailableGroupPresenter implements Home_AvailableGroupPresenter_Interface{
+	
+	Home_AvailableGroupView view;
+	
+	public Home_AvailableGroupPresenter(Home_AvailableGroupView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+	}
+
+	@Override
+	public void validatecredential(Group group) {
+		// TODO Auto-generated method stub
+		view.goToDetailedGroupInfo(group);
+	}
+
+	@Override
+	public void validatecredential(String Event, int position) {
+		if(Event.equals("sort"))
+		{
+			view.sortList(position);
+		}
+		
+	}
+
+}

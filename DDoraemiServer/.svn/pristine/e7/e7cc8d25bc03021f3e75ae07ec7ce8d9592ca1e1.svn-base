@@ -1,0 +1,30 @@
+package com.myserver.skp.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.myserver.skp.mapper.TestMapper;
+import com.myserver.skp.vo.TestVo;
+
+@Service
+public class TestDao {
+	@Resource
+    private TestMapper testMapper;
+	
+	public List<TestVo> getSelect() {
+        return this.testMapper.select();
+    }
+	
+	public String getSelectP(int p_id){
+		return this.testMapper.selectP(p_id);
+	}
+	
+	public void update(String p_photo_url, int p_id){
+		this.testMapper.photoSet(p_photo_url, p_id);
+	}
+	
+}
+

@@ -1,0 +1,10 @@
+package ddoraemi.detailediteminfo.presenter;
+
+import ddoraemi.home.model.ProgramData;
+
+public interface DetailedItemInfo_ViewPresenter_Interface {
+	public void validatecredential(String event, ProgramData item);
+	public void goToWebsite();
+	public void callToAdmin();
+	
+}

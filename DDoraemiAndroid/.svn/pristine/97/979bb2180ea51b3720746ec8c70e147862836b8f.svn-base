@@ -1,0 +1,40 @@
+package ddoraemi.joining.view;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import ddoraemi.start.R;
+import ddoraemi.start.SplashActivity;
+
+public class Fragment_JoinThree extends Fragment implements OnClickListener{
+	Button join;
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_jointhree, null);
+		init(v);
+		return v;
+	}
+	private void init(View v) {
+		// TODO Auto-generated method stub
+		join=(Button)v.findViewById(R.id.join_fragmentThree_ButtonNext);
+		join.setOnClickListener(this);
+		
+	}
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if(v.getId()==R.id.join_fragmentThree_ButtonNext)
+		{
+			////통신을 통해서 회원가입정보 서버로 전송 이후 splash로 간다.
+			Intent intent=new Intent(getActivity(),SplashActivity.class);
+			getActivity().startActivity(intent);
+			
+		}
+		
+	}
+}

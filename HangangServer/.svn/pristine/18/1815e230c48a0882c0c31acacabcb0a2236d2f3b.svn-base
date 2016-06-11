@@ -1,0 +1,9 @@
+package com.fuck.hangang.mapper;
+
+import java.util.List;
+
+import com.fuck.hangang.vo.QnaVo;
+
+public interface QnaMapper {
+	public List<QnaVo> getqna();
+}

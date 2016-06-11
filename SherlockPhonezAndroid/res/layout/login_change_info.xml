@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/witchhunter" >
+     <RelativeLayout
+        android:id="@+id/layout_title_login_changeinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#15FFFFFF"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip" >
+
+        <Button
+            android:id="@+id/btn_cancel_login_changeinfo"
+            android:layout_width="30dip"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_title_login_changeinfo"
+            android:layout_alignTop="@+id/tv_title_login_changeinfo"
+            android:layout_marginLeft="10dip"
+            android:background="@drawable/back" />
+
+        <TextView
+            android:id="@+id/tv_title_login_changeinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="개인정보변경"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFFFF"
+            android:textSize="20dip" />
+    </RelativeLayout>
+     <RelativeLayout
+        android:id="@+id/rl_login_changeinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dip"
+        android:background="@drawable/layout_round_corner"
+        android:padding="10dip" >
+
+        <Button
+            android:id="@+id/btn_login_changeinfo"
+            android:layout_width="65dip"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/et_passwd_login_changeinfo"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/et_phoneNum_login_changeinfo"
+            android:layout_marginLeft="10dip"
+            android:background="@drawable/button_round_corner"
+            android:text="확인"
+            android:textColor="#FFFFFF"
+            android:textSize="15dip" />
+
+        <EditText
+            android:id="@+id/et_phoneNum_login_changeinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="10dip"
+            android:layout_toLeftOf="@+id/btn_login_changeinfo"
+            android:background="@drawable/editbox"
+            android:hint="휴대폰 번호를 입력해 주세요."
+            android:textColor="#000000"
+            android:inputType="phone"
+            android:textSize="15dip" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/et_passwd_login_changeinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/et_phoneNum_login_changeinfo"
+            android:layout_alignRight="@+id/et_phoneNum_login_changeinfo"
+            android:layout_below="@+id/et_phoneNum_login_changeinfo"
+            android:background="@drawable/editbox"
+            android:hint="비밀번호를 입력해 주세요."
+            android:textColor="#000000"
+            android:inputType="textPassword"
+            android:textSize="15dip" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

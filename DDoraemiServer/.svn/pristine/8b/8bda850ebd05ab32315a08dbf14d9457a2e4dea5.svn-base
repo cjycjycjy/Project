@@ -1,0 +1,15 @@
+package com.myserver.skp.mapper;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.myserver.skp.vo.GatheringVo;
+
+@Repository
+public interface GatheringMapper {
+	List<HashMap<String, String>> selectAllofGathering(@Param("p_id") int p_id);
+	List<HashMap<String, String>> selectIsAvailable();
+}

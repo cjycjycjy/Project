@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:key="setting_activity_account"
+        android:title="기기권한 이용" >
+        <Preference
+            android:key="Reen_device_policy"
+            android:selectable="true"
+            android:summary="단말기 사용권한 설정"
+            android:title="기기권한 사용" />
+        <Preference
+            android:key="Disable_device_policy"
+            android:selectable="true"
+            android:summary="단말기 사용권한 해제"
+            android:title="기기권한 해제" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:key="setting_activity_account"
+        android:title="서비스 이용" >
+        <Preference
+            android:key="Reen_service"
+            android:selectable="true"
+            android:summary="서비스를 사용"
+            android:title="서비스 시작" />
+        <Preference
+            android:key="Disable_service"
+            android:selectable="true"
+            android:summary="서비스를 중단"
+            android:title="서비스 중지" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:key="setting_activity_account"
+        android:title="DPM 기능" >
+        <Preference
+            android:key="Request_LockNow"
+            android:selectable="true"
+            android:summary="LockNow 함수를 호출합니다."
+            android:title="LockNow" />
+        <Preference
+            android:key="Request_PasswordScreen"
+            android:selectable="true"
+            android:summary="비밀번호 설정화면을 호출합니다."
+            android:title="비밀번호 설정화면" />
+        <Preference
+            android:key="Request_isPass"
+            android:selectable="true"
+            android:summary="현재 잠금상태를 확인합니다."
+            android:title="잠금상태 확인" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

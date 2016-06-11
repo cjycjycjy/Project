@@ -1,0 +1,26 @@
+package com.fuck.hangang.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.fuck.hangang.vo.RealtimeScheduleVo;
+import com.fuck.hangang.vo.RegistrationIdVo;
+import com.fuck.hangang.vo.ScheduleVo;
+
+@Repository
+public interface RealtimeScheduleMapper {
+	public void registrealtimeSchedule(@Param("r_year") int r_year, @Param("r_month") int r_month,
+			@Param("r_day") int r_day, @Param("start_hour") int start_hour, @Param("start_min") int start_min,
+			@Param("t_num") int t_num, @Param("r_lat") double r_lat, @Param("r_lng") double r_lng,
+			@Param("r_park") String r_park);
+
+	public void updateScheduleStatement(@Param("s_num") int s_num);
+
+	public List<RealtimeScheduleVo> getRealtimeSchedule(@Param("r_year") int r_year, @Param("r_month") int r_month,
+			@Param("r_day") int r_day);
+
+	public void endrealtimeschedule(@Param("r_num") int r_num);
+	public List<RegistrationIdVo> getRegiIdForPush(@Param("s_num") int s_num);
+}

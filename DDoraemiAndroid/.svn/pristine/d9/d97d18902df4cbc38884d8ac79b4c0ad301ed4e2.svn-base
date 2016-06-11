@@ -1,0 +1,11 @@
+package ddoraemi.mypage.model;
+
+public class MyPageInteractor implements MyPageInteractorInterface{
+
+	@Override
+	public void myPage() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

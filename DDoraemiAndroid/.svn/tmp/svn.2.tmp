@@ -1,0 +1,110 @@
+package ddoraemi.joining.view;
+
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
+import ddoraemi.start.R;
+
+public class JoinActivity extends FragmentActivity implements OnClickListener {
+	TextView title;
+	ImageView back;
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_join);
+		init();
+	}
+
+	public void init() {
+		title = (TextView) findViewById(R.id.join_tv_titlebars);
+		back = (ImageView) findViewById(R.id.JoinActivity_ImgBack);
+		back.setOnClickListener(this);
+	}
+
+	public void setTitleOne() {
+		title.setText("계정정보 (1/3)");
+	}
+
+	public void setTitleTwo() {
+		title.setText("계정정보 (2/3)");
+	}
+
+	public void setTitleThree() {
+		title.setText("계정정보 (3/3)");
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if (v.getId() == R.id.JoinActivity_ImgBack) {
+			FragmentManager manager = getSupportFragmentManager();
+
+			if (manager != null) {
+				if (manager.getBackStackEntryCount() == 0) {
+					finish();
+				} else if (manager.getBackStackEntryCount() == 1) {
+					setTitleOne();
+					FragmentManager fragmentmanager = getSupportFragmentManager();
+					FragmentTransaction fragmenttransaction = fragmentmanager
+							.beginTransaction();
+					fragmentmanager.popBackStack();
+					FragmentTransaction ft = getSupportFragmentManager()
+							.beginTransaction();
+					ft.commit();
+
+				} else {
+					setTitleTwo();
+					FragmentManager fragmentmanager = getSupportFragmentManager();
+					FragmentTransaction fragmenttransaction = fragmentmanager
+							.beginTransaction();
+					fragmentmanager.popBackStack();
+					FragmentTransaction ft = getSupportFragmentManager()
+							.beginTransaction();
+					ft.commit();
+				}
+			}
+		}
+
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			FragmentManager manager = getSupportFragmentManager();
+
+			if (manager != null) {
+				if (manager.getBackStackEntryCount() == 0) {
+					finish();
+				} else if (manager.getBackStackEntryCount() == 1) {
+					setTitleOne();
+					FragmentManager fragmentmanager = getSupportFragmentManager();
+					FragmentTransaction fragmenttransaction = fragmentmanager
+							.beginTransaction();
+					fragmentmanager.popBackStack();
+					FragmentTransaction ft = getSupportFragmentManager()
+							.beginTransaction();
+					ft.commit();
+
+				} else {
+					setTitleTwo();
+					FragmentManager fragmentmanager = getSupportFragmentManager();
+					FragmentTransaction fragmenttransaction = fragmentmanager
+							.beginTransaction();
+					fragmentmanager.popBackStack();
+					FragmentTransaction ft = getSupportFragmentManager()
+							.beginTransaction();
+					ft.commit();
+				}
+			}
+			return true;
+		} else
+			return false;
+	}
+}

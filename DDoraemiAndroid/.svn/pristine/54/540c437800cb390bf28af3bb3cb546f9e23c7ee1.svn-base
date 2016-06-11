@@ -1,0 +1,12 @@
+package ddoraemi.home.presenter;
+
+public interface HomeViewPresenterInterface {
+	public void goToMyPage();
+	public void goToHome();
+	public void goToShowMenu();
+	public void goToChallenge();
+	public void goToLocationChallenge();
+	public void goToApplyAdmin();
+	public void goToAdminMode();
+	public void goToSearch();
+}

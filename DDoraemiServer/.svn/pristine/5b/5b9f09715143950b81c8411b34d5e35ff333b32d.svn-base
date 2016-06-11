@@ -1,0 +1,20 @@
+package com.myserver.skp.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.myserver.skp.mapper.AfterwordReplyMapper;
+import com.myserver.skp.vo.AfterwordReplyVo;
+
+@Service
+public class AfterwordReplyDao {
+	@Resource
+	AfterwordReplyMapper afterwordReplyMapper;
+	
+	public List<AfterwordReplyVo> getSelectAllofAfterword(int a_id) {
+        return this.afterwordReplyMapper.selectAllofAfterword(a_id);
+    }
+}

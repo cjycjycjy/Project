@@ -1,0 +1,9 @@
+package ddoraemi.programlist.model;
+
+import ddoraemi.programlist.presenter.OnProgramlist_location_FinishenListener;
+import android.support.v4.app.Fragment;
+
+public interface Programlist_location_Interactor_Interface {
+	public void getData(final Fragment context, final OnProgramlist_location_FinishenListener listener,
+			final String category, final String p_addr_1);
+}

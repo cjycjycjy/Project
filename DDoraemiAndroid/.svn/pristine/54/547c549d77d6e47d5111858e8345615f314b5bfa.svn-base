@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/challenge_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="21dp"
+                android:text="풍년벼수확체험"
+                android:textColor="#795548"
+                android:textSize="19sp" />
+
+            <RelativeLayout
+                android:id="@+id/mainRelativeLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="400dp"
+                android:background="@android:color/white"
+                android:paddingTop="1dip" >
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="58dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="8dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/star_fill_img1"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="1dp"
+                        android:src="@drawable/star_fill" />
+
+                    <ImageView
+                        android:id="@+id/star_fill_img2"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="1dp"
+                        android:src="@drawable/star_fill" />
+
+                    <ImageView
+                        android:id="@+id/star_fill_img3"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="1dp"
+                        android:src="@drawable/star_fill" />
+
+                    <ImageView
+                        android:id="@+id/star_fill_img4"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="1dp"
+                        android:src="@drawable/star_fill" />
+
+                    <ImageView
+                        android:id="@+id/star_fill_img5"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@drawable/star_fill" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/star_stroke_img1"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="1dp"
+                        android:src="@drawable/star_stroke" />
+
+                    <ImageView
+                        android:id="@+id/star_stroke_img2"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="1dp"
+                        android:src="@drawable/star_stroke" />
+
+                    <ImageView
+                        android:id="@+id/star_stroke_img3"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="1dp"
+                        android:src="@drawable/star_stroke" />
+
+                    <ImageView
+                        android:id="@+id/star_stroke_img4"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_marginRight="1dp"
+                        android:src="@drawable/star_stroke" />
+
+                    <ImageView
+                        android:id="@+id/star_stroke_img5"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@drawable/star_stroke" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="4dp"
+                android:text="체험가기 좋은계절"
+                android:textColor="#474747"
+                android:textSize="11sp" />
+
+            <LinearLayout
+                android:id="@+id/seasons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="11dp"
+                android:gravity="center"
+                android:orientation="horizontal" >
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="18dp"
+                android:text="풍년벼수확체험은 초등생을 위한 체헙입니다........풍년벼 수확체험은.......
+        " />
+
+            <ListView
+                android:id="@+id/android:list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </ListView>
+        </LinearLayout>
+    </ScrollView>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/btn_opengroup" />
+
+</LinearLayout>

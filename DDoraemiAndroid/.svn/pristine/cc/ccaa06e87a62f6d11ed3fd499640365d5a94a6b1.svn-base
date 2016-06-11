@@ -1,0 +1,5 @@
+package ddoraemi.home;
+
+public interface Home_MainViewPresenterInterface {
+	public void validateCredentials(String event);
+}

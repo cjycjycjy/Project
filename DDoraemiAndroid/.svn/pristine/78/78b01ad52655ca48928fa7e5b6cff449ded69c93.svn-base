@@ -1,0 +1,25 @@
+package ddoraemi.home.model;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+import com.google.gson.JsonArray;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
+import ddoraemi.home.presenter.OnHome_RecommendFinishedListener;
+import ddoraemi.retrofit.Retrofit;
+
+public class Home_RecommendInteractor implements Home_RecommendInteractorInterface{
+
+	@Override
+	public void getData(Fragment context,
+			OnHome_RecommendFinishedListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

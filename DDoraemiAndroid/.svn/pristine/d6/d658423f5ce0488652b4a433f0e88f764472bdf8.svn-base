@@ -1,0 +1,108 @@
+package ddoraemi.myinfopage.view;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.start.R;
+
+public class MyPage_AccountSettingView extends Activity implements OnClickListener {
+	EditText phonenum;
+	ImageView sendbt, back;
+	
+	AppController app;
+	
+	TextView tv_account_id;
+	TextView tv_adult_gender;
+	TextView tv_adult_age;
+	TextView tv_child_gender;
+	TextView tv_child_age;
+	TextView tv_regidential_district;
+	TextView tv_challenge_type;
+	TextView tv_change_password;
+	
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_account_setting);
+		app = (AppController)getApplicationContext();
+		init();
+	}
+//
+	public void init() {
+		sendbt = (ImageView) findViewById(R.id.btn_save);
+		sendbt.setOnClickListener(this);
+		back = (ImageView) findViewById(R.id.btn_left_menu);
+		back.setOnClickListener(this);
+		tv_account_id = (TextView)findViewById(R.id.tv_account_id);
+		tv_adult_gender = (TextView)findViewById(R.id.tv_adult_gender);
+		tv_adult_age = (TextView)findViewById(R.id.tv_adult_age);
+		tv_child_gender = (TextView)findViewById(R.id.tv_child_gender);
+		tv_child_age = (TextView)findViewById(R.id.tv_child_age);
+		tv_regidential_district = (TextView)findViewById(R.id.tv_regidential_district);
+		tv_challenge_type = (TextView)findViewById(R.id.tv_challenge_type);
+		tv_change_password = (TextView)findViewById(R.id.tv_change_password);
+		
+		tv_change_password.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		tv_account_id.setText(app.getId().toString());
+		
+		if(String.valueOf(app.getUser().getParent_gender()).equals("M"))
+			tv_adult_gender.setText("남성");
+		else
+			tv_adult_gender.setText("여성");
+		
+		tv_adult_age.setText(String.valueOf(app.getUser().getParent_age())+"세");
+		
+		if(String.valueOf(app.getUser().getU_gender()).equals("M"))
+			tv_child_gender.setText("남성");
+		else
+			tv_child_gender.setText("여성");
+		
+		tv_child_age.setText(String.valueOf(app.getUser().getU_age())+"세");
+		
+		String str="";
+		if(!app.getUser().getU_addr1().isEmpty())
+			str+=app.getUser().getU_addr1()+"시 ";
+		if(!app.getUser().getU_addr2().isEmpty())
+			str+=app.getUser().getU_addr2()+"구 ";
+		if(!app.getUser().getU_addr3().isEmpty())
+			str+=app.getUser().getU_addr3()+"동";
+		tv_regidential_district.setText(str);
+		
+		str="";
+		for(int i =0; i<app.getUser().getFavorit_program().size();i++){
+			if(!app.getUser().getFavorit_program().get(i).isEmpty())
+				str+=app.getUser().getFavorit_program().get(i)+",";
+		}
+		
+		tv_challenge_type.setText(str);
+		tv_challenge_type.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
+
+	@Override
+	public void onClick(View v) {
+		if(v.getId()==R.id.btn_left_menu){
+			finish();
+		}
+	}
+
+}

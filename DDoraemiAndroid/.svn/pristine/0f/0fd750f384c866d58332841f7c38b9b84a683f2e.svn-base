@@ -1,0 +1,130 @@
+package ddoraemi.detailediteminfo.view;
+
+import java.util.ArrayList;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.detailediteminfo.model.Afterword;
+import ddoraemi.detailediteminfo.model.AfterwordReply;
+import ddoraemi.start.R;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+public class DetailedAfterword_replyListAdapter extends ArrayAdapter<AfterwordReply> {
+	PopupWindow mDropdown;
+	ArrayList<AfterwordReply> items;
+	Context context;
+
+	AppController app;
+	// Spinner btn_modifydelete;
+	// ArrayAdapter modifydelete;
+
+	public DetailedAfterword_replyListAdapter(Context context, int resource, ArrayList<AfterwordReply> objects) {
+		super(context, resource, objects);
+		this.context = context;
+		items = objects;
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View v = convertView;
+		if (v == null) {
+			LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			v = vi.inflate(R.layout.item_afterwordlist_replylist, null);
+			app = (AppController) v.getContext().getApplicationContext();
+		}
+		AfterwordReply p = items.get(position);
+
+		// btn_modifydelete = (Spinner)v.findViewById(R.id.modifydelete);
+		// String[] option =
+		// v.getResources().getStringArray(R.array.modify_spinner_items);
+		// modifydelete = new
+		// SpinnerAdapter(v.getContext(),R.layout.item_spinnerrecommend,option);
+		// modifydelete.setDropDownViewResource(R.layout.item_spinnerrecommend);
+		// btn_modifydelete.setAdapter(modifydelete);
+		
+		if (p != null) {
+			TextView tv_afterword_reply_u_id = (TextView) v.findViewById(R.id.tv_afterword_reply_u_id);
+			final TextView tv_afterword_reply_text = (TextView) v.findViewById(R.id.tv_afterword_reply_text);
+			TextView tv_afterword_reply_date = (TextView) v.findViewById(R.id.tv_afterword_reply_date);
+			final ImageView btn_modifydelete = (ImageView) v.findViewById(R.id.modifydelete);
+			
+			if (app.getId().equals(items.get(position).getU_id())) {
+				btn_modifydelete.setVisibility(View.VISIBLE);
+			} else {
+				btn_modifydelete.setVisibility(View.GONE);
+			}
+			btn_modifydelete.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					initPopupWindow(btn_modifydelete,tv_afterword_reply_text);
+				}
+			});
+
+			tv_afterword_reply_u_id.setText(p.getU_id());
+			tv_afterword_reply_date.setText(String.valueOf(p.getA_r_year()) + "-" + String.valueOf(p.getA_r_month())
+					+ "-" + String.valueOf(p.getA_r_day()));
+			tv_afterword_reply_text.setText(p.getA_r_content());
+		}
+		return v;
+	}
+	
+	public PopupWindow initPopupWindow(ImageView pop,final TextView tv_afterword_reply_text) {
+		try {
+			LayoutInflater mInflater = (LayoutInflater) context
+					.getApplicationContext().getSystemService(
+							Context.LAYOUT_INFLATER_SERVICE);
+			View layout = mInflater.inflate(R.layout.item_popupmenu, null);
+
+			// If you want to add any listeners to your textviews, these are two
+			// //textviews.
+			final ImageView itema = (ImageView) layout.findViewById(R.id.itemA);
+			itema.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					((DetailedAfterword_reply_view)context).setEditText(tv_afterword_reply_text.getText().toString(),true,mDropdown);
+				}
+			});
+
+			final ImageView itemb = (ImageView) layout.findViewById(R.id.itemB);
+			itemb.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+
+			layout.measure(View.MeasureSpec.UNSPECIFIED,
+					View.MeasureSpec.UNSPECIFIED);
+			mDropdown = new PopupWindow(layout,
+					FrameLayout.LayoutParams.WRAP_CONTENT,
+					FrameLayout.LayoutParams.WRAP_CONTENT, true);
+			Drawable background = context.getResources().getDrawable(android.R.drawable.editbox_dropdown_light_frame);
+			mDropdown.setBackgroundDrawable(background);
+			mDropdown.showAsDropDown(pop, 5, 5);
+			return mDropdown;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+}

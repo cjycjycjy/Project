@@ -1,0 +1,30 @@
+package ddoraemi.retrofit;
+
+import retrofit.Callback;
+import retrofit.http.Body;
+import retrofit.http.GET;
+import retrofit.http.POST;
+import retrofit.http.Query;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+public interface Retrofit {
+		public static final String ROOT = "http://203.252.166.151:9090/skp";
+		@GET("/getprogram.skp")
+	    public void getProgramList_availableGroup(Callback<JsonObject> callback);
+		@GET("/getAfterword.skp")
+		public void getAfterword(@Query("info")JsonObject info,Callback<JsonArray> callback);
+		
+		//////////회원가입 관련 통신/////////////
+		@POST("/signup.skp")///회원가입 통신
+		public void requestJoin(@Body JsonObject info,Callback<String> callback);
+		@GET("/idcheck.skp")///아이디 중복확인
+		public void getConfirmOverlapID(@Query("id") String info,Callback<String> callback);
+		/////////////////////////////////
+		
+		///////////로그인 관련 통신/////////////
+		@GET("/getAfterword.skp")///로그인 통신
+		public void requestLogin(@Query("info") JsonObject info,Callback<String> callback);
+		/////////////////////////////////
+}

@@ -1,0 +1,114 @@
+package ddoraemi.home.view;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.astuetz.PagerSlidingTabStrip;
+import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
+
+import ddoraemi.home.model.Group;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.home.presenter.Home_MainViewPresenter;
+import ddoraemi.home.presenter.Home_MainViewPresenterInterface;
+import ddoraemi.start.R;
+
+public class Home_MainView extends Fragment implements Home_MainViewInterface {
+	private PagerSlidingTabStrip tabs;
+	private ViewPager pager;
+	private PagerAdapter adapter;
+	private Home_MainViewPresenterInterface presenter;
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_home, null);
+		init();
+		presenter.validateCredentials("getdata"); // 占쏙옙占쏙옙트占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙
+													// 占쏙옙占�
+		return v;
+	}
+
+	public void init() {
+		presenter = new Home_MainViewPresenter(this);
+	}
+
+	@Override
+	public void setViewPager(View v, ArrayList<ProgramData> data,
+			ArrayList<Group> group) {
+		pager = (ViewPager) v.findViewById(R.id.fragment_home_pager);
+		tabs = (PagerSlidingTabStrip) v.findViewById(R.id.fragment_home_tabs);
+		adapter = new PagerAdapter(getChildFragmentManager(), data, group);
+		pager.setAdapter(adapter);
+		pager.setOffscreenPageLimit(2);
+		final int pageMargin = (int) TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+						.getDisplayMetrics());
+		pager.setPageMargin(pageMargin);
+		tabs.setViewPager(pager);
+		tabs.setShouldExpand(true);
+	}
+
+	public class PagerAdapter extends FragmentPagerAdapter implements
+			IconTabProvider {
+		private int[] Title = { R.drawable.tab_recommend,
+				R.drawable.tab_goingprogram };
+		ArrayList<ProgramData> recommenddata;
+		ArrayList<Group> group;
+
+		public PagerAdapter(FragmentManager fm, ArrayList<ProgramData> data,
+				ArrayList<Group> group) {
+			super(fm);
+			this.recommenddata = new ArrayList<ProgramData>();
+			this.recommenddata.addAll(data);
+			this.group = new ArrayList<Group>();
+			this.group.addAll(group);
+		}
+
+		@Override
+		public int getItemPosition(Object object) {
+			return POSITION_NONE;
+		}
+
+		@Override
+		public int getCount() {
+			return Title.length;
+		}
+
+
+		@Override
+		public Fragment getItem(int position) {
+			if (position == 0) {
+				return new Home_RecommendView(recommenddata);
+			} else {
+				return new Home_AvailableGroupView(group);
+			}
+
+		}
+
+		@Override
+		public int getPageIconResId(int position) {
+			switch (position) {
+			case 0:
+				return Title[0];
+			case 1:	
+			default :
+			return Title[1];
+			}
+		}
+	}
+
+	@Override
+	public void setProgramList(ArrayList<ProgramData> data,
+			ArrayList<Group> group) {
+		// TODO Auto-generated method stub
+		setViewPager(getView(), data, group);
+	}
+}

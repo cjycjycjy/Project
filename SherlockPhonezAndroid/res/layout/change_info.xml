@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/witchhunter" >
+     <RelativeLayout
+        android:id="@+id/layout_title_changeinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#15FFFFFF"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip" >
+
+        <Button
+            android:id="@+id/btn_cancel_changeinfo"
+            android:layout_width="30dip"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_title_join_changeinfo"
+            android:layout_alignTop="@+id/tv_title_join_changeinfo"
+            android:layout_marginLeft="10dip"
+            android:background="@drawable/back" />
+
+        <TextView
+            android:id="@+id/tv_title_join_changeinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="개인정보변경"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFFFF"
+            android:textSize="20dip" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_warning_changeinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_title_changeinfo" >
+
+        <TextView
+            android:id="@+id/tv_warning_passwd_changeinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="#FFFF0000"
+            android:gravity="center"
+            android:paddingBottom="5dip"
+            android:paddingTop="5dip"
+            android:text="비밀번호 확인을 제대로 해주세요"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFFFF"
+            android:textSize="15dip"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_warning_mail_changeinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="#FFFF0000"
+            android:gravity="center"
+            android:paddingBottom="5dip"
+            android:paddingTop="5dip"
+            android:text="메일 형식이 잘못 되었습니다."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFFFF"
+            android:textSize="15dip"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_warning_empty_changeinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="#FFFF0000"
+            android:gravity="center"
+            android:paddingBottom="5dip"
+            android:paddingTop="5dip"
+            android:text="정보를 모두 입력해 주세요."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFFFF"
+            android:textSize="15dip"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layout_warning_changeinfo" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <RelativeLayout
+                android:id="@+id/rl_join_changeinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:background="@drawable/layout_round_corner"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:padding="10dip" >
+                
+                <TextView
+                    android:id="@+id/tv_phonenum_changeinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip"
+                    android:text="휴대폰 번호"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15dip" />
+
+                <TextView
+                    android:id="@+id/tv_phonenum_join_auto_changeinfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dip"
+                    android:layout_below="@+id/tv_phonenum_changeinfo"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15dip" />
+
+                <TextView
+                    android:id="@+id/tv_name_join_changeinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_phonenum_join_auto_changeinfo"
+                    android:layout_marginBottom="10dip"
+                    android:text="이름"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15dip" />
+
+                <EditText
+                    android:id="@+id/et_name_join_changeinfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_name_join_changeinfo"
+                    android:layout_marginBottom="20dip"
+                    android:textColor="#000000"
+                    android:background="@drawable/editbox"
+                  
+                    android:textSize="15dip" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/tv_passwd_join_changeinfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/et_name_join_changeinfo"
+                    android:layout_marginBottom="10dip"
+                    android:text="비밀번호"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15dip" />
+
+                <EditText
+                    android:id="@+id/et_passwd_join_changeinfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_passwd_join_changeinfo"
+                    android:layout_marginBottom="20dip"
+                    android:background="@drawable/editbox"
+                    android:hint="비밀번호를 입력해 주세요.(6~12자)"
+                    android:inputType="textPassword"
+                    android:textColor="#000000"
+                    android:textSize="15dip" />
+
+                <TextView
+                    android:id="@+id/tv_passwdcheck_changeinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/et_passwd_join_changeinfo"
+                    android:layout_marginBottom="10dip"
+                    android:text="비밀번호 확인"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15dip" />
+
+                <EditText
+                    android:id="@+id/et_passwdcheck_changeinfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_passwdcheck_changeinfo"
+                    android:layout_marginBottom="20dip"
+                    android:background="@drawable/editbox"
+                    android:hint="비밀번호를 다시 한번 입력해 주세요."
+                    android:inputType="textPassword"
+                    android:textColor="#000000"
+                    android:textSize="15dip" />
+
+                <TextView
+                    android:id="@+id/tv_email_join_changeinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/et_passwdcheck_changeinfo"
+                    android:layout_marginBottom="10dip"
+                    android:text="이메일"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15dip" />
+
+                <EditText
+                    android:id="@+id/et_email_join_changeinfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_email_join_changeinfo"
+                    android:layout_marginBottom="10dip"
+                    android:background="@drawable/editbox"
+                    android:textColor="#000000"
+                    android:inputType="textEmailAddress"
+                    android:textSize="15dip" />
+                
+                
+                 <TextView
+                    android:id="@+id/tv_email_note_changeinfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/et_email_join_changeinfo"
+                    android:layout_marginBottom="10dip"
+                    android:text="* 위 입력하신 이메일은 비밀 번호를 분실하였을시 찾는데 꼭 필요한 정보입니다. 자주 사용하시는 계정으로 확실히 입력해 주세요."
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15dip" />
+                 
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_ok_changeinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_join_changeinfo"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginBottom="10dip"
+                android:background="@drawable/button_round_corner"
+                android:text="완료"
+                android:textColor="#FFFFFF"
+                android:textSize="15dip" />
+        </RelativeLayout>
+    </ScrollView>
+    
+
+</RelativeLayout>

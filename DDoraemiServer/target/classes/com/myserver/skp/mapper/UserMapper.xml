@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.UserMapper">
+
+	<resultMap id="userMap" type="com.myserver.skp.vo.UserVo">
+		<id property="u_id" column="u_id" />
+		<result property="password" column="password" />
+		<result property="u_phone" column="u_phone" />
+		<result property="parent_gender" column="parent_gender" />
+		<result property="parent_age" column="parent_age" />
+		<result property="u_addr_1" column="u_addr1" />
+		<result property="u_addr_2" column="u_addr2" />
+		<result property="u_addr_3" column="u_addr3" />
+		<result property="u_gender" column="u_gender" />
+		<result property="u_age" column="u_age" />
+		<result property="u_register_id" column="u_register_id" />
+		<result property="u_photo_url" column="u_photo_url" />
+		<result property="permission" column="permission"/>
+		<result property="alarm" column="alarm" />
+	</resultMap>
+
+	<resultMap id="bookmarkMap" type="java.util.HashMap">
+		<id property="u_id" column="u_id" />
+		<result property="p_id" column="p_id" />
+	</resultMap>
+	
+	<resultMap id="recommendMap" type="java.util.HashMap">
+		<id property="u_id" column="u_id" />
+		<result property="u_age" column="u_age" />
+	</resultMap>
+
+	<resultMap id="gcmRegisterQuestionMap" type="java.util.HashMap">
+		<id property="u_register_id" column="u_register_id" />
+		<result property="p_name" column="p_name" />
+		<result property="g_name" column="g_name" />
+		<result property="g_id" column="g_id" />
+	</resultMap>
+
+	<resultMap id="gcmBookmarkMap" type="java.util.HashMap">
+		<id property="u_register_id" column="u_register_id" />
+		<result property="u_id" column="u_id" />
+		<result property="p_name" column="p_name" />
+		<result property="p_photo_url" column="p_photo_url" />
+	</resultMap>
+
+	<resultMap id="favoritProgramMap" type="java.util.HashMap">
+		<id property="u_id" column="u_id" />
+		<result property="e_name" column="e_name" />
+	</resultMap>
+
+	<insert id="insertBase" parameterType="UserVo">
+		insert into user
+		values(#{u_id}, #{password}, #{u_phone},
+		#{parent_gender},
+		#{parent_age}, #{u_addr_1},
+		#{u_addr_2}, #{u_addr_3},
+		#{u_gender},
+		#{u_age}, #{u_register_id}, #{u_photo_url}, 0, 1)
+	</insert>
+
+	<select id="selectFavoritProgram" resultMap="favoritProgramMap">
+		select e_name
+		from favorit_program where u_id = #{u_id}
+	</select>
+
+	<insert id="insertFavoritProgram" parameterType="String">
+		insert into
+		favorit_program
+		values(#{u_id}, #{e_name})
+	</insert>
+
+	<delete id="deleteFavoritProgram">
+		delete from favorit_program
+		where u_id=#{u_id}
+	</delete>
+
+	<select id="idCheck" resultMap="userMap" parameterType="String">
+		select *
+		from user where u_id = #{u_id}
+	</select>
+
+	<select id="login" resultMap="userMap" parameterType="String">
+		select *
+		from user where u_id = #{u_id} and password = #{password}
+	</select>
+
+	<select id="selectBookmark" resultMap="bookmarkMap">
+		select p_id
+		from bookmark
+		where u_id = #{u_id}
+	</select>
+
+	<select id="insertBookmark">
+		INSERT
+		INTO bookmark
+		VALUES (#{u_id}, #{p_id})
+	</select>
+
+	<select id="deleteBookmark">
+		DELETE
+		FROM bookmark
+		WHERE u_id=#{u_id} AND
+		p_id=#{p_id}
+	</select>
+
+	<select id="updatePermissionAdminRequest">
+		update user set permission=1 where u_id=#{u_id}
+	</select>
+
+	<select id="updatePermissionAdmin">
+		update user set permission=2 where u_id=#{u_id}
+	</select>
+
+	<select id="selectGCMregisterQuestion" resultMap="gcmRegisterQuestionMap">
+		select
+		u_register_id, g_name, p_name, gathering.g_id from gathering join user on
+		gathering.u_id=user.u_id
+		join program on program.p_id = gathering.p_id where g_id=#{g_id}
+	</select>
+
+	<select id="selectGCMregisterQuestionReply" resultMap="gcmRegisterQuestionMap">
+		select
+		user.u_register_id, gathering.g_name, program.p_name, gathering.g_id from question
+		join user on question.u_id=user.u_id
+		join gathering on gathering.g_id= question.g_id
+		join program on program.p_id=gathering.p_id where q_id=#{q_id}
+	</select>
+
+
+	<select id="selectGCMBookmark" resultMap="gcmBookmarkMap">
+		select
+		user.u_id, user.u_register_id, program.p_name, program.p_photo_url from bookmark join user on
+		bookmark.u_id=user.u_id
+		join program on bookmark.p_id= program.p_id where program.p_id=#{p_id} 
+	</select>
+	
+	<update id="updatePassword">
+		update user set password = #{password} where u_id=#{u_id}
+	</update>
+	
+	<select id="selectJoinGatheringUser" resultMap="userMap">
+		select user.* from join_gathering join user on join_gathering.u_id = user.u_id
+		where join_gathering.g_id=#{g_id}
+	</select>
+	
+	<update id="updateUserPhoto">
+		update user set u_photo_url=#{u_photo_url} where u_id=#{u_id}
+	</update>
+	
+	<select id="selectVerificationCode" resultType="String">
+		select verification_code from verification_code where u_id=#{u_id}
+	</select>
+	
+	<select id="selectUserPhone" resultType="String">
+		select u_phone from user where u_id=#{u_id}
+	</select>
+	
+	<select id="selectUserPhoto" resultType="String">
+		select u_photo_url from user where u_id=#{u_id}
+	</select>
+	
+	<insert id="insertVerificationCode">
+		insert into verification_code values(#{u_id}, #{verification_code})
+	</insert>
+	
+	<delete id="deleteVerificationCode">
+		delete from verification_code where u_id=#{u_id}
+	</delete>
+	
+	<update id="updateAlarm">
+		update user set alarm=#{alarm} where u_id=#{u_id}
+	</update>
+	
+	<update id="updateRegisterId">
+		update user set u_register_id = #{new_register_id} where u_register_id = #{u_register_id}
+	</update>
+	
+	<update id="updateRegisterIdUId">
+		update user set u_register_id = #{u_register_id} where u_id = #{u_id}
+	</update>
+
+	<select id="selectUId" resultMap="recommendMap">
+		select u_id, u_age from user
+	</select>
+	
+</mapper>

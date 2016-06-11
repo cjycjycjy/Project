@@ -1,0 +1,22 @@
+package ddoraemi.applyadmin.view;
+
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.start.R;
+import android.app.Activity;
+import android.os.Bundle;
+
+public class Apply_Admin_View extends Activity implements
+		Apply_Admin_View_Interface {
+	AppController app;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_applyadmin);
+		app = (AppController) getApplicationContext();
+		init();
+	}
+	public void init()
+	{
+		
+	}
+}

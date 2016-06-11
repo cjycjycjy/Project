@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.VersionMapper">
+
+	<resultMap id="versionMap" type="com.myserver.skp.vo.VersionVo">
+		<result property="version" column="version" />
+		<result property="check" column="a_check" />
+	</resultMap>
+	
+	<select id="selectVersion" resultMap="versionMap">
+		select *
+		from version
+	</select>
+</mapper>

@@ -1,0 +1,5 @@
+package ddoraemi.myinfopage.presenter;
+
+public interface Write_AfterwordPresenterInterface {
+	public void validateCredentials(String event) ;
+}

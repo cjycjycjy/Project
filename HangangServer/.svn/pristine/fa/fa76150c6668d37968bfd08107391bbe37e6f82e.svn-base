@@ -1,0 +1,38 @@
+package com.fuck.hangang.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.json.simple.JSONObject;
+import org.junit.runners.Parameterized.Parameters;
+
+import com.fuck.hangang.vo.NoticePhotoVo;
+import com.fuck.hangang.vo.NoticeVo;
+import com.fuck.hangang.vo.NoticecommentVo;
+import com.fuck.hangang.vo.NoticecommentofcommentVo;
+
+public interface NoticeMapper {
+	public List<NoticeVo> getnotice();
+
+	public void registnotice(@Param("n_title") String n_title, @Param("n_contents") String n_contents, @Param("n_type") int n_type);
+	
+	public void registnoticephoto(@Param("n_num") int n_num, @Param("n_photo_url") String n_photo_url);
+
+	public List<NoticecommentVo> getnoticecomment(@Param("n_num") int n_num, @Param("lastnum") int lastnum,
+			@Param("count") int count);
+
+	public void registnoticecomment(NoticecommentVo noticecommentVo);
+
+	public List<NoticecommentofcommentVo> getnoticecommentofcomment(@Param("n_num") int n_num,
+			@Param("n_c_num") int n_c_num, @Param("lastnum") int lastnum, @Param("count") int count);
+
+	public void registnoticecommentofcomment(NoticecommentofcommentVo noticecommentofcommentVo);
+
+	public void deletenotice(@Param("n_num") int n_num);
+
+	public void deletenoticecomment(@Param("n_num") int n_num, @Param("n_c_num") int n_c_num);
+	
+	public int getnoticecommentcount(@Param("n_num") int n_num);
+	
+	public int getnoticecommentofcommentcount(@Param("n_num") int n_num, @Param("n_c_num") int n_c_num);
+}

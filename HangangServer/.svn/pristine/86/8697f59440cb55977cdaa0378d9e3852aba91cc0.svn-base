@@ -1,0 +1,92 @@
+package com.fuck.hangang.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
+
+import com.fuck.hangang.mapper.UserMapper;
+import com.fuck.hangang.vo.TeamUserVo;
+import com.fuck.hangang.vo.TeamVo;
+import com.fuck.hangang.vo.UserVo;
+
+@Service
+public class UserDao {
+
+	@Resource
+	UserMapper userMapper;
+	
+	public void signup(UserVo userVo){
+		this.userMapper.signup(userVo);
+	}
+	
+	public UserVo signin(String u_id, String u_passwd){
+		return this.userMapper.signin(u_id, u_passwd);
+	}
+	
+	public UserVo getuser(String u_id){
+		return this.userMapper.getuser(u_id);
+	}
+	public List<TeamVo> getbookmarkteam(String u_id){
+		return this.userMapper.getbookmarkteam(u_id);
+	}
+	public TeamVo getteam(String u_id){
+		return this.userMapper.getteam(u_id);
+	}
+	
+	public String getuserphoto(@Param("u_id") String u_id) {
+		return this.userMapper.getuserphoto(u_id);
+	}
+	
+	public void changeuserphoto(@Param("u_id") String u_id, @Param("u_photo") String u_photo) {
+		this.userMapper.changeuserphoto(u_id, u_photo);
+	}
+	
+	public UserVo getoneuser(String u_id) {
+		return this.userMapper.getoneuser(u_id);
+	}
+	
+	public void updateforeignkey(int flag) {
+		this.userMapper.updateforeignkey(flag);
+	}
+	
+	public void signout(String u_id) {
+		this.userMapper.signout(u_id);
+	}
+	
+	public TeamUserVo getteamuser(String u_id) {
+		return this.userMapper.getteamuser(u_id);
+	}
+	
+	public String getteamleader(int t_num) {
+		return this.userMapper.getteamleader(t_num);
+	}
+	
+	public int getteamsize(int t_num) {
+		return this.userMapper.getteamsize(t_num);
+	}
+	
+	public void deleteteamuser(String u_id) {
+		this.userMapper.deleteteamuser(u_id);
+	}
+	
+	public void deleteteam(int t_num) {
+		this.userMapper.deleteteam(t_num);
+	}
+	
+	public TeamUserVo getrandomleader(int t_num) {
+		return this.userMapper.getrandomleader(t_num);
+	}
+	
+	public void updateleader(String u_id) {
+		this.userMapper.updateleader(u_id);
+	}
+	
+	public void changepasswd(String u_id, String u_passwd) {
+		this.userMapper.changepasswd(u_id, u_passwd);
+	}
+	
+	
+}

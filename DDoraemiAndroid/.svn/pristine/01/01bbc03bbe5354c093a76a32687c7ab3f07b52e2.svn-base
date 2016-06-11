@@ -1,0 +1,252 @@
+package ddoraemi.detailedgroupinfo.view;
+
+import java.util.ArrayList;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnScrollChangedListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.detailedgroupinfo.presenter.DetailedGroupInfo_InfoView_presenter;
+import ddoraemi.detailedgroupinfo.presenter.DetailedGroupInfo_InfoView_presenter_Interface;
+import ddoraemi.detailediteminfo.view.ScrollTabHolderFragment;
+import ddoraemi.dialog.Dialog_cancelGroup;
+import ddoraemi.dialog.Dialog_confirm_JoinGroup;
+import ddoraemi.home.model.Group;
+import ddoraemi.start.R;
+
+public class DetailedGroupInfo_InfoView extends ScrollTabHolderFragment implements OnScrollListener,OnClickListener,
+OnScrollChangedListener,DetailedGroupInfo_InfoView_Interface{
+
+	Group group;
+	ScrollView content;
+	ImageView btn_joingroup;
+	DetailedGroupInfo_InfoView_presenter_Interface presenter;
+	int persons;
+	TextView joinpersons;
+	AppController app;
+	boolean participated;
+	Dialog_cancelGroup dialog;
+	Dialog_cancelGroup dialog_join;
+	boolean ismaster;
+	String date;
+	public DetailedGroupInfo_InfoView(Group group) {
+		// TODO Auto-generated constructor stub
+		this.group = group;
+
+	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_detailedgroupinfo, null);
+		app = (AppController)getActivity().getApplicationContext();
+		init(v);
+		return v;
+	}
+
+	public void init(View v){
+		presenter = new DetailedGroupInfo_InfoView_presenter(this);
+		content = (ScrollView) v
+				.findViewById(R.id.fragment_detailedgroupinfo_scrollview);
+		content.getViewTreeObserver().addOnScrollChangedListener(this);
+		btn_joingroup = (ImageView)v.findViewById(R.id.iv_joingroup);
+		date = group.getG_start_year()+"."+group.getG_start_month()+"."+group.getG_start_day()+"  "+
+				group.getG_start_hour()+"시 "+group.getG_start_minute()+"분 - "+group.getG_end_hour()+"시 "+
+				group.getG_end_minute()+"분";
+		if(app.getUser().getU_id().equalsIgnoreCase(this.group.getU_id())){
+			ismaster = true;
+			participated = true;
+		}else{
+
+			setjoinbtn();
+
+		}
+		btn_joingroup.setOnClickListener(this);
+		dialog = new Dialog_cancelGroup(this.getContext(), group.getP_name(),date);
+		dialog.getOkBtn().setOnClickListener(this);
+		dialog.getCancelBtn().setOnClickListener(this);
+		
+		dialog_join = new Dialog_cancelGroup(this.getContext(), group.getP_name(),date);
+		dialog_join.getOkBtn().setOnClickListener(this);
+		dialog_join.getCancelBtn().setOnClickListener(this);
+		TextView tv_p_name = (TextView)v.findViewById(R.id.fragment_detailedgroupinfo_tv_challenge_name);
+		TextView tv_g_name = (TextView)v.findViewById(R.id.tv_groupname);
+		TextView tv_g_comment = (TextView)v.findViewById(R.id.fragment_detailedgroupinfo_tv_comment);
+		TextView tv_g_date = (TextView)v.findViewById(R.id.fragment_detailedgroupinfo_tv_dateinfo);
+
+
+		TextView tv_persons = (TextView)v.findViewById(R.id.fragment_detailedgroupinfo_persons);
+		TextView tv_cost = (TextView)v.findViewById(R.id.fragment_detailedgroupinfo_cost);
+		TextView tv_supplies = (TextView)v.findViewById(R.id.fragment_detailedgroupinfo_supplies);
+
+		tv_g_comment.setText(group.getG_info());
+		tv_g_name.setText(group.getG_name());
+		tv_p_name.setText(group.getP_name());
+		tv_g_date.setText(group.getG_start_year()+"-"+group.getG_start_month()+"-"+group.getG_start_day());
+		joinpersons = (TextView)v.findViewById(R.id.fragment_detailedgroupinfo_joinperson);
+		joinpersons.setText(group.getG_persons()+"명");
+
+		tv_persons.setText(String.valueOf(group.getG_want_persons()+"명"));
+		//tv_cost.setText(String.valueOf(group.g));
+
+	}
+
+	public void setjoinbtn(){
+		ArrayList<Integer> arr = app.getUser().getParticipatedgroup();
+		int id = this.group.getG_id();
+		btn_joingroup.setImageResource(R.drawable.btn_willyouparticipate);
+		participated = false;
+		
+		for(int i=0; i<arr.size(); i++){
+			if(id == arr.get(i)){
+				btn_joingroup.setImageResource(R.drawable.btn_participation);
+				participated = true;
+			}
+		}
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		if (mScrollTabHolder != null)
+			mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount,
+					totalItemCount, 0);
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// nothing
+	}
+
+	@Override
+	public void adjustScroll(int scrollHeight) {
+		// TODO Auto-generated method stub
+		content.setScrollY(0);
+
+	}
+	@Override
+	public void onScrollViewScroll(int scrollheight, int spageCount) {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void onScrollChanged() {
+		// TODO Auto-generated method stub
+		if (mScrollTabHolder != null)
+		{
+			int scrollY=content.getScrollY();
+			mScrollTabHolder.onScrollViewScroll(scrollY, 0);
+		}
+	}
+	@Override
+	public void showMap() {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void showDetailedChallengeInfo() {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == 50){
+			if(data.getIntExtra("event",1)==2){
+				int person = this.group.getG_persons();
+				this.persons = data.getIntExtra("persons", persons);
+				this.group.setG_persons(person+persons);
+				joinpersons.setText(person+persons+"명");
+				ArrayList<Integer> arr = app.getUser().getParticipatedgroup();
+				arr.add(this.group.getG_id());
+				app.getUser().setParticipatedgroup(arr);
+				btn_joingroup.setImageResource(R.drawable.btn_participation);
+				participated = true;
+
+			}
+		}
+
+	}
+	@Override
+	public void goToJoinGroup(Group group) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(this.getActivity(),JoinGroupView.class);
+		intent.putExtra("group", group);
+		startActivityForResult(intent, 50);
+	}
+
+	@Override
+	public void showCancelDialog() {
+		dialog_join.show();
+
+	}
+	
+	public void showDeleteDialog(){
+		dialog.show();
+	}
+	public void dismissDeleteDialog(){
+		dialog.dismiss();
+	}
+
+	@Override
+	public void cancelGroup(int minus) {
+		int person = this.group.getG_persons();
+		this.group.setG_persons(person-minus);
+		joinpersons.setText(person-minus+"명");
+		ArrayList<Integer> arr = app.getUser().getParticipatedgroup();
+		arr.remove(this.group.getG_id());
+		app.getUser().setParticipatedgroup(arr);
+		participated = false;
+		btn_joingroup.setImageResource(R.drawable.btn_willyouparticipate);
+	}
+	@Override
+	public void dismissCancelDialog(){
+		dialog_join.dismiss();
+	}
+
+	public void deleteGroup(){
+		dialog.dismiss();
+		Intent intent = new Intent();
+		intent.putExtra("group", group);
+		this.getActivity().setResult(100, intent);
+		getActivity().finish();
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		//마스터도 아니고 참여자도 아닐때
+		if(v.getId() == R.id.iv_joingroup && participated == false && ismaster == false){
+			presenter.validatecredential("joingroup", group);
+		}
+		//마스터가 아니고 참여자일때
+		else if(v.getId() == R.id.iv_joingroup && participated == true && ismaster == false){
+			presenter.validatecredential("cancel", group);
+		}else if(v.getId() == R.id.btn_dialog_confirmcancel_ok && participated == true && ismaster == false){
+			presenter.validatecredential("cancelGroup", group);
+		}else if(v.getId() == R.id.btn_dialog_confirmcancel_cancel && participated == true && ismaster == false){
+			presenter.validatecredential("dismiss_cancel_dialog", group);
+		}
+		//마스터 일때
+		else if(v.getId() == R.id.iv_joingroup && participated == true && ismaster == true){
+			presenter.validatecredential("delete", group);
+		}else if(v.getId() == R.id.btn_dialog_confirmcancel_ok && participated == true && ismaster == true){
+			presenter.validatecredential("deleteGroup", group);
+		}else if(v.getId() == R.id.btn_dialog_confirmcancel_cancel && participated == true && ismaster == true){
+			presenter.validatecredential("dismiss_delete_dialog", group);
+		}
+	}
+
+
+
+}

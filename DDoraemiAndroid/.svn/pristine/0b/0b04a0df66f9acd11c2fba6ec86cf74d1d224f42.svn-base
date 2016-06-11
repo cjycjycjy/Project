@@ -1,0 +1,31 @@
+package ddoraemi.mypage;
+
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
+import ddoraemi.start.R;
+
+public class MyPageView extends Fragment implements MypageViewInterface{
+	private MyPagePresenterInterface Presenter;
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_mypage, null);
+		init(v);
+		return v;
+	}
+	public void init(View v)
+	{
+		
+	}
+	@Override
+	public void navigateToNext() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

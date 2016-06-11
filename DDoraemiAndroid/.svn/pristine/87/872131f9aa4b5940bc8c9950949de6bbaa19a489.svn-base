@@ -1,0 +1,23 @@
+package ddoraemi.appcontroller;
+
+import android.app.Application;
+
+public class AppController extends Application {
+	private String ServerIp;
+	private String id;
+
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		super.onCreate();
+
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return this.id;
+	}
+}

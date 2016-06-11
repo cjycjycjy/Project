@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/witchhunter"
+    android:orientation="vertical" 
+   >
+
+    <RelativeLayout
+        android:id="@+id/layout_title_pop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#15FFFFFF"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip" >
+
+        <Button
+            android:id="@+id/btn_cancel_pop"
+            android:layout_width="30dip"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_title_pop"
+            android:layout_alignTop="@+id/tv_title_pop"
+            android:layout_marginLeft="10dip"
+            android:background="@drawable/back" />
+
+        <TextView
+            android:id="@+id/tv_title_pop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="사진 보기"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFFFF"
+            android:textSize="20dip" />
+    </RelativeLayout>
+
+    <ViewFlipper
+        android:id="@+id/flipper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="100dip" >
+
+       
+    </ViewFlipper>
+	 <TextView
+            android:id="@+id/tv_photo_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            
+            
+           	android:layout_marginTop="400dip"
+           	android:layout_marginLeft="20dip"
+            android:text="TextView" />
+   
+</RelativeLayout>

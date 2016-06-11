@@ -1,0 +1,35 @@
+package com.fuck.hangang.vo;
+
+public class AdminRequestVo {
+	int a_num;
+	int a_r_num;
+	int t_num;
+	int t_members_num;
+	
+	
+	public int getA_num() {
+		return a_num;
+	}
+	public void setA_num(int a_num) {
+		this.a_num = a_num;
+	}
+	public int getA_r_num() {
+		return a_r_num;
+	}
+	public void setA_r_num(int a_r_num) {
+		this.a_r_num = a_r_num;
+	}
+	public int getT_num() {
+		return t_num;
+	}
+	public void setT_num(int t_num) {
+		this.t_num = t_num;
+	}
+	public int getT_members_num() {
+		return t_members_num;
+	}
+	public void setT_members_num(int t_members_num) {
+		this.t_members_num = t_members_num;
+	}
+	
+}

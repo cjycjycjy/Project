@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.CheerfulMapper">
+
+
+	<resultMap type="com.fuck.hangang.vo.CheerfulVo" id="cheerfulMap">
+		<id property="ch_num" column="c_num" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="ch_content" column="c_content" />
+		<result property="ch_photourl" column="c_photourl" />
+		<result property="ch_time" column="c_time" />
+		<result property="t_name" column="t_name" />
+	</resultMap>
+
+	<resultMap id="userMap" type="com.fuck.hangang.vo.UserVo">
+		<id property="u_id" column="u_id" />
+		<result property="u_passwd" column="u_passwd" />
+		<result property="u_name" column="u_name" />
+		<result property="u_email" column="u_email" />
+		<result property="u_permission" column="u_permission" />
+		<result property="push" column="push" />
+		<result property="u_photo" column="u_photo" />
+		<result property="u_registrationid" column="u_registrationid" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.CheerfulReplyVo" id="cheerfulreplyMap">
+		<id property="c_num" column="c_num" />
+		<result property="c_r_num" column="c_r_num" />
+		<result property="u_id" column="u_id" />
+		<result property="c_r_content" column="c_r_content" />
+		<result property="c_r_time" column="c_r_time" />
+		<result property="t_num" column="t_num" />
+		<result property="t_name" column="t_name" />
+		<result property="u_photo" column="u_photo" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.CheerfulReplyOfReplyVo"
+		id="cheerfulreplyofreplyMap">
+		<id property="c_num" column="c_num" />
+		<result property="c_r_num" column="c_r_num" />
+		<result property="c_rr_num" column="c_rr_num" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="c_rr_content" column="c_rr_content" />
+		<result property="c_rr_time" column="c_rr_time" />
+		<result property="t_name" column="t_name" />
+		<result property="u_photo" column="u_photo" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+	<resultMap type="com.fuck.hangang.vo.RegistrationIdVo" id="registrationIdMap">
+		<result property="u_registrationid" column="u_registrationid"/>
+	</resultMap>
+	
+	<select id="getRegiIdOfUser" resultMap="registrationIdMap">
+		select u_registrationid from user where u_id = 
+		(select u_id from cheerful where c_num = #{c_num})
+	</select>
+	
+	<select id="checkPushUser" resultType="int">
+		select push from user
+		where u_id = #{id}
+	</select>
+	
+	<select id="checkReplyUser" resultType="String">
+		select u_id from user where u_id =(select u_id from cheerful where c_num = #{c_num})
+	</select>
+	
+
+	<select id="getteamcheerfulfirst" resultMap="cheerfulMap">
+		select cheerful.*,
+		team.t_name from cheerful inner join team
+		where cheerful.t_num =
+		team.t_num and team.t_num = #{t_num} and
+		cheerful.t_num = #{t_num}
+		order by c_time DESC Limit
+		#{lastnum},#{count}
+	</select>
+	<select id="getteamcheerfullast" resultMap="cheerfulMap">
+		select cheerful.*, team.t_name from cheerful inner join team
+		where
+		cheerful.t_num = team.t_num and team.t_num = #{t_num} and
+		cheerful.t_num = #{t_num} and c_num <![CDATA[<]]>
+		#{lastnum} order by c_time DESC Limit 0,20
+	</select>
+	<select id="gettotalcheerfulfirst" resultMap="cheerfulMap">
+		select cheerful.*,
+		team.t_name from cheerful inner join team
+		where cheerful.t_num =
+		team.t_num order by c_time DESC Limit
+		#{lastnum},#{count}
+	</select>
+	<select id="gettotalcheerfullast" resultMap="cheerfulMap">
+		select cheerful.*, team.t_name from cheerful inner join team
+		where
+		cheerful.t_num = team.t_num and c_num <![CDATA[<]]>
+		#{lastnum} order by c_time DESC Limit 0,20
+	</select>
+	<select id="getcheerfulcommentnum" resultType="int">
+		select
+		count(c_num) from cheerful_reply where c_num = #{c_num}
+	</select>
+	<select id="getcheerfuluserinfo" resultMap="userMap">
+		select * from user
+		where u_id = #{u_id}
+	</select>
+	<insert id="registcheerful">
+		insert into cheerful
+		values(null,#{u_id},#{t_num},#{ch_contents},#{ch_photo},null)
+	</insert>
+	
+	<select id="getcheerfulOne" resultMap="cheerfulMap">
+		select cheerful.*,
+		team.t_name from cheerful inner join team
+		where cheerful.t_num =
+		team.t_num and c_num = #{c_num}
+	</select>
+
+	<select id="getcheerfulreplyfirst" resultMap="cheerfulreplyMap">
+		select
+		cheerful_reply.*,x2.t_num ,u_permission, u_photo, t_name, u_name from
+		(select x1.*,team.t_name from
+		(select user.*, team_user.t_num from user
+		left outer join team_user on
+		user.u_id = team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join cheerful_reply
+		on cheerful_reply.u_id = x2.u_id
+		where
+		c_num
+		= #{c_num} order by c_r_num
+		DESC Limit
+		#{lastnum},#{count}
+	</select>
+	
+	<select id="getcheerfulreplyone" resultMap="cheerfulreplyMap">
+		select
+		cheerful_reply.*,x2.t_num ,u_permission, u_photo, t_name, u_name from
+		(select x1.*,team.t_name from
+		(select user.*, team_user.t_num from user
+		left outer join team_user on
+		user.u_id = team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join cheerful_reply
+		on cheerful_reply.u_id = x2.u_id
+		where
+		c_num
+		= #{c_num} and c_r_num = #{c_r_num}
+	</select>
+
+	<select id="getcheerfulreplylast" resultMap="cheerfulreplyMap">
+		select cheerful_reply.*,x2.t_num ,u_permission, u_photo, t_name,
+		u_name from (select x1.*,team.t_name from
+		(select user.*,
+		team_user.t_num from user left outer join team_user on
+		user.u_id =
+		team_user.u_id) x1 left outer join team on x1.t_num =
+		team.t_num) x2
+		right outer join cheerful_reply on cheerful_reply.u_id = x2.u_id
+		where
+		c_num
+		=
+		#{c_num} and c_r_num <![CDATA[<]]>
+		#{lastnum} order by c_r_num DESC Limit 0,20;
+	</select>
+
+
+	<insert id="registcheerfulreply" parameterType="CheerfulReplyVo">
+		insert into
+		cheerful_reply values(#{c_num}, null, #{u_id}, #{c_r_content}, null);
+	</insert>
+
+	<select id="getcheerfulreplyofreplyfirst" resultMap="cheerfulreplyofreplyMap">
+		select
+		cheerful_reply_reply.*,x2.t_num ,u_permission, u_photo, t_name, u_name from
+		(select x1.*,team.t_name from
+		(select user.*, team_user.t_num from user
+		left outer join team_user on
+		user.u_id = team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join cheerful_reply_reply
+		on cheerful_reply_reply.u_id = x2.u_id
+		where c_num
+		= #{c_num} and c_r_num =
+		#{c_r_num} order by
+		c_rr_num DESC Limit 0, 20
+	</select>
+
+	<select id="getcheerfulreplyofreplylast" resultMap="cheerfulreplyofreplyMap">
+		select cheerful_reply_reply.*,x2.t_num ,u_permission, u_photo, t_name,
+		u_name from (select x1.*,team.t_name from
+		(select user.*, team_user.t_num from user left outer join team_user on
+		user.u_id = team_user.u_id) x1 left outer join team on x1.t_num =
+		team.t_num) x2
+		right outer join cheerful_reply_reply on cheerful_reply_reply.u_id = x2.u_id
+		where
+		c_num
+		= #{c_num} and c_r_num =
+		#{c_r_num} and c_rr_num <![CDATA[<]]>
+		#{lastnum} order by c_rr_num DESC Limit 0,20;
+	</select>
+
+
+	<insert id="registcheerfulreplyofreply" parameterType="CheerfulReplyOfReplyVo">
+		insert
+		into cheerful_reply_reply values(#{c_num}, #{c_r_num}, null , #{u_id},
+		#{c_rr_content}, null)
+	</insert>
+
+	<delete id="deletecheerfulreply">
+		delete from cheerful_reply where c_num = #{c_num} and
+		c_r_num = #{c_r_num}
+	</delete>
+
+	<delete id="deletecheerfulreplyofreply">
+		delete from cheerful_reply_reply where c_num =
+		#{c_num} and c_r_num = #{c_r_num} and c_rr_num = #{c_rr_num}
+	</delete>
+
+	<select id="getcheerfulphotourl" resultType="String">
+		select c_photourl
+		from cheerful where c_num = #{c_num}
+	</select>
+
+	<delete id="deletecheerful">
+		delete from cheerful where c_num = #{c_num}
+	</delete>
+
+	<update id="updatecheerfulreply">
+		update cheerful_reply set c_r_content =
+		#{c_r_content} where c_num = #{c_num} and c_r_num = #{c_r_num}
+	</update>
+
+	<update id="updatecheerfulreplyofreply">
+		update cheerful_reply_reply set c_rr_content =
+		#{c_rr_content} where c_num = #{c_num} and c_r_num = #{c_r_num} and
+		c_rr_num = #{c_rr_num}
+	</update>
+
+	<select id="getcheerfulreplycount" resultType="int">
+		select count(*)
+		from cheerful_reply where c_num = #{c_num}
+	</select>
+
+	<select id="getcheerfulreplyofreplycount" resultType="int">
+		select
+		count(*) from cheerful_reply_reply where c_num = #{c_num} and c_r_num
+		= #{c_r_num}
+	</select>
+
+</mapper>

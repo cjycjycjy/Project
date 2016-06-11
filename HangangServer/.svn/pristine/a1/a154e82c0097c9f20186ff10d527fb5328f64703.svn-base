@@ -1,0 +1,27 @@
+package com.fuck.hangang.vo;
+
+public class TeamGalleryVo {
+	int num;
+	int t_num;
+	String photo_url;
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
+	public int getT_num() {
+		return t_num;
+	}
+	public void setT_num(int t_num) {
+		this.t_num = t_num;
+	}
+	public String getPhoto_url() {
+		return photo_url;
+	}
+	public void setPhoto_url(String photo_url) {
+		this.photo_url = photo_url;
+	}
+	
+	
+}

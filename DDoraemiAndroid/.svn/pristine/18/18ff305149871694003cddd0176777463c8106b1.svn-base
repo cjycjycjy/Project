@@ -1,0 +1,11 @@
+package ddoraemi.adminmodehome.view;
+
+import android.app.Fragment;
+
+public class AdminHomeMainView extends Fragment {
+	int p_num;
+
+	public AdminHomeMainView(int p_num) {
+		this.p_num = p_num;
+	}
+}

@@ -1,0 +1,18 @@
+package com.fuck.hangang.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.fuck.hangang.vo.TeamVo;
+import com.fuck.hangang.vo.UserVo;
+
+@Repository
+public interface UserMapper {
+	public void signup(UserVo userVo);
+	public UserVo signin(@Param("u_id") String u_id, @Param("u_passwd") String u_passwd);
+	public UserVo getuser(@Param("u_id") String u_id);
+	public List<TeamVo> getbookmarkteam(@Param("u_id") String u_id);
+	public TeamVo getteam(@Param("u_id") String u_id);
+}

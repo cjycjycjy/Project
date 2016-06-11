@@ -1,0 +1,62 @@
+package com.myserver.skp.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.myserver.skp.dao.ProgramDao;
+import com.myserver.skp.vo.ProgramVo;
+
+@Controller
+public class GatheringController {
+	private static final Logger logger = LoggerFactory.getLogger(ProgramController.class);
+
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+
+	@Resource
+	private ProgramDao programDao;
+
+	@RequestMapping(value = "/getgathering", method = RequestMethod.GET)
+	public @ResponseBody List<ProgramVo> home(HttpServletRequest req) {
+		logger.info("This is Test");
+        List<ProgramVo> list = this.programDao.getSelectAll();
+
+        for(int i=0; i<list.size(); i++){
+        	if(list.get(i).getP_addr_1()==null){
+        		list.get(i).setP_addr_1("");
+        	}
+        	if(list.get(i).getP_addr_2()==null){
+        		list.get(i).setP_addr_2("");
+        	}
+        	if(list.get(i).getP_addr_3()==null){
+        		list.get(i).setP_addr_3("");
+        	}
+        	if(list.get(i).getP_addr_4()==null){
+        		list.get(i).setP_addr_4("");
+        	}
+        	if(list.get(i).getP_addr_5()==null){
+        		list.get(i).setP_addr_5("");
+        	}
+        	if(list.get(i).getP_addr_6()==null){
+        		list.get(i).setP_addr_6("");
+        	}
+        	
+        	if(list.get(i).getP_note()==null){
+        		list.get(i).setP_note("");
+        	}
+        }
+        logger.info("totcal count" + list.size() );
+
+        return list;
+	}
+}

@@ -1,0 +1,85 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+import java.util.ArrayList;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import ddoraemi.detailedgroupinfo.model.DetailedGroup_inputqna_interactor;
+import ddoraemi.detailedgroupinfo.model.DetailedGroup_inputqna_interactor_Interface;
+import ddoraemi.detailedgroupinfo.model.QnA;
+import ddoraemi.detailedgroupinfo.model.QnAReply;
+import ddoraemi.detailedgroupinfo.view.DetailedGroupInfo_QnA_View;
+
+public class DetailedGroupInfo_QnA_presenter implements DetailedGroupInfo_QnA_presenter_Interface, 
+OnDetailedGroupInputqna_FinishedListener{
+
+	DetailedGroupInfo_QnA_View view;
+	DetailedGroup_inputqna_interactor_Interface interactor;
+	ArrayList<QnA> qna;
+
+
+
+	public DetailedGroupInfo_QnA_presenter(DetailedGroupInfo_QnA_View view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		this.interactor = new DetailedGroup_inputqna_interactor();
+		this.qna = new ArrayList<QnA>();
+	}
+	@Override
+	public void validatecredential(String event,String u_id, String q_content, int g_id, QnA qna, int position) {
+		// TODO Auto-generated method stub
+		if(event.equalsIgnoreCase("inputqna")){
+			interactor.setData(view.getActivity(),this, g_id, u_id, q_content);
+		}else{
+			view.goToDetailedQnA(qna, position);
+		}
+		
+	}
+	@Override
+	public void onDataSetSuccess(JsonArray data) {
+		// TODO Auto-generated method stub
+		qna.clear();
+
+		for(int i=0; i<data.size(); i++){
+			JsonObject dataobj = (JsonObject)data.get(i);
+			int q_id = (dataobj.get("q_id")).getAsInt();
+			JsonObject userobj = dataobj.get("q_user").getAsJsonObject(); 
+			String u_id = userobj.get("u_id").getAsString();
+			int g_id = (dataobj.get("g_id")).getAsInt();
+			String q_content = (dataobj.get("q_content")).getAsString();
+			int q_year = (dataobj.get("q_year")).getAsInt();
+			int q_month = (dataobj.get("q_month")).getAsInt();
+			int q_day = (dataobj.get("q_day")).getAsInt();
+			int q_r_num = (dataobj.get("q_r_num")).getAsInt();
+			ArrayList<QnAReply> question_reply;
+			question_reply = new ArrayList<QnAReply>();
+			JsonArray reply = dataobj.get("question_reply").getAsJsonArray();
+			String u_photo_url = "empty";
+			if(!userobj.get("u_photo_url").isJsonNull()){
+				u_photo_url = userobj.get("u_photo_url").getAsString();
+			}
+			for(int j=0; j<reply.size(); j++){
+				JsonObject obj = (JsonObject)reply.get(j);
+				JsonObject qr_userobj = obj.get("q_r_user").getAsJsonObject();
+				int q_r_id = (obj.get("q_r_id")).getAsInt();
+				int q_id2 = (obj.get("q_id")).getAsInt();
+				String q_r_content= (obj.get("q_r_content")).getAsString();
+				int q_r_year = (obj.get("q_r_year")).getAsInt();
+				int q_r_month = (obj.get("q_r_month")).getAsInt();
+				int q_r_day = (obj.get("q_r_day")).getAsInt();
+				String u_id2 = (qr_userobj.get("u_id")).getAsString();
+				String qr_u_photo_url = "empty";
+				if(!qr_userobj.get("u_photo_url").isJsonNull()){
+					qr_u_photo_url = (qr_userobj.get("u_photo_url")).getAsString();
+				}		
+				question_reply.add(new QnAReply(q_r_id, q_id2, q_r_content, q_r_year, q_r_month, q_r_day, u_id2,qr_u_photo_url));
+			}
+			qna.add(new QnA(q_id, u_id, g_id, q_content, q_year, q_month, q_day, q_r_num, question_reply,u_photo_url));
+		}
+		view.renewQnAList(qna);
+
+		
+	}
+
+}

@@ -1,0 +1,5 @@
+package ddoraemi.creategroup.model;
+
+public interface CreateGroup_Interactor_Inteface {
+
+}

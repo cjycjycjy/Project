@@ -1,0 +1,21 @@
+package com.fuck.hangang.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.fuck.hangang.vo.CheerfulVo;
+import com.fuck.hangang.vo.UserVo;
+
+@Repository
+public interface CheerfulMapper {
+	public List<CheerfulVo> getteamcheerfulfirst(@Param("t_num") int t_num, @Param("lastnum") int lastnum, @Param("count") int count);
+	public List<CheerfulVo> getteamcheerfullast(@Param("t_num") int t_num, @Param("lastnum") int lastnum);
+	public List<CheerfulVo> gettotalcheerfulfirst( @Param("lastnum") int lastnum, @Param("count") int count);
+	public List<CheerfulVo> gettotalcheerfullast(@Param("lastnum") int lastnum);
+	public int getcheerfulcommentnum(@Param("c_num") int c_num);
+	public void registcheerful(@Param("u_id") String u_id, @Param("t_num") int t_num,
+			@Param("ch_contents") String ch_content, @Param("ch_photo") String ch_photo);
+	public UserVo getcheerfuluserinfo(@Param("u_id") String u_id);
+}

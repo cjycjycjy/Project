@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="57dp"
+    android:background="#ffffff"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
+    android:paddingLeft="17dp"
+    android:paddingRight="17dp"
+    android:paddingTop="8dp"
+    android:descendantFocusability="blocksDescendants"  >
+
+    <ToggleButton
+            android:focusable="false"
+        android:id="@+id/tb_nonchecked"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="12dp"
+        android:textOn=""
+        android:textOff=""
+        android:background="@drawable/icon_notchecked" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:layout_marginLeft="17dp" 
+        android:layout_marginTop="4dp">
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/iv_joinperson_u_img"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_user" />
+
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/circle_yellow" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tv_joinperson_u_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="6dp"
+            android:text="mother"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView 
+            android:id="@+id/tv_u_addr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="11dp"
+            android:text="어디어디살아요"
+            android:textSize="13dp"
+            android:textColor="#868585"
+            
+            />
+    </LinearLayout>
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+    <ImageView 
+         android:focusable="false"
+        android:id="@+id/iv_phone"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginRight="23dp"
+        android:src="@drawable/icon_call"
+        />
+
+    <ImageView
+         android:focusable="false"
+         android:id="@+id/iv_text"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="13dp"
+        android:src="@drawable/icon_text" />
+    </LinearLayout>
+
+</LinearLayout>

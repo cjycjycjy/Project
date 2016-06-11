@@ -1,0 +1,11 @@
+package ddoraemi.join;
+
+public class JoinInteractor implements JoinInteractorInterface{
+
+	@Override
+	public void join(String address, String nickname, String serverIp) {
+		// TODO Auto-generated method stub
+		//통신 코드 들어갈 부분
+	}
+
+}

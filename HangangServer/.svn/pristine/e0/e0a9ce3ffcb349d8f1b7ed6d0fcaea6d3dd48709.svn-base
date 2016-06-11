@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.MainMapper">
+
+	<resultMap id="noticeMap" type="com.fuck.hangang.vo.NoticeVo">
+		<id property="n_num" column="n_num" />
+		<result property="n_title" column="n_title" />
+		<result property="n_contents" column="n_contents" />
+		<result property="n_type" column="n_type" />
+		<result property="n_time" column="n_time" />
+		<collection property="photo" ofType="com.fuck.hangang.vo.NoticePhotoVo">
+			<result property="n_index" column="n_index" />
+			<result property="n_photo_url" column="n_photo_url" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="contestMap" type="com.fuck.hangang.vo.ContestVo">
+		<id property="p_num" column="num" />
+		<result property="t_num" column="t_num" />
+		<result property="u_id" column="u_id" />
+		<result property="p_contents" column="contents" />
+		<result property="t_name" column="t_name" />
+		<collection property="photo" ofType="com.fuck.hangang.vo.ContestPhotoVo">
+			<result property="p_index" column="p_index" />
+			<result property="photo" column="url" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="scheduleMap" type="com.fuck.hangang.vo.ScheduleVo">
+		<id property="s_num" column="s_num" />
+		<result property="s_year" column="s_year" />
+		<result property="s_month" column="s_month" />
+		<result property="s_day" column="s_day" />
+		<result property="start_hour" column="start_hour" />
+		<result property="start_min" column="start_min" />
+		<result property="end_hour" column="end_hour" />
+		<result property="end_min" column="end_min" />
+		<result property="t_num" column="t_num" />
+		<result property="s_lat" column="s_lat" />
+		<result property="s_long" column="s_long" />
+		<result property="s_park" column="s_park" />
+		<result property="flag" column="flag" />
+		<result property="car_num" column="car_num" />
+		<result property="t_logo" column="t_logo" />
+		<result property="t_name" column="t_name" />
+	</resultMap>
+
+	<resultMap id="realtimescheduleMap" type="com.fuck.hangang.vo.RealtimeScheduleVo">
+		<id property="r_num" column="r_s_num" />
+		<result property="r_year" column="r_s_year" />
+		<result property="r_month" column="r_s_month" />
+		<result property="r_day" column="r_s_day" />
+		<result property="start_hour" column="start_hour" />
+		<result property="start_min" column="start_min" />
+		<result property="end_hour" column="end_hour" />
+		<result property="end_min" column="end_min" />
+		<result property="t_num" column="t_num" />
+		<result property="r_lat" column="s_lat" />
+		<result property="r_long" column="s_long" />
+		<result property="r_park" column="s_park" />
+		<result property="flag" column="flag" />
+		<result property="t_logo" column="t_logo" />
+		<result property="t_name" column="t_name" />
+	</resultMap>
+
+	<select id="getnoticecommentcount" resultType="int">
+		select
+		count(n_num) from notice natural join notice_comment where n_num = #{n_num}
+	</select>
+
+	<select id="getnotice" resultMap="noticeMap">
+		select x1.*, notice_photo.*
+		from
+		(select notice.*
+		from notice
+		order by n_num DESC Limit 0,3)x1
+		left outer join notice_photo on x1.n_num = notice_photo.n_num;
+	</select>
+
+	<select id="getcontest" resultMap="contestMap">
+		select
+		photo_contest.*,photo_contest_photourl.url,photo_contest_photourl.p_index,
+		team.t_name
+		from photo_contest natural join team natural join
+		photo_contest_photourl
+		order by p_index ASC;
+	</select>
+
+	<select id="getschedule" resultMap="scheduleMap">
+		select
+		schedules.*,team.t_logo,team.t_name from schedules inner join team
+		where team.t_num =schedules.t_num and s_year = #{s_year} and s_month =
+		#{s_month} and s_day = #{s_day} order by schedules.s_park
+	</select>
+
+	<select id="getrealtimeschedule" resultMap="realtimescheduleMap">
+		select
+		realtime_schedules.*, t_logo, t_name from realtime_schedules
+		inner join
+		team where realtime_schedules.t_num = team.t_num and flag = 1
+		order by
+		realtime_schedules.s_park
+	</select>
+
+
+
+</mapper>

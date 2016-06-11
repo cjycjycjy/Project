@@ -1,0 +1,49 @@
+package ddoraemi.myinfopage.view;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.start.R;
+
+public class MyPage_AlarmSettingView extends Activity implements OnClickListener {
+	EditText phonenum;
+	ImageView sendbt, back, iv_alarm,iv_complete;
+	
+	AppController app;
+	
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_alarm_setting);
+		app = (AppController)getApplicationContext();
+		init();
+	}
+
+	public void init() {
+		back = (ImageView) findViewById(R.id.btn_left_menu);
+		back.setOnClickListener(this);
+		iv_alarm = (ImageView)findViewById(R.id.iv_alarm);
+		iv_alarm.setOnClickListener(this);
+		iv_complete = (ImageView)findViewById(R.id.iv_complete);
+		iv_complete.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if(v.getId()==R.id.btn_left_menu){
+			finish();
+		}
+		if(v.getId()==R.id.iv_alarm){
+			iv_alarm.setImageResource(R.drawable.icon_checkactive);
+		}
+		if(v.getId()==R.id.iv_complete){
+			
+		}
+	}
+
+}

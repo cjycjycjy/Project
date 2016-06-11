@@ -1,0 +1,5 @@
+package ddoraemi.home.presenter;
+
+public interface Home_RecommendPresenterInterface {
+	public void validatecredential(String event, String item_name);
+}

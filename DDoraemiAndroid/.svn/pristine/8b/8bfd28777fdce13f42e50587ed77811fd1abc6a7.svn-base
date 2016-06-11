@@ -1,0 +1,318 @@
+package ddoraemi.myinfopage.view;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
+import android.renderscript.Type;
+import android.util.Base64;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.TextView;
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.retrofit.Retrofit;
+import ddoraemi.start.R;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+public class Mypage_Profileimg_View extends Activity implements OnClickListener {
+
+	AppController app;
+	ImageView btn_back, iv_profile;
+	TextView btn_save;
+	public static String path;
+	public static Bitmap image_bitmap = null;
+	final int REQ_CODE_SELECT_IMAGE = 100;
+	final int REQ_CODE_CAPTURE_IMAGE = 200;
+	private MyPageView targetFragment;
+
+	int type = 0;
+	public static Context mcontext;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_profileimage_popup);
+		app = (AppController) getApplicationContext();
+		type = getIntent().getIntExtra("type", -1);
+		mcontext = this;
+		init();
+
+	}
+
+	public void init() {
+
+		if (type == 1) {
+
+			Intent intent = new Intent(Intent.ACTION_PICK);
+			intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+			intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+			startActivityForResult(intent, REQ_CODE_SELECT_IMAGE);
+
+		} else if (type == 2) {
+			Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(cameraIntent, REQ_CODE_CAPTURE_IMAGE);
+		}
+
+		btn_back = (ImageView) findViewById(R.id.btn_left_menu_profileimg_popup);
+		btn_back.setOnClickListener(this);
+
+		btn_save = (TextView) findViewById(R.id.btn_save);
+		btn_save.setOnClickListener(this);
+
+		iv_profile = (ImageView) findViewById(R.id.btn_profileimg_popup);
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch (v.getId()) {
+		case R.id.btn_left_menu_profileimg_popup:
+			finish();
+			break;
+		case R.id.btn_save:
+			requestChangeProfileImg(this, app.getId(), path);
+			break;
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// Toast.makeText(getContext(), "resultCode :
+		// "+resultCode,Toast.LENGTH_SHORT).show();
+
+		if (requestCode == REQ_CODE_SELECT_IMAGE) {
+			if (resultCode == Activity.RESULT_OK) {
+				try {
+
+					path = getImageNameToUri(data.getData());// getImageNameToUri();
+					// Uri에서 이미지 이름을 얻어온다.
+					// String name_Str = getImageNameToUri(data.getData());
+
+					DisplayMetrics metrics = new DisplayMetrics();
+					getWindowManager().getDefaultDisplay().getMetrics(metrics);
+					int screenWidth = metrics.widthPixels;
+					int screenHeight = metrics.heightPixels;
+
+					// 이미지 데이터를 비트맵으로 받아온다.
+					// image_bitmap = (Bitmap) data.getExtras().get("data");
+
+					Bitmap loaded = BitmapFactory.decodeFile(path);
+					loaded = GetRotatedBitmap(loaded, GetExifOrientation(path));
+					loaded = Bitmap.createScaledBitmap(loaded, loaded.getWidth()/2, loaded.getHeight()/2, true);
+					image_bitmap = loaded;
+					iv_profile.setImageBitmap(loaded);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(mcontext, "사진가져오기실패");
+				dialog.show();
+			}
+		}
+		if (requestCode == REQ_CODE_CAPTURE_IMAGE) {
+			if (resultCode == Activity.RESULT_OK) {
+				try {
+					path = getImageNameToUri(data.getData());// getImageNameToUri();
+					// Uri에서 이미지 이름을 얻어온다.
+					// String name_Str = getImageNameToUri(data.getData());
+
+					DisplayMetrics metrics = new DisplayMetrics();
+					getWindowManager().getDefaultDisplay().getMetrics(metrics);
+					int screenWidth = metrics.widthPixels;
+					int screenHeight = metrics.heightPixels;
+
+					// 이미지 데이터를 비트맵으로 받아온다.
+					// image_bitmap = (Bitmap) data.getExtras().get("data");
+
+					Bitmap loaded = BitmapFactory.decodeFile(path);
+					loaded = GetRotatedBitmap(loaded, GetExifOrientation(path));
+					loaded = Bitmap.createScaledBitmap(loaded, loaded.getWidth()/2, loaded.getHeight()/2, true);
+					image_bitmap = loaded;
+					iv_profile.setImageBitmap(loaded);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(mcontext, "사진가져오기실패.");
+				dialog.show();
+			}
+		}
+	}
+
+	public synchronized static Bitmap GetRotatedBitmap(Bitmap bitmap, int degrees) {
+		if (degrees != 0 && bitmap != null) {
+			Matrix m = new Matrix();
+			m.setRotate(degrees, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
+			try {
+				Bitmap b2 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+				if (bitmap != b2) {
+					bitmap.recycle();
+					bitmap = b2;
+				}
+			} catch (OutOfMemoryError ex) {
+				// We have no memory to rotate. Return the original bitmap.
+			}
+		}
+
+		return bitmap;
+	}
+
+	public synchronized static int GetExifOrientation(String filepath) {
+		int degree = 0;
+		ExifInterface exif = null;
+
+		try {
+			exif = new ExifInterface(filepath);
+		} catch (IOException e) {
+			Log.e("TAG", "cannot read exif");
+			e.printStackTrace();
+		}
+
+		if (exif != null) {
+			int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+
+			if (orientation != -1) {
+				// We only recognize a subset of orientation tag values.
+				switch (orientation) {
+				case ExifInterface.ORIENTATION_ROTATE_90:
+					degree = 90;
+					break;
+
+				case ExifInterface.ORIENTATION_ROTATE_180:
+					degree = 180;
+					break;
+
+				case ExifInterface.ORIENTATION_ROTATE_270:
+					degree = 270;
+					break;
+				}
+
+			}
+		}
+
+		return degree;
+	}
+
+	public String getImageNameToUri(Uri data) {
+		String[] proj = { MediaStore.Images.Media.DATA };
+		Cursor cursor = managedQuery(data, proj, null, null, null);
+		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+		cursor.moveToFirst();
+
+		String imgPath = cursor.getString(column_index);
+		String imgName = imgPath.substring(imgPath.lastIndexOf("/") + 1);
+
+		return imgPath;
+	}
+
+	public void requestChangeProfileImg(final Context context, final String u_id, final String all_path) {
+		final ProgressDialog progressdialog = new ProgressDialog(context);
+		progressdialog.setMessage("잠시만 기다려주세요");
+		progressdialog.setIndeterminate(true);
+		progressdialog.setCancelable(false);
+		progressdialog.show();
+
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					JsonObject info = new JsonObject();
+					
+					Bitmap photobmp;
+					BitmapFactory.Options option = new BitmapFactory.Options();
+					option.inSampleSize = 2;
+					photobmp = BitmapFactory.decodeFile(all_path, option);
+					ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					photobmp.compress(CompressFormat.JPEG, 100, stream);
+					final Bitmap intentbitmap=photobmp;
+					byte[] bytearray = stream.toByteArray();
+					final String s = Base64.encodeToString(bytearray, Base64.DEFAULT);
+					info.addProperty("u_id", u_id);
+					info.addProperty("photo", s);
+					RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(Retrofit.ROOT) // call
+																									// your
+																									// base
+																									// url
+							.build();
+					Retrofit retrofit = restAdapter.create(Retrofit.class);
+					retrofit.modifyUserPhoto(info, new Callback<JsonObject>() {
+						@Override
+						public void success(JsonObject result, Response response) {
+							progressdialog.dismiss();
+							String resultstr=result.get("result").getAsString();
+								if (resultstr.equals("200")) {
+									String url=result.get("u_photo_url").getAsString();
+									app.getUser().setU_photo_url(url);
+									Intent intent=new Intent();
+									intent.putExtra("bitmap", s);
+									setResult(200, intent);
+									finish();
+								} else {
+									Dialog_BaseDialog dialog = new Dialog_BaseDialog(context,
+											"프로필사진 변경에 실패하였습니다.\n잠시후 다시 시도해주세요.");
+									dialog.show();
+								}
+							
+						}
+
+						@Override
+						public void failure(RetrofitError retrofitError) {
+							progressdialog.dismiss();
+
+				            Log.e("failure", String.valueOf(retrofitError.getResponse().getStatus()));
+				            Log.e("failure", String.valueOf(retrofitError.getResponse().getBody()));
+				            Log.v("fail", retrofitError.getMessage());
+
+								Dialog_BaseDialog dialog = new Dialog_BaseDialog(context,
+										"사진전송 실패");
+								dialog.show();
+							
+						}
+					});
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					progressdialog.dismiss();
+						Dialog_BaseDialog dialog = new Dialog_BaseDialog(context, getString(R.string.failed_dialog));
+						dialog.show();
+					
+				}
+			}
+		}).start();
+
+	}
+}

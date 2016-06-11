@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="225dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/lv_admin_programlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </ListView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <ImageView
+            android:id="@+id/iv_admin_selectprogram"
+            android:layout_width="77dp"
+            android:layout_height="32dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="19dp"
+            android:src="@drawable/btn_ok" />
+    </RelativeLayout>
+
+</LinearLayout>

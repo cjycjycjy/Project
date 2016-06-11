@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myserver.skp.mapper.AfterwordReplyMapper">
+
+    <resultMap id="afterwordReplyMap" type="com.myserver.skp.vo.AfterwordReplyVo">
+        <id    		property="a_r_id"    		column="a_r_id" />
+        <result     property="u_id"    		column="u_id" />
+        <result     property="a_id"    		column="a_id" />
+        <result     property="a_r_content"    		column="a_r_content" />
+        <result     property="a_r_year"    column="a_r_year" />
+        <result     property="a_r_month"    	column="a_r_month" />
+        <result     property="a_r_day"    	column="a_r_day" />
+    </resultMap>
+
+    <select id="selectAllofAfterword" resultMap="afterwordReplyMap">
+        SELECT  * FROM afterword_reply WHERE a_id = #{a_id}
+    </select>
+
+</mapper>

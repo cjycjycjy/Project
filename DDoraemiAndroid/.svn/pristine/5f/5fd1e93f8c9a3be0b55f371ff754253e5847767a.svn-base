@@ -1,0 +1,9 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+import android.content.Intent;
+
+public interface DetailedGroupInfo_Presenter_Interface {
+	public void createGroup();
+	public void showMap();
+	public void validatecredential(String event, int g_id, Intent intent,int p_id);
+}

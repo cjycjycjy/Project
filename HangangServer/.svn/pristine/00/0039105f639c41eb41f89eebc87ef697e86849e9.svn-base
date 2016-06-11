@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.UserMapper">
+
+	<resultMap id="userMap" type="com.fuck.hangang.vo.UserVo">
+		<id property="u_id" column="u_id" />
+		<result property="u_passwd" column="u_passwd" />
+		<result property="u_name" column="u_name" />
+		<result property="u_email" column="u_email" />
+		<result property="u_permission" column="u_permission" />
+		<result property="push" column="push" />
+		<result property="u_photo" column="u_photo" />
+		<result property="u_registrationid" column="u_registrationid" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.TeamVo" id="teamMap">
+		<id property="t_num" column="t_num" />
+		<result property="t_name" column="t_name" />
+		<result property="t_info" column="t_info" />
+		<result property="t_facebook" column="t_facebook" />
+		<result property="t_youtube" column="t_youtube" />
+		<result property="t_logo" column="t_logo" />
+		<result property="t_background_img" column="t_background_img" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.TeamUserVo" id="teamuserMap">
+		<id property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="isLeader" column="isLeader" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.RequestChangeTeamNameVo" id="RequestChangeTeamNameMap">
+		<result property="t_num" column="t_num" />
+		<result property="flag" column="flag" />
+		<result property="new_t_name" column="new_t_name" />
+	</resultMap>
+	<insert id="signup" parameterType="UserVo">
+		insert into user
+		values(#{u_id},#{u_passwd},#{u_name},#{u_email},1,1, null, null)
+	</insert>
+
+	<select id="signin" resultMap="userMap">
+		select * from user where u_id
+		=#{u_id} and u_passwd =#{u_passwd}
+	</select>
+
+	<select id="getuser" resultMap="userMap">
+		select * from user where u_id =
+		#{u_id}
+	</select>
+
+	<select id="getbookmarkteam" resultMap="teamMap">
+		select * from team where
+		t_num = (select t_num from bookmark where u_id = #{u_id})
+	</select>
+
+	<select id="getteam" resultMap="teamMap">
+		select * from team where t_num =
+		(select t_num from team_user where u_id= #{u_id})
+	</select>
+
+	<select id="getuserphoto" resultType="String">
+		select u_photo from user
+		where u_id = #{u_id}
+	</select>
+
+	<update id="changeuserphoto">
+		update user set u_photo = #{u_photo} where u_id =
+		#{u_id}
+	</update>
+
+	<select id="getoneuser" resultMap="userMap">
+		select *
+		from user
+		where u_id =
+		#{u_id}
+	</select>
+
+
+	<update id="updateforeignkey" parameterType="int">
+		set
+		foreign_key_checks = #{flag}
+	</update>
+
+	<delete id="signout" parameterType="String">
+		delete from user where u_id =
+		#{u_id}
+	</delete>
+
+	<select id="getteamuser" resultMap="teamuserMap">
+		select * from team_user
+		where
+		u_id = #{u_id}
+	</select>
+
+	<select id="getteamleader" resultType="String" parameterType="int">
+		select u_id from team_user
+		where t_num = #{t_num} and isLeader = 1
+	</select>
+
+	<select id="getteamsize" resultType="int" parameterType="int">
+		select
+		count(*) from team_user
+		where t_num = #{t_num}
+	</select>
+
+	<delete id="deleteteamuser">
+		delete from team_user where u_id = #{u_id}
+	</delete>
+
+	<delete id="deleteteam" parameterType="int">
+		delete from team
+		where
+		t_num = #{t_num}
+	</delete>
+
+	<select id="getrandomleader" resultMap="teamuserMap"
+		parameterType="int">
+		select *
+		from team_user
+		where t_num = #{t_num}
+		order by
+		RAND()
+		LIMIT 0,1
+	</select>
+
+	<update id="updateleader">
+		update team_user set isLeader = 1 where u_id =
+		#{u_id}
+	</update>
+
+	<update id="changepasswd">
+		update user set u_passwd = #{u_passwd}
+		where u_id =
+		#{u_id}
+	</update>
+
+	<select id="selectUserMail" resultType="String">
+		select u_email from user
+		where u_id=#{u_id}
+	</select>
+	<update id="updatePassword">
+		update user set u_passwd=#{u_passwd} where
+		u_id=#{u_id}
+	</update>
+
+	<update id="updateRegisterIdById">
+		update user set u_registrationid =
+		#{u_registrationid} where u_id = #{u_id}
+	</update>
+
+	<select id="checkchangeTeamName" resultMap="RequestChangeTeamNameMap">
+		select * from
+		changeteamname where t_num = #{t_num} and flag = 0
+	</select>
+	
+	<delete id="cancelChangeTeamName">
+		delete from changeteamname where t_num = #{t_num} and flag=0
+	</delete>
+
+	<insert id="changeTeamName">
+		insert into changeteamname
+		values(#{t_num},#{new_t_name},0)
+	</insert>
+
+	<update id="changeuserinfo">
+		update user set u_passwd = #{u_passwd}, u_email =
+		#{u_email} where u_id = #{u_id}
+	</update>
+
+</mapper>

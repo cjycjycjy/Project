@@ -1,0 +1,53 @@
+package ddoraemi.joining.view;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.start.R;
+
+public class FindPasswordAcitivity extends Activity implements OnClickListener {
+	EditText phonenum;
+	ImageView sendbt, back;
+	private String phoneregex = "^[0-9]{10,11}$";// 핸드폰조건
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_findpassword);
+		init();
+	}
+
+	public void init() {
+		phonenum = (EditText) findViewById(R.id.FindPasswordAcitivity_EditPhone);
+		sendbt = (ImageView) findViewById(R.id.FindPasswordAcitivity_Imgfind);
+		sendbt.setOnClickListener(this);
+		back = (ImageView) findViewById(R.id.FindPasswordAcitivity_ImgBack);
+		back.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.FindPasswordAcitivity_Imgfind) {
+			String str_phone = phonenum.getText().toString();
+			if (str_phone.matches(phoneregex)) {
+				// //서버랑 통신해서 핸드폰으로 임시비번 보내기
+				Intent intent = new Intent(FindPasswordAcitivity.this,
+						FindPasswordDoneAcitvity.class);
+				startActivity(intent);
+				finish();
+			} else {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+						FindPasswordAcitivity.this, "잘못된 입력입니다.\n전화번호를 확인해주세요.");
+				dialog.show();
+			}
+		} else {
+			finish();
+		}
+
+	}
+
+}

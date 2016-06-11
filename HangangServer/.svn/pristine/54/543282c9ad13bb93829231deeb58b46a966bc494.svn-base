@@ -1,0 +1,21 @@
+package com.fuck.hangang.dao;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.fuck.hangang.mapper.QnaMapper;
+import com.fuck.hangang.vo.QnaVo;
+
+@Service
+public class QnaDao {
+	@Resource
+	QnaMapper qnaMapper;
+
+	public List<QnaVo> getqna() {
+		return this.qnaMapper.getqna();
+	}
+
+}

@@ -1,0 +1,97 @@
+package ddoraemi.home.presenter;
+
+import java.util.ArrayList;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import ddoraemi.home.model.Group;
+import ddoraemi.home.model.Home_MainViewInteractor;
+import ddoraemi.home.model.Home_MainViewInteractorInterface;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.home.view.Home_MainView;
+import android.view.View;
+
+public class Home_MainViewPresenter implements Home_MainViewPresenterInterface, OnHome_MainViewFinishedListener{
+
+	Home_MainView view;
+	Home_MainViewInteractorInterface interactor;
+	ArrayList<ProgramData> programList;
+	ArrayList<Group> groupList;
+	public Home_MainViewPresenter(Home_MainView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		interactor = new Home_MainViewInteractor();
+		programList = new ArrayList<ProgramData>();
+		groupList = new ArrayList<Group>();
+
+	}
+	@Override
+	public void validateCredentials(String event) {
+		// TODO Auto-generated method stub
+		if(event.toString().equalsIgnoreCase("getdata")){
+			interactor.getData(view.getActivity(),this);
+		}
+
+	}
+	@Override
+	public void OnGetDataSuccess(JsonObject data) {
+		// TODO Auto-generated method stub
+		programList.clear();
+		groupList.clear();
+		///////////////////////////////////////////////////////////////
+		// 추천 알고리즘 적용해서 리스트 만들어내기!!!!!!!!!!!
+		///////////////////////////////////////////////////////////////
+		
+		JsonArray program = data.getAsJsonArray("program");
+		JsonArray group = data.getAsJsonArray("gathering");
+			
+		for(int i=0; i<program.size(); i++){
+			JsonObject dataobj = (JsonObject)program.get(i);
+			int p_id = (dataobj.get("p_id")).getAsInt();
+			String p_name = (dataobj.get("p_name")).getAsString();
+			String p_town_name = (dataobj.get("p_town_name")).getAsString();
+			int cost = (dataobj.get("p_cost")).getAsInt();
+			int p_min_persons = (dataobj.get("p_min_persons")).getAsInt();
+			int p_max_persons = (dataobj.get("p_max_persons")).getAsInt();
+			int p_lead_time = (dataobj.get("p_read_time")).getAsInt();		
+			int p_is_possible = (dataobj.get("p_is_possible")).getAsInt();
+			String p_note = (dataobj.get("p_note")).getAsString();
+			String p_addr_1 = (dataobj.get("p_addr_1")).getAsString();
+			String p_addr_2 = (dataobj.get("p_addr_2")).getAsString();
+			String p_addr_3 = (dataobj.get("p_addr_3")).getAsString();
+			String p_addr_4 = (dataobj.get("p_addr_4")).getAsString();
+			String p_addr_5 = (dataobj.get("p_addr_5")).getAsString();
+			String p_addr_6 = (dataobj.get("p_addr_6")).getAsString();
+			String p_type = (dataobj.get("p_type")).getAsString();
+			int a_id = (dataobj.get("a_id")).getAsInt();
+			String p_url = (dataobj.get("p_url")).getAsString();
+			
+			programList.add(new ProgramData(p_id, p_name, 
+					p_town_name, p_addr_1, p_addr_2, p_addr_3, p_addr_4, p_addr_5, 
+					p_addr_6, cost, p_min_persons, p_max_persons, p_lead_time, p_note, p_is_possible,p_type,
+					a_id,p_url));			
+		}
+		
+		for(int i=0; i<group.size(); i++){
+			JsonObject dataobj = (JsonObject)group.get(i);
+			int p_id = (dataobj.get("p_id")).getAsInt();
+			String p_name = (dataobj.get("p_name")).getAsString();
+			String p_addr = (dataobj.get("p_addr")).getAsString();
+			int g_id= (dataobj.get("g_id")).getAsInt();
+			String g_name= (dataobj.get("g_name")).getAsString();
+			String g_date= (dataobj.get("g_date")).getAsString();
+			String g_due= (dataobj.get("g_due")).getAsString();
+			int g_min_persons= (dataobj.get("g_min_persons")).getAsInt();
+			String g_info= (dataobj.get("g_info")).getAsString();
+			boolean is_available= (dataobj.get("is_available")).getAsBoolean();
+			int persons= (dataobj.get("g_persons")).getAsInt();
+			
+			groupList.add(new Group(p_id,p_name, p_addr, g_id, g_name, 
+					g_date, g_due, g_min_persons, g_info, is_available, persons));
+		}
+
+		view.setProgramList(programList,groupList);
+	}
+
+}

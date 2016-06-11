@@ -1,0 +1,58 @@
+package ddoraemi.applyadmin.model;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+import com.google.gson.JsonObject;
+
+import ddoraemi.applyadmin.presenter.OnApply_Admin_Request_FinishedListener;
+import ddoraemi.retrofit.Retrofit;
+import android.content.Context;
+
+public class Apply_Admin_Interactor implements Apply_Admin_Interactor_Interface{
+
+	@Override
+	public void sendRequest(final Context context,final String u_id,final String a_name,final String a_phonenum,
+			final String a_p_phonenum,final String a_email,final String a_programinfo,
+			final OnApply_Admin_Request_FinishedListener listener) {
+		// TODO Auto-generated method stub
+
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					RestAdapter restAdapter = new RestAdapter.Builder()
+					.setEndpoint(Retrofit.ROOT) // call your base
+					// url
+					.build();
+					Retrofit retofit = restAdapter.create(Retrofit.class);
+					retofit.requestadmin(u_id, a_name, a_phonenum, a_p_phonenum, a_email, a_programinfo,
+							new Callback<String>() {
+						@Override
+						public void success(String result,
+								Response response) {
+							if(result.equalsIgnoreCase("200"))
+								listener.onRequestSuccess(result);
+							else
+								listener.onFailed();
+						}
+						@Override
+						public void failure(
+								RetrofitError retrofitError) {
+							listener.onFailed();
+
+						}
+					});
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					listener.onFailed();
+				}
+			}
+
+		}).start();
+
+	}
+
+}

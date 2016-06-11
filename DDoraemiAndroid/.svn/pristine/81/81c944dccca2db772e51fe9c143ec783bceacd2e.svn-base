@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/fragment_mypage_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fragment_mypage_tabs" />
+
+        <FrameLayout
+            android:id="@+id/fragment_mypage_header"
+            android:layout_width="match_parent"
+            android:layout_height="206dp"
+            android:background="#FFFFFF" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="156dp"
+                android:background="#FFCC00" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="21dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <FrameLayout
+                        android:layout_width="87dp"
+                        android:layout_height="87dp" >
+
+                        <com.android.volley.toolbox.NetworkImageView
+                            android:scaleType="centerCrop"
+                            android:id="@+id/fragment_mypage_userprofileImg"
+                            android:layout_width="87dp"
+                            android:layout_height="87dp"
+                            android:src="@drawable/icon_user_profile" />
+
+                        <ImageView
+                            android:layout_width="87dp"
+                            android:layout_height="87dp"
+                            android:src="@drawable/circle_bgyellow" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/fragment_mypage_Tv_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="아이디"
+                        android:textColor="#414141"
+                        android:textSize="16sp" >
+                    </TextView>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/icon_personal"
+                    android:layout_width="4dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/normal_horizontal_margin"
+                    android:layout_marginTop="11dp"
+                    android:src="@drawable/icon_personal" />
+            </RelativeLayout>
+
+            <com.astuetz.PagerSlidingTabStrip
+                android:id="@+id/fragment_mypage_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:layout_gravity="bottom"
+                android:background="#ffffff"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:pstsDividerColor="#00ff0000"
+                app:pstsIndicatorColor="#795548"
+                app:pstsIndicatorHeight="3dip"
+                app:pstsShouldExpand="true"
+                app:pstsTabPaddingLeftRight="5dip" />
+        </FrameLayout>
+    </FrameLayout>
+
+</LinearLayout>

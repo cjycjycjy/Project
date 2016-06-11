@@ -1,0 +1,326 @@
+package ddoraemi.home.model;
+
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.List;
+
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+
+public class Group implements Serializable
+{
+
+	int g_id;
+	int p_id;
+	String u_id;
+	String g_name;
+	int g_persons;
+	int g_want_persons;
+	String g_info;
+	int g_status;
+	int g_open_year;
+	int g_open_month;
+	int g_open_day;
+	int g_close_year;
+	int g_close_month;
+	int g_close_day;
+	int g_start_year;
+	int g_start_month;
+	int g_start_day;
+	int g_start_hour;
+	int g_start_minute;
+	int g_end_hour;
+	int g_end_minute;
+	int d_day;
+	Calendar cal;
+	String e_name;
+	String p_name;
+	String p_addr;
+	String p_photo_url;
+	double lat;
+	double lng;
+	
+	
+
+	long now_day;
+	int myafterwordnum;
+	float myafterwordscore;
+	
+	public Group(int g_id, int p_id, String u_id, String g_name, int g_persons,
+			int g_want_persons, String g_info, int g_status, int g_open_year,
+			int g_open_month, int g_open_day, int g_close_year,
+			int g_close_month, int g_close_day, int g_start_year,
+			int g_start_month, int g_start_day, int g_start_hour,
+			int g_start_minute, int g_end_hour, int g_end_minute,
+			String e_name, String p_name, String p_addr,String p_photo_url) {
+		super();
+		this.g_id = g_id;
+		this.p_id = p_id;
+		this.u_id = u_id;
+		this.g_name = g_name;
+		this.g_persons = g_persons;
+		this.g_want_persons = g_want_persons;
+		this.g_info = g_info;
+		this.g_status = g_status;
+		this.g_open_year = g_open_year;
+		this.g_open_month = g_open_month;
+		this.g_open_day = g_open_day;
+		this.g_close_year = g_close_year;
+		this.g_close_month = g_close_month;
+		this.g_close_day = g_close_day;
+		this.g_start_year = g_start_year;
+		this.g_start_month = g_start_month;
+		this.g_start_day = g_start_day;
+		this.g_start_hour = g_start_hour;
+		this.g_start_minute = g_start_minute;
+		this.g_end_hour = g_end_hour;
+		this.g_end_minute = g_end_minute;
+		this.e_name = e_name;
+		this.p_name = p_name;
+		this.p_addr = p_addr;
+		this.p_photo_url = p_photo_url;
+
+		this.myafterwordnum=-1;
+		this.myafterwordscore=-1;
+
+		cal=Calendar.getInstance();
+		now_day=cal.getTimeInMillis();
+		int year2 = g_close_year;
+		int month2 = g_close_month;
+		int day2 = g_close_day;
+		cal.set(year2, month2-1,day2);
+		long eventday=cal.getTimeInMillis();
+		int result=(int)((eventday-now_day)/(60*60*24*1000));
+		this.d_day=result;
+	}
+	
+	
+	public void setD_day(int day)
+	{
+		this.d_day=day;
+	}
+	public int getD_day(){
+		return this.d_day; 
+	}
+	public String getP_photo_url() {
+		return p_photo_url;
+	}
+
+
+
+	public void setP_photo_url(String p_photo_url) {
+		this.p_photo_url = p_photo_url;
+	}
+
+
+
+	public int getG_id() {
+		return g_id;
+	}
+	public void setG_id(int g_id) {
+		this.g_id = g_id;
+	}
+	public int getP_id() {
+		return p_id;
+	}
+	public void setP_id(int p_id) {
+		this.p_id = p_id;
+	}
+	public String getU_id() {
+		return u_id;
+	}
+	public void setU_id(String u_id) {
+		this.u_id = u_id;
+	}
+	public String getG_name() {
+		return g_name;
+	}
+	public void setG_name(String g_name) {
+		this.g_name = g_name;
+	}
+	public int getG_persons() {
+		return g_persons;
+	}
+	public void setG_persons(int g_persons) {
+		this.g_persons = g_persons;
+	}
+	public int getG_want_persons() {
+		return g_want_persons;
+	}
+	public void setG_want_persons(int g_want_persons) {
+		this.g_want_persons = g_want_persons;
+	}
+	public String getG_info() {
+		return g_info;
+	}
+	public void setG_info(String g_info) {
+		this.g_info = g_info;
+	}
+	public int getG_status() {
+		return g_status;
+	}
+	public void setG_status(int g_status) {
+		this.g_status = g_status;
+	}
+	public int getG_open_year() {
+		return g_open_year;
+	}
+	public void setG_open_year(int g_open_year) {
+		this.g_open_year = g_open_year;
+	}
+	public int getG_open_month() {
+		return g_open_month;
+	}
+	public void setG_open_month(int g_open_month) {
+		this.g_open_month = g_open_month;
+	}
+	public int getG_open_day() {
+		return g_open_day;
+	}
+	public void setG_open_day(int g_open_day) {
+		this.g_open_day = g_open_day;
+	}
+	public int getG_close_year() {
+		return g_close_year;
+	}
+	public void setG_close_year(int g_close_year) {
+		this.g_close_year = g_close_year;
+	}
+	public int getG_close_month() {
+		return g_close_month;
+	}
+	public void setG_close_month(int g_close_month) {
+		this.g_close_month = g_close_month;
+	}
+	public int getG_close_day() {
+		return g_close_day;
+	}
+	public void setG_close_day(int g_close_day) {
+		this.g_close_day = g_close_day;
+	}
+	public int getG_start_year() {
+		return g_start_year;
+	}
+	public void setG_start_year(int g_start_year) {
+		this.g_start_year = g_start_year;
+	}
+	public int getG_start_month() {
+		return g_start_month;
+	}
+	public void setG_start_month(int g_start_month) {
+		this.g_start_month = g_start_month;
+	}
+	public int getG_start_day() {
+		return g_start_day;
+	}
+	public void setG_start_day(int g_start_day) {
+		this.g_start_day = g_start_day;
+	}
+	public int getG_start_hour() {
+		return g_start_hour;
+	}
+	public void setG_start_hour(int g_start_hour) {
+		this.g_start_hour = g_start_hour;
+	}
+	public int getG_start_minute() {
+		return g_start_minute;
+	}
+	public void setG_start_minute(int g_start_minute) {
+		this.g_start_minute = g_start_minute;
+	}
+	public int getG_end_hour() {
+		return g_end_hour;
+	}
+	public void setG_end_hour(int g_end_hour) {
+		this.g_end_hour = g_end_hour;
+	}
+	public int getG_end_minute() {
+		return g_end_minute;
+	}
+	public void setG_end_minute(int g_end_minute) {
+		this.g_end_minute = g_end_minute;
+	}
+	public String getE_name() {
+		return e_name;
+	}
+	public void setE_name(String e_name) {
+		this.e_name = e_name;
+	}
+	public String getP_name() {
+		return p_name;
+	}
+	public void setP_name(String p_name) {
+		this.p_name = p_name;
+	}
+	public String getP_addr() {
+		return p_addr;
+	}
+	public void setP_addr(String p_addr) {
+		this.p_addr = p_addr;
+	}
+
+
+
+	public int getMyafterwordnum() {
+		return myafterwordnum;
+	}
+
+
+
+	public void setMyafterwordnum(int myafterwordnum) {
+		this.myafterwordnum = myafterwordnum;
+	}
+
+
+
+	public float getMyafterwordscore() {
+		return myafterwordscore;
+	}
+
+
+
+	public void setMyafterwordscore(float myafterwordscore) {
+		this.myafterwordscore = myafterwordscore;
+	}
+
+	public void findGeoPoint(String Address,Context context)
+	{
+		Geocoder geocoder=new Geocoder(context);
+		Address addr;
+		try{ 
+			List<Address> listaddress=geocoder.getFromLocationName(Address, 1);
+			if(listaddress.size()>0)
+			{
+				addr=listaddress.get(0);
+				lat=addr.getLatitude();
+				lng=addr.getLongitude();
+			}
+		}catch(Exception o)
+		{
+			o.printStackTrace();
+		}
+		
+	}
+
+
+
+
+	public double getLat() {
+		return lat;
+	}
+
+
+
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+
+
+
+	public double getLng() {
+		return lng;
+	}
+}

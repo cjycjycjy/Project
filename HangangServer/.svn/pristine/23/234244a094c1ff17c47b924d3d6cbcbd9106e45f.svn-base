@@ -1,0 +1,64 @@
+package com.fuck.hangang.controller;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fuck.hangang.dao.TeamListDao;
+import com.fuck.hangang.vo.CheerfulVo;
+import com.fuck.hangang.vo.ScheduleVo;
+import com.fuck.hangang.vo.TeamGalleryVo;
+import com.fuck.hangang.vo.TeamVo;
+
+@Controller
+public class TeamListController {
+	@Resource
+	TeamListDao teamListDao;
+	
+	@RequestMapping(value = "/getteaminfo")
+	public @ResponseBody <T> HashMap<String, T> getteaminfo(){
+		List<TeamVo> resultTeamVo = teamListDao.getteaminfo();
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		
+		if(resultTeamVo != null){
+			resultHashMap.put("team", (T)resultTeamVo);
+			resultHashMap.put("result", (T)"Success");
+			return resultHashMap;
+		}else{
+			resultHashMap.put("result", (T)"Failed");
+			return resultHashMap;
+		}
+	}
+	
+	@RequestMapping(value = "/getteambloginfo", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getteambloginfo(@RequestParam("t_num")
+	int t_num, @RequestParam("year") int year, @RequestParam("month") int month){
+		int nextmonth = month+1;
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		List<ScheduleVo> resultScheduleVo = teamListDao.getteamschedule(t_num, year, month, nextmonth);
+		List<TeamGalleryVo> resultTeamGalleryVo = teamListDao.getteamgallery(t_num);
+		TeamVo resultTeamdata = teamListDao.getteamdata(t_num);
+		List<CheerfulVo> resultCheerfulVo = teamListDao.getteamcheerful(t_num);
+		for(int i=0; i<resultCheerfulVo.size(); i++){
+			resultCheerfulVo.get(i).setCh_c_num(teamListDao.getcheerfulcommentnum(resultCheerfulVo.get(i).getCh_num()));
+		}
+		resultHashMap.put("schedule", (T)resultScheduleVo);
+		resultHashMap.put("teaminfo", (T)resultTeamdata);
+		resultHashMap.put("cheerful", (T)resultCheerfulVo);
+		resultHashMap.put("gallery", (T)resultTeamGalleryVo);
+		resultHashMap.put("result", (T)"Success");
+		return resultHashMap;
+		
+		
+	}
+	
+	
+}

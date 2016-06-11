@@ -1,0 +1,15 @@
+package ddoraemi.programlist.model;
+
+import android.support.v4.app.Fragment;
+import ddoraemi.programlist.presenter.OnProgramlist_location_FinishenListener;
+
+public class Programlist_location_Interactor implements Programlist_location_Interactor_Interface{
+
+	@Override
+	public void getData(final Fragment context,
+			final OnProgramlist_location_FinishenListener listener,final String event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.TeamListMapper">
+
+
+
+	<resultMap type="com.fuck.hangang.vo.TeamVo" id="teamMap">
+		<id property="t_num" column="t_num" />
+		<result property="t_name" column="t_name" />
+		<result property="t_info" column="t_info" />
+		<result property="t_facebook" column="t_facebook" />
+		<result property="t_youtube" column="t_youtube" />
+		<result property="t_logo" column="t_logo" />
+		<result property="t_background_img" column="t_background_img" />
+
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.CheerfulVo" id="cheerfulMap">
+		<id property="ch_num" column="c_num" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="ch_content" column="c_content" />
+		<result property="ch_photourl" column="c_photourl" />
+		<result property="ch_time" column="c_time" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_photo" column="u_photo" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.TeamUserVo" id="teamuserMap">
+		<id property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="isLeader" column="isLeader" />
+		<result property="u_photo" column="u_photo" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+
+
+	<resultMap id="scheduleMap" type="com.fuck.hangang.vo.ScheduleVo">
+		<id property="s_num" column="s_num" />
+		<result property="s_year" column="s_year" />
+		<result property="s_month" column="s_month" />
+		<result property="s_day" column="s_day" />
+		<result property="start_hour" column="start_hour" />
+		<result property="start_min" column="start_min" />
+		<result property="end_hour" column="end_hour" />
+		<result property="end_min" column="end_min" />
+		<result property="t_num" column="t_num" />
+		<result property="s_lat" column="s_lat" />
+		<result property="s_long" column="s_long" />
+		<result property="s_park" column="s_park" />
+		<result property="flag" column="flag" />
+		<result property="car_num" column="car_num" />
+		<result property="t_logo" column="t_logo" />
+		<result property="t_name" column="t_name" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.BookmarkVo" id="bookmarkMap">
+		<id property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.TeamGalleryVo" id="teamgalleryMap">
+		<id property="num" column="num" />
+		<result property="t_num" column="t_num" />
+		<result property="photo_url" column="p_url" />
+	</resultMap>
+
+	<select id="getteaminfo" resultMap="teamMap">
+		select * from team order by
+		t_name
+	</select>
+
+	<select id="getteamschedule" resultMap="scheduleMap">
+		select
+		schedules.*,team.t_logo,team.t_name from schedules inner join team
+		where team.t_num = #{t_num} and schedules.t_num= #{t_num} and s_year =
+		#{year} and (s_month = #{month} or s_month = #{nextmonth})
+		order by
+		schedules.s_park
+	</select>
+
+	<select id="getteamdata" resultMap="teamMap">
+		select * from team where
+		t_num = #{t_num}
+	</select>
+
+	<select id="getteamcheerful" resultMap="cheerfulMap">
+		select cheerful.*,
+		team.t_name, user.u_permission, user.u_photo from cheerful natural
+		join team
+		natural join user where t_num = #{t_num} order by c_time DESC
+		Limit 0,20;
+	</select>
+
+	<select id="getcheerfulcommentnum" resultType="int">
+		select
+		count(c_num) from cheerful_reply where c_num = #{c_num}
+	</select>
+
+	<select id="getteamgallery" resultMap="teamgalleryMap">
+		select * from team_gallery
+		where t_num = #{t_num} order by num DESC Limit 0,20
+	</select>
+
+	<select id="getteamlogourl" resultType="String">
+		select t_logo from team
+		where t_num = #{t_num}
+	</select>
+
+	<select id="getteambackgroundurl" resultType="String">
+		select
+		t_background_img from team where t_num = #{t_num}
+	</select>
+
+	<select id="getteamname" resultType="String">
+		select t_name from team
+		where t_num = #{t_num};
+	</select>
+
+	<update id="changeteamlogoimage">
+		update team set t_logo = #{t_logo} where t_num =
+		#{t_num}
+	</update>
+
+	<update id="changebackgroundimage">
+		update team set t_background_img =
+		#{t_background_img} where t_num = #{t_num}
+	</update>
+
+	<update id="changeteamfacebook">
+		update team set t_facebook = #{t_facebook} where
+		t_num = #{t_num}
+	</update>
+
+	<update id="changeteamyoutube">
+		update team set t_youtube = #{t_youtube} where t_num
+		= #{t_num}
+	</update>
+
+	<update id="deleteteamfacebook">
+		update team set t_facebook = '' where t_num =
+		#{t_num}
+	</update>
+
+	<update id="deleteteamyoutube">
+		update team set t_youtube = '' where t_num = #{t_num}
+	</update>
+
+	<insert id="registbookmark">
+		insert into bookmark values(#{u_id},#{t_num})
+	</insert>
+
+	<delete id="deletebookmark">
+		delete from bookmark where u_id = #{u_id} and t_num =
+		#{t_num}
+	</delete>
+
+	<insert id="registteamgallery">
+		insert into team_gallery
+		values(null,#{t_num},#{p_url})
+	</insert>
+
+	<select id="getteamgalleryfirst" resultMap="teamgalleryMap">
+		select * from
+		team_gallery where t_num = #{t_num} order by num DESC Limit
+		#{lastnum},#{count}
+	</select>
+
+	<select id="getteamgallerylast" resultMap="teamgalleryMap">
+		select * from team_gallery where t_num = 4 and num <![CDATA[<]]>
+		#{lastnum} order by num DESC Limit 0,20;
+	</select>
+
+	<update id="changeteaminfo">
+		update team set t_info = #{t_info} where t_num =
+		#{t_num}
+	</update>
+
+	<select id="getteamuser" resultMap="teamuserMap">
+		select team_user.*, u_permission, u_photo, u_name from team_user natural join user where
+		t_num = #{t_num}
+		order by isLeader DESC
+	</select>
+	
+	<select id="getduplicationteamuser" resultMap="teamuserMap">
+		select * from team_user where u_id = #{u_id}
+	</select>
+	
+	<insert id="registteamuser">
+		insert into team_user values(#{u_id}, #{t_num}, 0)
+	</insert>
+	
+	<delete id="deleteteamuser">
+		delete from team_user where u_id = #{u_id}
+	</delete>
+	
+	<select id="getteamleader" parameterType="int" resultType="String">
+		select u_id from team_user where isLeader = 1 and t_num = #{t_num}
+	</select>
+	
+	<update id="updateoldleader">
+		update team_user set isLeader = 0 where u_id = #{u_id}
+	</update>
+	
+	<update id="updatenewleader">
+		update team_user set isLeader = 1 where u_id = #{u_id}
+	</update>
+	
+	<update id="changeuserpermission">
+		update user set u_permission = #{u_permission} where u_id = #{u_id}
+	</update>
+	
+	<select id="getteamgalleryurl" resultMap="teamgalleryMap">
+		select *
+		from team_gallery
+		where t_num = #{t_num} and num = #{q_num}
+	</select>
+	
+	<delete id="deleteteamgallery">
+		delete from team_gallery where t_num = #{t_num} and num = #{q_num}
+	</delete>
+
+</mapper>

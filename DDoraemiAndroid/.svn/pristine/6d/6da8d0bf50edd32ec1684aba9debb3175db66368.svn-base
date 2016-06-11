@@ -1,0 +1,7 @@
+package ddoraemi.home;
+
+public interface OnHomeFinishedListener {
+	public void onSuccess();
+
+	
+}

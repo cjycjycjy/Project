@@ -1,0 +1,17 @@
+package ddoraemi.retrofit;
+
+import retrofit.Callback;
+import retrofit.http.Body;
+import retrofit.http.GET;
+import retrofit.http.POST;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+public interface Retrofit {
+		public static final String ROOT = "http://203.252.166.151:9090/skp";
+		@GET("/getprogram.skp")
+	    public void getProgramList_availableGroup(Callback<JsonArray> callback);
+		@GET("/getAfterword.skp")
+		public void getAfterword(JsonObject info,Callback<JsonArray> callback);
+}

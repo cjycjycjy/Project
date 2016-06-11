@@ -1,0 +1,72 @@
+package ddoraemi.home.view;
+
+import java.util.ArrayList;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.TextView;
+import ddoraemi.appcontroller.AppController;
+import ddoraemi.detailediteminfo.view.DetailedItemInfo_View;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.home.presenter.Home_RecommendPresenter;
+import ddoraemi.home.presenter.Home_RecommendPresenterInterface;
+import ddoraemi.start.R;
+
+public class Home_RecommendView extends Fragment implements Home_RecommendViewInterface, OnItemClickListener{
+	ListView listview;//��õ ���� ����Ʈ��
+	ArrayList<ProgramData> list;///������� �Ѿ�� ����Ʈ
+	Home_MainViewChallengeListAdapter adapter;
+	Home_RecommendPresenterInterface presenter;
+	TextView title;
+	AppController app;
+	public Home_RecommendView() {
+		// TODO Auto-generated constructor stub
+	}
+	public Home_RecommendView(ArrayList<ProgramData> list)
+	{
+		this.list=new ArrayList<ProgramData>();
+		this.list.addAll(list);
+		presenter = new Home_RecommendPresenter(this);
+	}
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_recommendview, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		app=(AppController)getActivity().getApplicationContext();
+		listview=(ListView)v.findViewById(R.id.fragment_recommend_listview);
+		adapter=new Home_MainViewChallengeListAdapter(getActivity(), R.layout.item_challengelist, list);
+		listview.setAdapter(adapter);
+		listview.setOnItemClickListener(this);
+		title=(TextView)v.findViewById(R.id.fragment_recommend_Tv);
+		title.setText(app.getId() +" 님에게 가장 맞는 체험 활동은?");
+
+	}
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		ProgramData item = (ProgramData)parent.getItemAtPosition(position);
+		presenter.validatecredential("getItemInfo",item);	
+	}
+	@Override
+	public void goToDetailedItemInfo(ProgramData item) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(getActivity(), DetailedItemInfo_View.class);
+		intent.putExtra("item",item);
+		getActivity().startActivity(intent);
+	}
+	
+	
+	
+}

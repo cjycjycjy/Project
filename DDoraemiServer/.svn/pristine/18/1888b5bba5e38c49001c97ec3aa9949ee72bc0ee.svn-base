@@ -1,0 +1,118 @@
+package com.myserver.skp.controller;
+
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.myserver.skp.dao.AfterwordDao;
+import com.myserver.skp.dao.AfterwordReplyDao;
+import com.myserver.skp.dao.GatheringDao;
+import com.myserver.skp.vo.AfterwordReplyVo;
+import com.myserver.skp.vo.AfterwordVo;
+
+
+@Controller
+public class AfterwordController {
+	private static final Logger logger = LoggerFactory.getLogger(AfterwordController.class);
+
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+
+	@Resource
+	private AfterwordDao afterwordDao;
+
+	@Resource
+	private AfterwordReplyDao afterwordReplyDao;
+
+	@Resource
+	private GatheringDao gatheringDao;
+
+	@RequestMapping(value = "/getafterword", method = RequestMethod.GET)
+	public @ResponseBody <T> JSONObject getAfterword(@RequestParam("p_id") int p_id) {
+		JSONObject json = new JSONObject();
+		List<HashMap<String, T>> afterwordList = afterwordDao.getSelectAllofAfterword(p_id);
+		for(int i=0; i<afterwordList.size(); i++){
+			int a_id = (Integer)afterwordList.get(i).get("a_id");
+			afterwordList.get(i).put("afterword_reply",(T)afterwordReplyDao.getSelectAllofAfterwordReply(a_id));
+			afterwordList.get(i).put("a_photo_url", (T)afterwordDao.getSelectAfterwordPhotoUrl(a_id));
+		}
+
+		List<HashMap<String, String>> gatheringList = this.gatheringDao.getSelectAllofGathering(p_id);
+		json.put("gathering", gatheringList);
+		json.put("afterword", afterwordList);
+
+		return json;
+	}
+
+	//	@RequestMapping(value = "/registerafterword", method = RequestMethod.GET)
+	//	public @ResponseBody List<AfterwordVo> registerAfterword(@ModelAttribute("AfterwordVo") AfterwordVo afterwordVo) {
+	//		afterwordDao.insertAfterword(afterwordVo);
+	//		
+	//		return afterwordDao.getSelectAllofAfterword(afterwordVo.getP_id());
+	//	}
+	//	
+	@RequestMapping(value = "/registerafterwordreply", method = RequestMethod.GET)
+	public @ResponseBody <T> List<HashMap<String, T>> registerAfterwordreply(@RequestParam("u_id") String u_id,
+			@RequestParam("a_id") int a_id,
+			@RequestParam("a_r_content") String a_r_content) {
+
+		GregorianCalendar today = new GregorianCalendar();
+		int a_r_year = today.get ( today.YEAR );
+		int a_r_month = today.get ( today.MONTH ) + 1;
+		int a_r_day = today.get ( today.DAY_OF_MONTH ); 
+
+		AfterwordReplyVo afterwordReplyVo = new AfterwordReplyVo(u_id, a_id, a_r_content, a_r_year, a_r_month, a_r_day);
+
+		afterwordReplyDao.insertAfterwordReply(afterwordReplyVo);
+		afterwordDao.updateAfterwordReplyNumAdd(a_id);
+
+
+		List<HashMap<String, T>> afterwordReplyList = afterwordReplyDao.getSelectAllofAfterwordReply(a_id);
+
+		return afterwordReplyList;
+	}
+
+	@RequestMapping(value = "/modifyafterwordreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> modifyAfterwordReply(@RequestParam("a_id") int a_id, @RequestParam("a_r_id") int a_r_id,
+			@RequestParam("a_r_content") String a_r_content) {
+		HashMap<String, T> result = new HashMap<String, T>();
+		try{
+			afterwordReplyDao.updateAfterwordReply(a_r_id, a_r_content);
+			result.put("result", (T)"200");
+			List<HashMap<String, T>> afterwordReplyList = afterwordReplyDao.getSelectAllofAfterwordReply(a_id);
+			result.put("afterword_reply", (T)afterwordReplyList);
+		}catch(Exception e){
+			result.put("result", (T)"500");
+		}
+		return result;
+
+	}
+
+	@RequestMapping(value = "/deleteafterwordreply", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> deleteAfterwordreply(@RequestParam("a_id") int a_id, @RequestParam("a_r_id") int a_r_id) {
+		HashMap<String, T> result = new HashMap<String, T>();
+		try{
+			afterwordReplyDao.deleteAfterwordReply(a_r_id);
+			afterwordDao.updateAfterwordReplyNumSub(a_id);
+			result.put("result", (T)"200");
+			List<HashMap<String, T>> afterwordReplyList = afterwordReplyDao.getSelectAllofAfterwordReply(a_id);
+			result.put("afterword_reply", (T)afterwordReplyList);
+		}catch(Exception e){
+			result.put("result", (T)"500");
+		}
+		return result;
+	}
+}

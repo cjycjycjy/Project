@@ -1,0 +1,47 @@
+package ddoraemi.adminmodehome.presenter;
+
+import java.util.ArrayList;
+
+import com.google.gson.JsonObject;
+
+import ddoraemi.adminmodehome.model.AdminHomeMainInteractor;
+import ddoraemi.adminmodehome.model.AdminHomeMainInteractorInterface;
+import ddoraemi.adminmodehome.view.AdminHomeMainView;
+import ddoraemi.home.model.Group;
+import ddoraemi.home.model.ProgramData;
+
+public class AdminHomeMainPresenter implements AdminHomeMainPresenterInterface,OnAdminHomeMain_FinishenListener{
+	AdminHomeMainView view;
+	AdminHomeMainInteractorInterface interactor;
+	public AdminHomeMainPresenter(AdminHomeMainView view)
+	{
+		this.view=view;
+		interactor=new AdminHomeMainInteractor();
+	}
+	@Override
+	public void validatecredential(String event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void validatecredential(String event, int p_id) {
+		interactor.getProgramInfo(p_id, this);
+		
+	}
+	@Override
+	public void onSuccess(JsonObject result) {
+		// TODO Auto-generated method stub
+		ArrayList<Group> array=new ArrayList<>();
+		ProgramData data=new ProgramData();
+		view.setFragment(data, array);
+		
+	}
+	@Override
+	public void onFail() {
+		// TODO Auto-generated method stub
+		view.showFailureDialog();
+		
+	}
+
+}

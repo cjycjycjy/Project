@@ -1,0 +1,14 @@
+package ddoraemi.detailedgroupinfo.model;
+
+import ddoraemi.detailedgroupinfo.presenter.OnDetailedGroupInfo_Info_FinishedListener;
+import android.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+
+public interface DetailedGroupInfo_Info_Interactor_Interface {
+	public void cancelGroup(final FragmentActivity context, final int g_id, final String u_id, 
+			final OnDetailedGroupInfo_Info_FinishedListener listener);
+	public void deleteGroup(final FragmentActivity context, final int g_id,  
+			final OnDetailedGroupInfo_Info_FinishedListener listener);
+	public void getinfo(final FragmentActivity context,final int p_id,
+			final OnDetailedGroupInfo_Info_FinishedListener listener);
+}

@@ -1,0 +1,42 @@
+package com.fuck.hangang.scheduler;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.fuck.hangang.dao.MainDao;
+import com.fuck.hangang.util.GCMSender;
+import com.fuck.hangang.vo.ScheduleForPushMessageVo;
+
+@Component
+public class SendGcmAboutBookmarkTeamSchedule {
+	@Resource
+	MainDao mainDao;
+	
+	@Scheduled(cron = "0 0 0 * * *")
+	public void sendSchedulePush(){
+		GregorianCalendar today = new GregorianCalendar();
+		int year = today.get ( today.YEAR );
+		int month = today.get ( today.MONTH ) + 1;
+		int day = today.get ( today.DAY_OF_MONTH );
+		GCMSender gcmSender = new GCMSender();
+		List<ScheduleForPushMessageVo> resultVo = mainDao.getTodayScheduleForGcm(year, month, day);
+		
+		
+	}
+	
+	@Scheduled(cron = "0 0 22 * * *")
+	public void updateRealtimeScheduleStatus(){
+		GregorianCalendar today = new GregorianCalendar();
+		int year = today.get ( today.YEAR );
+		int month = today.get ( today.MONTH ) + 1;
+		int day = today.get ( today.DAY_OF_MONTH );
+		
+		mainDao.updateRealtimeScheduleStatus(year, month, day);
+		
+	}
+}
+

@@ -1,0 +1,7 @@
+package ddoraemi.detailediteminfo.presenter;
+
+import ddoraemi.detailediteminfo.model.ChallengePicture;
+
+public interface DetailedItemInfo_Picture_presenter_Interface {
+	public void validatecredential(String event,int p_id,int position);
+}

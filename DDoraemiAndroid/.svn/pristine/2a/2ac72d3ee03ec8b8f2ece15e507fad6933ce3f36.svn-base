@@ -1,0 +1,7 @@
+package ddoraemi.detailediteminfo.view;
+
+import ddoraemi.home.model.Group;
+
+public interface DetailedItemInfo_groupView_Interface {
+	public void goToDetailedGroupInfo(Group group);
+}

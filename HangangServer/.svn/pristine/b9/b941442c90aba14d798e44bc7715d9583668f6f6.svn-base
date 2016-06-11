@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fuck.hangang.mapper.QnaMapper">
+
+	<resultMap id="qnaMap" type="com.fuck.hangang.vo.QnaVo">
+		<id property="u_id" column="u_id" />
+		<result property="q_num" column="q_num" />
+		<result property="title" column="title" />
+		<result property="contents" column="contents" />
+		<result property="q_time" column="q_time" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_photo" column="u_photo" />
+	</resultMap>
+
+
+	<resultMap id="qnareplyMap" type="com.fuck.hangang.vo.QnareplyVo">
+		<id property="q_num" column="q_num" />
+		<result property="q_r_num" column="q_r_num" />
+		<result property="q_r_time" column="q_r_time" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="q_r_content" column="content" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_photo" column="u_photo" />
+		<result property="t_name" column="t_name" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.QnaReplyOfReplyVo" id="qnareplyofreplyMap">
+		<id property="q_num" column="q_num" />
+		<result property="q_r_num" column="q_r_num" />
+		<result property="q_rr_num" column="q_rr_num" />
+		<result property="q_rr_time" column="q_r_time" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="q_rr_content" column="content" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_photo" column="u_photo" />
+		<result property="t_name" column="t_name" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.RegistrationIdVo" id="registrationIdMap">
+		<result property="u_registrationid" column="u_registrationid" />
+	</resultMap>
+	
+	<insert id="registPushListAboutReply">
+		insert into push_list
+		values (#{id}, null, #{u_id}, #{flag}, #{num}, null, 0, null)
+	</insert>
+	
+	<insert id="registPushListAboutReplyOfReply">
+		insert into push_list
+		values (#{id}, null, #{u_id}, #{flag}, #{num}, #{reply_num}, 0, null)
+	</insert>
+
+	<select id="getRegiIdOfUser" resultMap="registrationIdMap">
+		select u_registrationid
+		from user where u_id =
+		(select u_id from qna where q_num = #{q_num})
+	</select>
+	
+	<select id="getRegiIdOfUserComment" resultMap="registrationIdMap">
+		select u_registrationid
+		from user where u_id =
+		(select u_id from qna_reply where q_r_num = #{q_r_num})
+	</select>
+	
+	<select id="checkPushUser" resultType="int">
+		select push from user
+		where u_id = #{id}
+	</select>
+	
+	<select id="checkReplyOfReplyUser" resultType="String">
+		select u_id from user
+		where u_id =(select u_id from qna_reply where q_num = #{q_num} and q_r_num = #{q_r_num})
+	</select>
+
+	<select id="checkReplyUser" resultType="String">
+		select u_id from user
+		where u_id =(select u_id from qna where q_num = #{q_num})
+	</select>
+
+
+
+	<select id="getqnafirst" resultMap="qnaMap">
+		select qna.*,
+		user.u_permission, user.u_photo from qna
+		natural join user
+		order by
+		q_time
+		DESC LIMIT 0, 20
+	</select>
+
+	<select id="getQnAOne" resultMap="qnaMap">
+		select qna.*,
+		user.u_permission, user.u_photo from qna
+		natural join user where
+		q_num = #{q_num}
+	</select>
+
+	<select id="getqnalast" resultMap="qnaMap">
+		select qna.*, user.u_permission, user.u_photo from qna
+		natural join
+		user
+		where q_num <![CDATA[<]]>
+		#{lastnum} order by q_time
+		DESC LIMIT 0, 20
+	</select>
+
+	<select id="getqnareplycount" parameterType="int" resultType="int">
+		select count(*)
+		from qna_reply
+		where q_num = #{q_num}
+	</select>
+
+	<select id="getqnareplyofreplycount" resultType="int">
+		select count(*)
+		from qna_reply_reply
+		where q_num = #{q_num} and q_r_num = #{q_r_num}
+	</select>
+
+	<select id="getqnareplyfirst" resultMap="qnareplyMap">
+		select
+		qna_reply.*,x2.t_num ,u_permission, u_photo, t_name, u_name from
+		(select x1.*,team.t_name from
+		(select user.*, team_user.t_num from user
+		left outer join team_user on
+		user.u_id = team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join qna_reply
+		on
+		qna_reply.u_id = x2.u_id
+		where q_num = #{q_num}
+		order by q_r_time DESC LIMIT
+		0, 20;
+	</select>
+	
+	<select id="getqnareplyone" resultMap="qnareplyMap">
+	select
+		qna_reply.*,x2.t_num ,u_permission, u_photo, t_name, u_name from
+		(select x1.*,team.t_name from
+		(select user.*, team_user.t_num from user
+		left outer join team_user on
+		user.u_id = team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join qna_reply
+		on
+		qna_reply.u_id = x2.u_id
+		where q_num = #{q_num} and q_r_num = #{q_r_num}
+	
+	</select>
+
+	<select id="getqnareplylast" resultMap="qnareplyMap">
+		select
+		qna_reply.*,x2.t_num ,u_permission, u_photo, t_name, u_name from
+		(select x1.*,team.t_name from
+		(select user.*, team_user.t_num from user
+		left outer join team_user on
+		user.u_id = team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join qna_reply
+		on
+		qna_reply.u_id = x2.u_id
+		where q_num = #{q_num} and q_r_num <![CDATA[<]]>
+		#{lastnum}
+		order by q_r_time DESC LIMIT 0, 20
+	</select>
+
+	<insert id="registqna" parameterType="QnaVo">
+		insert into qna
+		values(#{u_id}, null, #{title}, #{content}, null)
+	</insert>
+
+	<insert id="registqnareply" parameterType="QnareplyVo">
+		insert into qna_reply
+		values(#{q_num}, null, null, #{u_id}, #{q_r_content})
+	</insert>
+
+	<select id="getqnareplyofreplyfirst" resultMap="qnareplyofreplyMap">
+		select
+		qna_reply_reply.*,x2.t_num ,u_permission, u_photo, t_name, u_name from
+		(select x1.*,team.t_name from
+		(select user.*, team_user.t_num from user
+		left outer join team_user on
+		user.u_id = team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join qna_reply_reply
+		on qna_reply_reply.u_id = x2.u_id
+		where q_num = #{q_num} and q_r_num =
+		#{q_r_num}
+		order by q_r_time DESC LIMIT 0, 20
+	</select>
+
+	<select id="getqnareplyofreplylast" resultMap="qnareplyofreplyMap">
+		select
+		qna_reply_reply.*,x2.t_num ,u_permission, u_photo, t_name,
+		u_name from
+		(select x1.*,team.t_name from
+		(select user.*,
+		team_user.t_num from user
+		left outer join team_user on
+		user.u_id =
+		team_user.u_id) x1 left outer
+		join team on x1.t_num =
+		team.t_num) x2
+		right outer join qna_reply_reply
+		on qna_reply_reply.u_id = x2.u_id
+		where q_num =
+		#{q_num} and q_r_num = #{q_r_num} and q_rr_num <![CDATA[<]]>
+		#{lastnum}
+		order by q_r_time DESC LIMIT 0, 20
+	</select>
+
+
+
+	<insert id="registqnareplyofreply" parameterType="QnaReplyOfReplyVo">
+		insert into
+		qna_reply_reply values(#{q_num}, #{q_r_num}, null, null, #{u_id},
+		#{q_rr_content})
+	</insert>
+
+	<update id="updateqnareply">
+		update qna_reply set content =
+		#{q_r_content} where
+		q_num = #{q_num} and q_r_num = #{q_r_num}
+	</update>
+
+	<update id="updateqnareplyofreply">
+		update qna_reply_reply set content = #{q_rr_content}
+		where q_num = #{q_num} and q_r_num = #{q_r_num} and q_rr_num =
+		#{q_rr_num}
+	</update>
+
+	<delete id="deleteqnareplyofreply">
+		delete from qna_reply_reply where
+		q_num = #{q_num} and
+		q_r_num = #{q_r_num} and q_rr_num = #{q_rr_num}
+	</delete>
+
+	<delete id="deleteqnareply">
+		delete from qna_reply where
+		q_num = #{q_num} and
+		q_r_num = #{q_r_num}
+	</delete>
+
+	<delete id="deleteqna">
+		delete from qna where
+		q_num = #{q_num}
+	</delete>
+
+
+
+
+</mapper>

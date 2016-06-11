@@ -1,0 +1,272 @@
+package ddoraemi.dialog;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
+import ddoraemi.joining.view.Fragment_JoinThree;
+import ddoraemi.joining.view.Fragment_JoinTwo;
+import ddoraemi.start.R;
+
+public class Dialog_AddressSelect extends Dialog implements
+		android.view.View.OnClickListener {
+	private Context mContext = null;
+	private ImageView mBtn_ok, mBtn_cancel = null;
+	private TextView text;
+	private GridView location_grid;
+	private ImageView city, country, town;
+	private String key = "MUMehmZ1THt3tyskhY2fzEnHJ3gGncTVuxKSmKeDuo0ilSRo%2BamDQimSwqxpXOFjfSf%2B8R6w2WnWeFx50O%2FtFQ%3D%3D";
+	private int level;
+	private String str_city, str_country, str_town;
+	private ArrayList<String> CityArray, CountryArray, TownArray;
+	private Adapter_Dialog_AddressGrid adapter;
+	private String cityInfo, countryInfo, townInfo;
+	Fragment_JoinThree fragment;
+	private int lastposition;
+	private ProgressDialog loading;
+	final Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			int pagenum = msg.getData().getInt("num");
+			if (pagenum == 0) {
+				adapter.setData(CityArray);
+				adapter.notifyDataSetChanged();
+			} else if (pagenum == 1) {
+				adapter.setData(CountryArray);
+				adapter.notifyDataSetChanged();
+			} else {
+
+				adapter.setData(TownArray);
+				adapter.notifyDataSetChanged();
+			}
+			loading.dismiss();
+		}
+	};
+
+	public Dialog_AddressSelect(Context context, Fragment_JoinThree fragment) {
+		super(context);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.dialog_addressselect);
+		getWindow().setBackgroundDrawable(
+				new ColorDrawable(android.graphics.Color.TRANSPARENT));
+		this.setCanceledOnTouchOutside(false); // ���̾˷α� �ٱ����� ��ġ��, ���̾˷α� ������ �ʱ�
+		this.setCancelable(true); // ��Ű�� ���̾˷α� �ݱ�
+		mContext = context;
+		this.fragment = fragment;
+		initComponent();
+	}
+
+	private void initComponent() {
+		lastposition = -1;
+		level = 0;
+		city = (ImageView) findViewById(R.id.dialog_addressselect_cityimg);
+		country = (ImageView) findViewById(R.id.dialog_addressselect_countryimg);
+		town = (ImageView) findViewById(R.id.dialog_addressselect_townimg);
+		mBtn_cancel = (ImageView) findViewById(R.id.dialog_address_cancel);
+		mBtn_ok = (ImageView) findViewById(R.id.dialog_address_ok);
+		mBtn_ok.setOnClickListener(this); // Ŭ�� �̺�Ʈ ���
+		mBtn_cancel.setOnClickListener(this);
+		location_grid = (GridView) findViewById(R.id.dialog_address_LocationGrid);
+		CityArray = new ArrayList<String>();
+		CountryArray = new ArrayList<String>();
+		TownArray = new ArrayList<String>();
+		adapter = new Adapter_Dialog_AddressGrid(mContext, CityArray);
+		location_grid.setAdapter(adapter);
+		loading=new ProgressDialog(mContext);
+		loading.setMessage(mContext.getString(R.string.loading));
+		loading.setIndeterminate(true);
+		loading.setCancelable(false);
+		loading.show();
+		loading.show();
+		new GetCityTask(this).execute((Void) null);// //ó���� ��/�� �ʱ�ȭ
+
+		location_grid.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (level == 0) {
+					loading.show();
+					level = 1;
+					CountryArray.clear();
+					cityInfo = adapter.getItem(position);
+					if (!cityInfo.equals("세종")) {
+						new GetCountryTask(Dialog_AddressSelect.this, cityInfo)
+								.execute((Void) null);// ��/�� �ʱ�ȭ
+						showCountry();
+					} else {
+						level = 2;
+						TownArray.clear();
+						countryInfo = "";
+						new GetTownTask(Dialog_AddressSelect.this, cityInfo,
+								countryInfo).execute((Void) null);// ��/�� �ʱ�ȭ
+						showTown();
+					}
+				} else if (level == 1) {
+					loading.show();
+					level = 2;
+					TownArray.clear();
+					countryInfo = adapter.getItem(position);
+					new GetTownTask(Dialog_AddressSelect.this, cityInfo,
+							countryInfo).execute((Void) null);// ��/�� �ʱ�ȭ
+					showTown();
+				} else {
+					level = 3;
+					if (lastposition != -1) {
+						parent.getChildAt(lastposition).setBackgroundResource(R.drawable.btn_address);
+					}
+					view.setBackgroundColor(Color.parseColor("#c8c8c8"));
+					lastposition = position;
+					townInfo = adapter.getItem(position);
+				}
+
+			}
+		});
+
+	}
+
+	@Override
+	public void show() {
+		super.show();
+	}
+
+	@Override
+	public void dismiss() {
+		super.dismiss();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (level == 0) {
+			super.onBackPressed();
+		} else if (level == 1) {
+			level = 0;
+			adapter.setData(CityArray);
+			adapter.notifyDataSetChanged();
+			showCity();
+		} else if (level == 2) {
+
+			if (!cityInfo.equals("세종")) {
+				level = 1;
+				adapter.setData(CountryArray);
+				adapter.notifyDataSetChanged();
+				showCountry();
+			} else {
+				level = 0;
+				adapter.setData(CityArray);
+				adapter.notifyDataSetChanged();
+				showCity();
+			}
+		} else {
+			if (!cityInfo.equals("세종")) {
+				level = 1;
+				adapter.setData(CountryArray);
+				adapter.notifyDataSetChanged();
+
+				showCountry();
+			} else {
+				level = 0;
+				adapter.setData(CityArray);
+				adapter.notifyDataSetChanged();
+				showCity();
+			}
+			View gridChild = location_grid.getChildAt(lastposition);
+			gridChild.setBackgroundResource(R.drawable.btn_address);
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.dialog_address_ok) {
+			if (level > 2) {
+				fragment.setAddress(cityInfo, countryInfo, townInfo);
+				dismiss();
+			} else {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(getContext(),
+						"모든 항목을 선.");
+				dialog.show();
+			}
+		} else if (v.getId() == R.id.dialog_address_cancel) {
+			this.dismiss();
+		}
+
+	}
+
+	public void showCity() {
+		city.setVisibility(View.VISIBLE);
+		town.setVisibility(View.INVISIBLE);
+		country.setVisibility(View.INVISIBLE);
+	}
+
+	public void showCountry() {
+
+		city.setVisibility(View.INVISIBLE);
+		town.setVisibility(View.INVISIBLE);
+		country.setVisibility(View.VISIBLE);
+	}
+
+	public void showTown() {
+
+		city.setVisibility(View.INVISIBLE);
+		town.setVisibility(View.VISIBLE);
+		country.setVisibility(View.INVISIBLE);
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public ArrayList<String> getCityArray() {
+		return CityArray;
+	}
+
+	public void setCityArray(ArrayList<String> cityArray) {
+		CityArray = cityArray;
+	}
+
+	public ArrayList<String> getCountryArray() {
+		return CountryArray;
+	}
+
+	public void setCountryArray(ArrayList<String> countryArray) {
+		CountryArray = countryArray;
+	}
+
+	public ArrayList<String> getTownArray() {
+		return TownArray;
+	}
+
+	public void setTownArray(ArrayList<String> townArray) {
+		TownArray = townArray;
+	}
+
+	public Handler getHandler() {
+		return handler;
+	}
+
+	// /////////////��/�� ������ ��ű���
+
+}

@@ -1,0 +1,53 @@
+package ddoraemi.retrofit;
+
+import retrofit.Callback;
+import retrofit.http.Body;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
+import retrofit.http.POST;
+import retrofit.http.Query;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+public interface Retrofit {
+		public static final String ROOT = "http://203.252.166.151:9090/skp";
+		@GET("/getprogram.skp")
+	    public void getProgramList_availableGroup(Callback<JsonObject> callback);
+		
+		@GET("/getafterword.skp")
+		public void getAfterword(@Query("p_id")int p_id,Callback<JsonObject> callback);
+		
+		@GET("/getquestion.skp")
+		public void getQuestion(@Query("g_id")int p_id,Callback<JsonArray> callback);
+		
+		@GET("/getprogram.skp")
+	    public void getProgramList_type(@Query("category")String category,
+	    		@Query("e_name")String e_name,Callback<JsonArray> callback);
+		
+		@GET("/getprogram.skp")
+	    public void getProgramList_location(@Query("category")String category,
+	    		@Query("p_addr_1")String p_addr_1,Callback<JsonArray> callback);
+		
+		@GET("/registerafterwordreply.skp")
+		public void setReply(@Query("a_id")int a_id, @Query("u_id")String u_id, 
+				@Query("a_r_content")String a_r_content, Callback<JsonArray> callback);
+		
+		@GET("/registerquestionreply.skp")
+		public void setQnAReply(@Query("q_id")int q_id, @Query("u_id")String u_id, 
+				@Query("q_r_content")String q_r_content, Callback<JsonArray> callback);
+		
+		//////////ȸ������ ���� ���/////////////
+		@POST("/signup.skp")///ȸ������ ���
+		public void requestJoin(@Body JsonObject info,Callback<String> callback);
+		@GET("/idcheck.skp")///���̵� �ߺ�Ȯ��
+		public void getConfirmOverlapID(@Query("u_id") String info,Callback<String> callback);
+		/////////////////////////////////
+		
+		///////////�α��� ���� ���/////////////
+		@FormUrlEncoded
+		@POST("/login.skp")///�α��� ���
+		public void requestLogin(@Field("u_id") String id,@Field("password") String password,Callback<String> callback);
+		/////////////////////////////////
+}

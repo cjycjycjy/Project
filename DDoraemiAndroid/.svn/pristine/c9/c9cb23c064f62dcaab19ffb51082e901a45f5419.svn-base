@@ -1,0 +1,120 @@
+package ddoraemi.mypage.view;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.astuetz.PagerSlidingTabStrip;
+import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
+
+import ddoraemi.home.model.Group;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.mypage.presenter.MyPagePresenterInterface;
+import ddoraemi.start.R;
+
+public class MyPageView extends Fragment implements MypageViewInterface {
+	private MyPagePresenterInterface Presenter;
+	private PagerSlidingTabStrip tabs;
+	private ViewPager pager;
+	private PagerAdapter adapter;
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_mypage, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+
+	}
+
+	@Override
+	public void setViewPager(View v, ArrayList<ProgramData> participateprogram,
+			ArrayList<ProgramData> wishprogram,
+			ArrayList<ProgramData> pastprogram) {
+		tabs = (PagerSlidingTabStrip) v.findViewById(R.id.fragment_mypage_tabs);
+		pager = (ViewPager) v.findViewById(R.id.fragment_mypage_tabs);
+		adapter = new PagerAdapter(getChildFragmentManager(),
+				participateprogram, wishprogram, pastprogram);
+		pager.setAdapter(adapter);
+		pager.setOffscreenPageLimit(3);
+		final int pageMargin = (int) TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+						.getDisplayMetrics());
+		pager.setPageMargin(pageMargin);
+		tabs.setViewPager(pager);
+		tabs.setShouldExpand(true);
+	}
+
+	@Override
+	public void navigateToNext() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public class PagerAdapter extends FragmentPagerAdapter implements
+			IconTabProvider {
+		private int[] Title = { R.drawable.tab_participate,
+				R.drawable.tab_wish, R.drawable.tab_past };
+		ArrayList<ProgramData> myprogram;
+		ArrayList<ProgramData> wishprogram;
+		ArrayList<ProgramData> pastprogram;
+
+		public PagerAdapter(FragmentManager fm,
+				ArrayList<ProgramData> myprogram,
+				ArrayList<ProgramData> wishprogram,
+				ArrayList<ProgramData> pastprogram) {
+			super(fm);
+			this.myprogram = new ArrayList<ProgramData>();
+			this.wishprogram = new ArrayList<ProgramData>();
+			this.pastprogram = new ArrayList<ProgramData>();
+			this.myprogram.addAll(myprogram);
+			this.wishprogram.addAll(wishprogram);
+			this.pastprogram.addAll(pastprogram);
+		}
+
+		@Override
+		public int getItemPosition(Object object) {
+			return POSITION_NONE;
+		}
+
+		@Override
+		public int getCount() {
+			return Title.length;
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			if (position == 0) {
+				return new MyPage_ParticipateView();
+			} else if (position == 1) {
+				return new MyPage_WishView();
+			} else {
+				return new MyPage_PastView();
+			}
+
+		}
+
+		@Override
+		public int getPageIconResId(int position) {
+			switch (position) {
+			case 0:
+				return Title[0];
+			case 1:
+				return Title[1];
+			case 2:
+			default:
+				return Title[2];
+			}
+		}
+	}
+}

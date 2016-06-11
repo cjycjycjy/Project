@@ -1,0 +1,8 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+import ddoraemi.detailedgroupinfo.model.QnA;
+
+public interface DetailedQnA_reply_Presenter_Interface {
+	public void validatecredential(String string, QnA qna, int q_r_id, int q_id, String u_id, String q_r_content, int position);
+	public void deleteQnA(int q_id);
+}

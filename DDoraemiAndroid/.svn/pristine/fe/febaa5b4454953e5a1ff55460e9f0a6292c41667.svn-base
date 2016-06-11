@@ -1,0 +1,321 @@
+package ddoraemi.joining.view;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.dialog.Dialog_ConfirmPersonal;
+import ddoraemi.dialog.Dialog_ConfirmService;
+import ddoraemi.dialog.Dialog_ConfirmUseId;
+import ddoraemi.retrofit.Retrofit;
+import ddoraemi.start.R;
+
+public class Fragment_JoinOne extends Fragment implements OnClickListener {
+	TextView confirm_service, confirm_personal;// 이용약관, 개인정보 취급방침버튼
+	TextView next;
+	EditText edit_id, edit_passwd, edit_confirmpasswd, edit_phone,
+			edit_confirmphone;// 각각 에디트 박스
+	ToggleButton service, personal;// 개인정보,사용정보 이용동의
+	ImageView overlapid, confirmphone;// 아이디중복,전화번호 인증버튼
+	boolean isoverlapid, isconfirmedphone;
+	private String idregex = "^[a-zA-Z]{1}[a-zA-Z0-9_]{5,11}$";// id조건
+	private String phoneregex = "^[0-9]{10,11}$";// 핸드폰조건
+	private String confirmNumber;
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_joinone, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		// ///////////약관 관련///////////////
+		confirm_service = (TextView) v
+				.findViewById(R.id.join_fragmentone_TextService);
+		confirm_personal = (TextView) v
+				.findViewById(R.id.join_fragmentone_TextPersonal);
+		confirm_service.setOnClickListener(this);
+		confirm_personal.setOnClickListener(this);
+		// /////////////////////////////////
+		// ///////각각 컨트롤 초기화////////////
+		edit_id = (EditText) v.findViewById(R.id.join_fragmentone_IDEditText);
+		edit_passwd = (EditText) v
+				.findViewById(R.id.join_fragmentone_PasswdEditText);
+		edit_confirmpasswd = (EditText) v
+				.findViewById(R.id.join_fragmentone_ConfirmPasswdEditText);
+		edit_phone = (EditText) v
+				.findViewById(R.id.join_fragmentone_PhoneEditText);
+		edit_confirmphone = (EditText) v
+				.findViewById(R.id.join_fragmentone_ConfirmPhoneEditText);
+		service = (ToggleButton) v
+				.findViewById(R.id.join_fragmentone_ToggleService);
+		personal = (ToggleButton) v
+				.findViewById(R.id.join_fragmentone_TogglePersonal);
+		overlapid = (ImageView) v.findViewById(R.id.join_fragmentone_ImgID);
+		confirmphone = (ImageView) v
+				.findViewById(R.id.join_fragmentone_ImgConfirmPhone);
+
+		overlapid.setOnClickListener(this);
+		confirmphone.setOnClickListener(this);
+		edit_id.addTextChangedListener(IdTextWatcher);
+		edit_phone.addTextChangedListener(phoneTextWatcher);
+		// ////////////////////////////////////
+
+		// ////다음이동/////////
+		next = (TextView) v.findViewById(R.id.join_fragmentone_ButtonNext);
+		next.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.join_fragmentone_TextService) {
+			Dialog_ConfirmService dialog = new Dialog_ConfirmService(
+					getActivity());
+			dialog.show();
+		} else if (v.getId() == R.id.join_fragmentone_TextPersonal) {
+			Dialog_ConfirmPersonal dialog = new Dialog_ConfirmPersonal(
+					getActivity());
+			dialog.show();
+		}
+		// //////////////여기까지 약관 띄우기
+
+		// ////////////////중복확인//////////////////////
+		else if (v.getId() == R.id.join_fragmentone_ImgID) {
+			String str_id = edit_id.getText().toString();
+			if (str_id.matches(idregex)) {
+				confirmOverlapID();
+
+			} else {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(getActivity(),
+						"잘못된 아이디입니다.\n다른 아이디를 입력해주세요.");
+				dialog.show();
+			}
+		}
+		// ////////////////폰번호 인증/////////////////
+		else if (v.getId() == R.id.join_fragmentone_ImgConfirmPhone) {
+			String phone = edit_phone.getText().toString();
+			if (phone.matches(phoneregex)) {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(getActivity(),
+						"인증문자가 전송됩니다.\n잠시만 기다려주세요.");
+				dialog.show();
+				// ///인증번호 보내는 통신구문
+				confirmNumber = "1";// //인증번호로 변경하기
+				isconfirmedphone = true;// 인증번호 전송하면 변경하기.
+			} else {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(getActivity(),
+						"잘못된 전화번호입니다.\n전화번호를 다시입력해주세요.");
+				dialog.show();
+			}
+
+		} else if (v.getId() == R.id.join_fragmentone_ButtonNext) {
+			// //입력조건전부 따진후에
+			if (ConfirmForNext()) {
+				setActivityValue();
+				setDefaultEditAll();
+				setFalseAllBoolean();
+				((JoinActivity) getActivity()).setTitleTwo();
+				FragmentTransaction ft = getActivity()
+						.getSupportFragmentManager().beginTransaction();
+				ft.replace(R.id.joinFragment, new Fragment_JoinTwo());
+				ft.setTransition(FragmentTransaction.TRANSIT_NONE);
+				ft.addToBackStack(null);
+				ft.commit();
+			}
+
+		}
+	}
+
+	public boolean ConfirmForNext() {
+		String id = edit_id.getText().toString();// 아이디
+		String passwd = edit_passwd.getText().toString();// 비밀번호
+		String confirmpasswd = edit_confirmpasswd.getText().toString();// 비밀번호확인
+		String phone = edit_phone.getText().toString();// 전화번호
+		String confirmnumber = edit_confirmphone.getText().toString();// 인증번호
+		if (!isoverlapid) {
+			Dialog_BaseDialog dialog = new Dialog_BaseDialog(getActivity(),
+					"아이디 중복확인을 해주세요.");
+			dialog.show();
+			return false;
+		} else if (!(passwd.length() >= 6 && passwd.length() < 12)
+				&& passwd.equals(confirmpasswd)) {
+			Dialog_BaseDialog dialog = new Dialog_BaseDialog(getActivity(),
+					"잘못된 비밀번호입니다.\n다시 입력해주세요.");
+			dialog.show();
+			return false;
+		} else if (!(confirmnumber.equals(confirmNumber))) {
+			Dialog_BaseDialog dialog = new Dialog_BaseDialog(getActivity(),
+					"잘못된 인증번호입니다.\n인증번호를 다시입력해주세요.");
+			dialog.show();
+			return false;
+		} else if (isoverlapid && isconfirmedphone// /아이디 중복확인 및 핸드폰입력
+				&& confirmnumber.equals(confirmNumber)// 인증번호 확인
+				&& passwd.length() >= 6 && passwd.length() < 12// 비밀번호 길이 확인
+				&& passwd.equals(confirmpasswd)// /비밀번호 일치 및 길이
+				&& service.isChecked() && personal.isChecked()// 약관확인
+		) {
+			return true;// 모든 항목 일치하면
+		} else {
+			Dialog_BaseDialog dialog = new Dialog_BaseDialog(getActivity(),
+					"모든 항목에 응답하셔야\n다음 단계 진행이 가능합니다.");
+			dialog.show();
+			return false;
+		}
+	}
+
+	public void setDefaultEditID() {
+		edit_id.setText("");
+	}
+
+	public void setDefaultEditAll() {
+		edit_id.setText("");
+		edit_passwd.setText("");
+		edit_confirmpasswd.setText("");
+		edit_phone.setText("");
+		edit_confirmphone.setText("");
+	}
+
+	public void setFalseAllBoolean() {
+		isoverlapid = false;
+		isconfirmedphone = false;
+	}
+
+	public boolean isIsoverlapid() {
+		return isoverlapid;
+	}
+
+	public void setIsoverlapid(boolean isoverlapid) {
+		this.isoverlapid = isoverlapid;
+	}
+
+	public boolean isIsconfirmedphone() {
+		return isconfirmedphone;
+	}
+
+	public void setIsconfirmedphone(boolean isconfirmedphone) {
+		this.isconfirmedphone = isconfirmedphone;
+	}
+
+	private TextWatcher IdTextWatcher = new TextWatcher() {
+
+		public void afterTextChanged(Editable s) {
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+		}
+
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			isoverlapid = false;
+
+		}
+
+	};
+	private TextWatcher phoneTextWatcher = new TextWatcher() {
+
+		public void afterTextChanged(Editable s) {
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+		}
+
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			isconfirmedphone = false;
+			edit_confirmphone.setText("");
+		}
+
+	};
+
+	public void setActivityValue() {
+		String id = edit_id.getText().toString();
+		String passwd = edit_passwd.getText().toString();
+		String phone = edit_phone.getText().toString();
+		((JoinActivity) getActivity()).setId(id);
+		((JoinActivity) getActivity()).setPhone(id);
+		((JoinActivity) getActivity()).setPasswd(id);
+	}
+
+	public void confirmOverlapID() {
+		final ProgressDialog progressdialog = new ProgressDialog(getActivity());
+		progressdialog.setMessage("잠시만 기다려주세요");
+		progressdialog.setIndeterminate(true);
+		progressdialog.setCancelable(false);
+		progressdialog.show();
+		final String id = edit_id.getText().toString();
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					RestAdapter restAdapter = new RestAdapter.Builder()
+							.setEndpoint(Retrofit.ROOT) // call your base url
+							.build();
+					Retrofit retofit = restAdapter.create(Retrofit.class);
+					retofit.getConfirmOverlapID(id, new Callback<String>() {
+						@Override
+						public void success(String result, Response response) {
+							progressdialog.dismiss();
+							if (getActivity() != null) {
+								if (result.equals("200")) {
+									Dialog_ConfirmUseId dialog = new Dialog_ConfirmUseId(
+											getActivity(),
+											Fragment_JoinOne.this);
+									dialog.show();
+								} else// 중복됬을대
+								{
+									Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+											getActivity(),
+											"중복된 아이디입니다.\n다른 아이디를 입력해주세요.");
+									dialog.show();
+								}
+							}
+						}
+
+						@Override
+						public void failure(RetrofitError retrofitError) {
+							progressdialog.dismiss();
+							if (getActivity() != null) {
+
+								Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+										getActivity(),
+										"서버와 통신에 실패하였습니다.\n잠시후 다시 시도해주세요.");
+								dialog.show();
+							}
+						}
+					});
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					progressdialog.dismiss();
+					if (getActivity() != null) {
+
+						Dialog_BaseDialog dialog = new Dialog_BaseDialog(
+								getActivity(),
+								"서버와 통신에 실패하였습니다.\n잠시후 다시 시도해주세요.");
+						dialog.show();
+					}
+				}
+			}
+		}).start();
+	}
+}

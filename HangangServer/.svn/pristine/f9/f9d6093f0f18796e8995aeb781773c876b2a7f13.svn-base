@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.NoticeMapper">
+
+	<resultMap id="noticeMap" type="com.fuck.hangang.vo.NoticeVo">
+		<id property="n_num" column="n_num" />
+		<result property="n_title" column="n_title" />
+		<result property="n_contents" column="n_contents" />
+		<result property="n_type" column="n_type" />
+		<result property="n_time" column="n_time" />
+		<collection property="photo" ofType="com.fuck.hangang.vo.NoticePhotoVo">
+			<result property="n_index" column="n_index" />
+			<result property="n_photo_url" column="n_photo_url" />
+		</collection>
+	</resultMap>
+	
+	<resultMap id="noticephotoMap" type="com.fuck.hangang.vo.NoticePhotoVo">
+		<id property="n_index" column="n_index" />
+		<result property="n_photo_url" column="n_photo_url"/>
+	</resultMap>
+
+
+	<resultMap id="noticecommentMap" type="com.fuck.hangang.vo.NoticecommentVo">
+		<id property="n_num" column="n_num" />
+		<result property="n_c_num" column="n_c_num" />
+		<result property="n_c_time" column="n_c_time" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="n_c_content" column="n_c_content" />
+		<result property="t_name" column="t_name" />
+		<result property="u_photo" column="u_photo" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+
+	<resultMap id="noticecommentofcommentMap" type="com.fuck.hangang.vo.NoticecommentofcommentVo">
+		<id property="n_num" column="n_num" />
+		<result property="n_c_num" column="n_c_num" />
+		<result property="n_cc_num" column="n_cc_num" />
+		<result property="n_cc_time" column="n_c_time" />
+		<result property="u_id" column="u_id" />
+		<result property="t_num" column="t_num" />
+		<result property="n_cc_content" column="n_c_content" />
+		<result property="t_name" column="t_name" />
+		<result property="u_photo" column="u_photo" />
+		<result property="u_permission" column="u_permission" />
+		<result property="u_name" column="u_name" />
+	</resultMap>
+
+	<select id="getnoticecommentu_id" resultType="String">
+		select u_id
+		from
+		notice_comment
+		where n_c_num = #{n_c_num}
+	</select>
+
+	<select id="getnoticecommentcount" resultType="int">
+		select
+		count(n_num) from notice natural join notice_comment where n_num =
+		#{n_num}
+	</select>
+
+	<select id="getnoticecommentofcommentcount" resultType="int">
+		select
+		count(*)
+		from(select notice_comment.*
+		from notice
+		natural join
+		notice_comment
+		where n_num = #{n_num})x1
+		join notice_comment_comment
+		where notice_comment_comment.n_num = x1.n_num and
+		notice_comment_comment.n_c_num = x1.n_c_num
+		and x1.n_c_num = #{n_c_num}
+	</select>
+
+	<select id="getnoticecommentofcommentu_id" resultType="String">
+		select
+		u_id
+		from notice_comment_comment
+		where n_cc_num = #{n_cc_num}
+	</select>
+
+
+	<select id="getnotice" resultMap="noticeMap">
+		select
+		notice.*,notice_photo.n_photo_url from notice left outer join
+		notice_photo on notice.n_num = notice_photo.n_num
+		order by n_num DESC
+	</select>
+	
+	<select id="getnoticefirstnoflag" resultMap="noticeMap">
+		select notice.*, notice_photo.n_photo_url
+		from (	select *
+	 			from notice
+	 			order by n_num DESC LIMIT 0,20) notice
+   		left outer join	notice_photo on notice.n_num = notice_photo.n_num;
+	</select>
+	
+	<select id="getnoticefirst" resultMap="noticeMap">
+		select notice.*, notice_photo.n_photo_url
+		from (	select *
+	 			from notice where n_type = #{n_flag}
+	 			order by n_num DESC LIMIT 0,20) notice
+   		left outer join	notice_photo on notice.n_num = notice_photo.n_num;
+	</select>
+	
+	<select id="getnoticelastnoflag" resultMap="noticeMap">
+		select notice.*, notice_photo.n_photo_url
+		from (	select *
+	 			from notice where n_num <![CDATA[<]]> #{lastnum}
+	 			order by n_num DESC LIMIT 0,20) notice
+   		left outer join	notice_photo on notice.n_num = notice_photo.n_num;
+	</select>
+	
+	<select id="getnoticelast" resultMap="noticeMap">
+		select notice.*, notice_photo.n_photo_url
+		from (	select *
+	 			from notice where n_num <![CDATA[<]]> #{lastnum} and n_type = #{n_flag}
+	 			order by n_num DESC LIMIT 0,20) notice
+   		left outer join	notice_photo on notice.n_num = notice_photo.n_num;
+	</select>
+	
+	<select id="getnoticephoto" resultMap="noticephotoMap">
+		select n_index,n_photo_url
+		from notice_photo
+		where n_num = #{n_num}
+	
+	</select>
+
+	<insert id="registnotice" parameterType="NoticeVo">
+		insert into notice values(null ,#{n_title},#{n_contents},#{n_type},
+		null)
+		<selectKey keyProperty="n_num" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="registnoticephoto">
+		insert into
+		notice_photo
+		values(#{n_num},#{n_index},#{n_photo_url})
+	</insert>
+
+
+	<select id="getnoticecommentfirst" resultMap="noticecommentMap">
+		select  notice_comment.*, t_name, u_permission, u_photo, u_name
+		from notice_comment
+		left outer join	team on notice_comment.t_num = team.t_num
+		natural join user
+		where n_num = #{n_num}
+		order by n_c_num DESC Limit #{lastnum}, #{count}
+	</select>
+
+
+	<select id="getnoticecomment" resultMap="noticecommentMap">
+		select notice_comment.*, t_name, u_permission, u_photo, u_name
+		from notice_comment
+		left outer join	team on notice_comment.t_num = team.t_num
+		natural join user
+		where n_num = #{n_num} and n_c_num<![CDATA[<]]>	#{lastnum}
+		order by n_c_num DESC Limit 0,20
+	</select>
+	
+	<insert id="registnoticecommentnull" parameterType="NoticecommentVo">
+		insert into
+		notice_comment values(#{n_num}, null, null, #{u_id}, null, #{n_c_content})
+	</insert>
+
+	<insert id="registnoticecomment" parameterType="NoticecommentVo">
+		insert into
+		notice_comment values(#{n_num}, null, null, #{u_id}, #{t_num}, #{n_c_content})
+	</insert>
+
+	<select id="getnoticecommentofcommentfirst" resultMap="noticecommentofcommentMap">
+		select
+		notice_comment_comment.*, u_permission, u_photo, t_name, u_name
+		from
+		notice_comment_comment
+		left outer join team on notice_comment_comment.t_num = team.t_num
+		natural join user
+		where
+		n_num = #{n_num} and n_c_num = #{n_c_num}
+		order by n_cc_num DESC Limit #{lastnum},#{count}
+	</select>
+
+	<select id="getnoticecommentofcomment" resultMap="noticecommentofcommentMap">
+		select
+		notice_comment_comment.*, u_permission, u_photo, t_name, u_name
+		from
+		notice_comment_comment
+		left outer join team on notice_comment_comment.t_num = team.t_num
+		natural join user
+		where
+		n_num = #{n_num} and n_c_num = #{n_c_num} and n_cc_num <![CDATA[<]]> #{lastnum}
+		order by n_cc_num DESC Limit 0, 20
+	</select>
+	
+	<insert id="registnoticecommentofcommentnull" parameterType="NoticecommentofcommentVo">
+		insert
+		into notice_comment_comment values(#{n_num}, #{n_c_num}, null, null,
+		#{u_id}, null, #{n_cc_content})
+	</insert>
+
+
+	<insert id="registnoticecommentofcomment" parameterType="NoticecommentofcommentVo">
+		insert
+		into notice_comment_comment values(#{n_num}, #{n_c_num}, null, null,
+		#{u_id}, #{t_num}, #{n_cc_content})
+	</insert>
+
+	<delete id="deletenotice" parameterType="NoticeVo">
+		delete from notice where
+		n_num = #{n_num}
+	</delete>
+	
+	<delete id="deletenoticecomment" parameterType="NoticecommentVo">
+		delete from
+		notice_comment where n_num = #{n_num} and n_c_num = #{n_c_num}
+	</delete>
+
+	<delete id="deletenoticecommentofcomment" parameterType="NoticecommentofcommentVo">
+		delete from notice_comment_comment where n_num = #{n_num} and n_c_num = #{n_c_num} and n_cc_num = #{n_c_num}
+	</delete>
+
+	<update id="updatenoticecomment">
+		update notice_comment set n_c_content =
+		#{n_c_content} where n_num = #{n_num} and n_c_num = #{n_c_num}
+	</update>
+
+	<update id="updatenoticecommentofcomment">
+		update notice_comment_comment set n_c_content =
+		#{n_cc_content} where n_num = #{n_num} and n_c_num = #{n_c_num} and
+		n_cc_num = #{n_cc_num}
+	</update>
+
+</mapper>

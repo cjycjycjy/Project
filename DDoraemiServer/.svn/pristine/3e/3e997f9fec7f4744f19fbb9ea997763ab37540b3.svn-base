@@ -1,0 +1,124 @@
+package com.myserver.skp.vo;
+
+import java.util.HashMap;
+import java.util.List;
+
+public class UserVo {
+	String u_id;
+	String password;
+	String u_phone;
+	char parent_gender;
+	int parent_age;
+	String u_addr1;
+	String u_addr2;
+	String u_addr3;
+	char u_gender;
+	int u_age;
+	String u_photo_url;
+	List<HashMap<String, String>> favorit_program;
+	List<HashMap<String, Integer>> bookmark;
+	List<ProgramVo> bookmark_list;
+	List<ProgramVo> passer_program;
+	List<GatheringVo> join_gathering;
+
+
+	public String getU_id() {
+		return u_id;
+	}
+	public void setU_id(String u_id) {
+		this.u_id = u_id;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getU_phone() {
+		return u_phone;
+	}
+	public void setU_phone(String u_phone) {
+		this.u_phone = u_phone;
+	}
+	public char getParent_gender() {
+		return parent_gender;
+	}
+	public void setParent_gender(char parent_gender) {
+		this.parent_gender = parent_gender;
+	}
+	public int getParent_age() {
+		return parent_age;
+	}
+	public void setParent_age(int parent_age) {
+		this.parent_age = parent_age;
+	}
+
+	public String getU_addr1() {
+		return u_addr1;
+	}
+	public void setU_addr1(String u_addr1) {
+		this.u_addr1 = u_addr1;
+	}
+	public String getU_addr2() {
+		return u_addr2;
+	}
+	public void setU_addr2(String u_addr2) {
+		this.u_addr2 = u_addr2;
+	}
+	public String getU_addr3() {
+		return u_addr3;
+	}
+	public void setU_addr3(String u_addr3) {
+		this.u_addr3 = u_addr3;
+	}
+	public char getU_gender() {
+		return u_gender;
+	}
+	public void setU_gender(char u_gender) {
+		this.u_gender = u_gender;
+	}
+	public int getU_age() {
+		return u_age;
+	}
+	public void setU_age(int u_age) {
+		this.u_age = u_age;
+	}
+	public List<HashMap<String, String>> getFavorit_program() {
+		return favorit_program;
+	}
+	public void setFavorit_program(List<HashMap<String, String>> favorit_program) {
+		this.favorit_program = favorit_program;
+	}
+	public List<HashMap<String, Integer>> getBookmark() {
+		return bookmark;
+	}
+	public void setBookmark(List<HashMap<String, Integer>> bookmark) {
+		this.bookmark = bookmark;
+	}
+	public String getU_photo_url() {
+		return u_photo_url;
+	}
+	public void setU_photo_url(String u_photo_url) {
+		this.u_photo_url = u_photo_url;
+	}
+	public List<ProgramVo> getBookmark_list() {
+		return bookmark_list;
+	}
+	public void setBookmark_list(List<ProgramVo> bookmark_list) {
+		this.bookmark_list = bookmark_list;
+	}
+	public List<ProgramVo> getPasser_program() {
+		return passer_program;
+	}
+	public void setPasser_program(List<ProgramVo> passer_program) {
+		this.passer_program = passer_program;
+	}
+	public List<GatheringVo> getJoin_gathering() {
+		return join_gathering;
+	}
+	public void setJoin_gathering(List<GatheringVo> join_gathering) {
+		this.join_gathering = join_gathering;
+	}
+
+
+}

@@ -1,0 +1,76 @@
+package ddoraemi.home;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.astuetz.PagerSlidingTabStrip;
+
+import ddoraemi.start.R;
+
+public class Home_MainView extends Fragment {
+	private PagerSlidingTabStrip tabs;
+	private ViewPager pager;
+	private PagerAdapter adapter;
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_home, null);
+		init(v);
+		return v;
+	}
+
+	public void init(View v) {
+		pager=(ViewPager)v.findViewById(R.id.fragment_home_pager);
+		tabs=(PagerSlidingTabStrip)v.findViewById(R.id.fragment_home_tabs);
+		adapter = new PagerAdapter(getChildFragmentManager());
+		pager.setAdapter(adapter);
+		pager.setOffscreenPageLimit(2);
+		final int pageMargin = (int) TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+						.getDisplayMetrics());
+		pager.setPageMargin(pageMargin);
+		tabs.setViewPager(pager);
+
+	}
+
+	public class PagerAdapter extends FragmentPagerAdapter {
+		private String[] Title = { "추천 체험활동", "진행중인 모임" };
+
+		public PagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public int getItemPosition(Object object) {
+			return POSITION_NONE;
+		}
+
+		@Override
+		public int getCount() {
+			return Title.length;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+
+			return Title[position];
+		};
+
+		@Override
+		public Fragment getItem(int position) {
+			if (position == 0) {
+				return new Home_RecommendView();
+			} else {
+				return new Home_AvailableGroupView();
+			}
+
+		}
+	}
+}

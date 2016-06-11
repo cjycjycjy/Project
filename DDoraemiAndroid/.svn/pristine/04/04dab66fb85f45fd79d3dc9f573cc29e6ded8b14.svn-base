@@ -1,0 +1,6 @@
+package ddoraemi.mypage.presenter;
+
+public interface OnMyPageFinishedListner {
+	public void onSuccess();
+
+}

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.NoticeMapper">
+
+	<resultMap id="noticeMap" type="com.fuck.hangang.vo.NoticeVo">
+		<id property="n_num" column="n_num" />
+		<result property="n_title" column="n_title" />
+		<result property="n_contents" column="n_contents" />
+		<result property="n_type" column="n_type" />
+		<result property="n_time" column="n_time" />
+		<collection property="photo" ofType="com.fuck.hangang.vo.NoticePhotoVo">
+			<result property="n_index" column="n_index" />
+			<result property="n_photo_url" column="n_photo_url" />
+		</collection>
+	</resultMap>
+
+
+	<resultMap id="noticecommentMap" type="com.fuck.hangang.vo.NoticecommentVo">
+		<id property="n_num" column="n_num" />
+		<result property="n_c_num" column="n_c_num" />
+		<result property="n_c_time" column="n_c_time" />
+		<result property="u_id" column="u_id" />
+		<result property="n_c_content" column="n_c_content" />
+	</resultMap>
+
+	<resultMap id="noticecommentofcommentMap" type="com.fuck.hangang.vo.NoticecommentofcommentVo">
+		<id property="n_num" column="n_num" />
+		<result property="n_c_num" column="n_c_num" />
+		<result property="n_cc_num" column="n_cc_num" />
+		<result property="n_c_time" column="n_c_time" />
+		<result property="u_id" column="u_id" />
+		<result property="n_c_content" column="n_c_content" />
+	</resultMap>
+
+
+	<select id="getnoticecommentcount" resultType="int">
+		select
+		count(n_num) from notice natural join notice_comment where n_num =
+		#{n_num}
+	</select>
+
+	<select id="getnoticecommentofcommentcount" resultType="int">
+		select
+		count(notice_comment.n_c_num) from notice, notice_comment,
+		notice_comment_comment where notice.n_num = notice_comment.n_num and
+		notice_comment.n_num = notice_comment_comment.n_num;
+	</select>
+
+
+
+	<select id="getnotice" resultMap="noticeMap">
+		select
+		notice.*,notice_photo.n_photo_url from notice left outer join
+		notice_photo on notice.n_num = notice_photo.n_num
+		order by n_num DESC Limit 0,10;
+	</select>
+
+	<insert id="registnotice" parameterType="NoticeVo">
+		insert into notice values(null ,#{n_title},#{n_contents},#{n_type},
+		null)
+		<selectKey keyProperty="n_num" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<insert id="registnoticephoto" parameterType="NoticePhotoVo">
+		insert into
+		notice_photo values(#{n_num},null,#{n_photo_url})
+	</insert>
+
+
+	<select id="getnoticecomment" resultMap="noticecommentMap">
+		select notice_comment.*,
+		user.u_permission, user.u_photo from notice_comment
+		inner join user
+		where notice_comment.u_id = user.u_id and n_num = #{n_num} order by
+		n_c_num DESC Limit #{lastnum},#{count}
+	</select>
+
+
+	<insert id="registnoticecomment" parameterType="NoticecommentVo">
+		insert into
+		notice_comment values(#{n_num}, null, null, #{u_id}, #{n_c_content})
+	</insert>
+
+	<select id="getnoticecommentofcomment" resultMap="noticecommentofcommentMap">
+		select
+		notice_comment_comment.*, user.u_permission, user.u_photo
+		from
+		notice_comment_comment inner join user
+		where
+		notice_comment_comment.u_id = user.u_id and n_num = #{n_num} and
+		n_c_num = #{n_c_num} order by n_cc_num DESC Limit #{lastnum},#{count}
+	</select>
+
+
+	<insert id="registnoticecommentofcomment" parameterType="NoticecommentofcommentVo">
+		insert
+		into notice_comment_comment values(#{n_num}, #{n_c_num}, null, null,
+		#{u_id}, #{n_c_content})
+	</insert>
+
+	<delete id="deletenotice" parameterType="NoticeVo">
+		delete from notice where
+		n_num = #{n_num}
+	</delete>
+
+	<delete id="deletenoticecomment" parameterType="NoticecommentVo">
+		delete from
+		notice_comment where n_num = #{n_num} and n_c_num = #{n_c_num}
+	</delete>
+
+</mapper>

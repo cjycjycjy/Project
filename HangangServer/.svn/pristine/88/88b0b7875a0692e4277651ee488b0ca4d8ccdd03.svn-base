@@ -1,0 +1,123 @@
+package com.fuck.hangang.controller;
+
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.apache.commons.codec.binary.*;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.simple.JSONObject;
+
+import com.fuck.hangang.dao.CheerfulDao;
+import com.fuck.hangang.vo.CheerfulVo;
+import com.fuck.hangang.vo.NoticeVo;
+
+@Controller
+public class CheerfulController {
+	@Resource
+	CheerfulDao cheerfulDao;
+
+	@RequestMapping(value = "/getcheerful", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getteambloginfo(@RequestParam("t_num") int t_num,
+			@RequestParam("lastnum") int lastnum) {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+		if (t_num != -1) {
+			List<CheerfulVo> resultCheerfulVo = null;
+
+			if (lastnum == -1) { // 전체 팀의 전체 중 20개 (first)
+				lastnum = 0;
+				int count = 20;
+				resultCheerfulVo = cheerfulDao.getteamcheerfulfirst(t_num, lastnum, count);
+
+			} else { // 전체 팀중 최근 20개 (last)
+
+				resultCheerfulVo = cheerfulDao.getteamcheerfullast(t_num, lastnum);
+			}
+
+			for (int i = 0; i < resultCheerfulVo.size(); i++) {
+				resultCheerfulVo.get(i)
+						.setCh_c_count(cheerfulDao.getcheerfulcommentnum(resultCheerfulVo.get(i).getCh_num()));
+				resultCheerfulVo.get(i).setU_permission(
+						cheerfulDao.getcheerfuluserinfo(resultCheerfulVo.get(i).getU_id()).getU_permission());
+				resultCheerfulVo.get(i)
+						.setU_photo(cheerfulDao.getcheerfuluserinfo(resultCheerfulVo.get(i).getU_id()).getU_photo());
+
+			}
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("cheer", (T) resultCheerfulVo);
+			return resultHashMap;
+		} else {
+			List<CheerfulVo> resultCheerfulVo = null;
+
+			if (lastnum == -1) { // 해당 팀의 전체 중 20개 (first)
+				lastnum = 0;
+				int count = 20;
+				resultCheerfulVo = cheerfulDao.gettotalcheerfulfirst(lastnum, count);
+			} else { // 해당 팀중 최근 20개(last)
+
+				resultCheerfulVo = cheerfulDao.gettotalcheerfullast(lastnum);
+			}
+
+			for (int i = 0; i < resultCheerfulVo.size(); i++) {
+				resultCheerfulVo.get(i)
+						.setCh_c_count(cheerfulDao.getcheerfulcommentnum(resultCheerfulVo.get(i).getCh_num()));
+				resultCheerfulVo.get(i).setU_permission(
+						cheerfulDao.getcheerfuluserinfo(resultCheerfulVo.get(i).getU_id()).getU_permission());
+				resultCheerfulVo.get(i)
+						.setU_photo(cheerfulDao.getcheerfuluserinfo(resultCheerfulVo.get(i).getU_id()).getU_photo());
+			}
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("cheer", (T) resultCheerfulVo);
+			return resultHashMap;
+		}
+
+	}
+
+	@RequestMapping(value = "/registcheerful", method = RequestMethod.POST)
+	public @ResponseBody String registcheerful(@RequestBody JSONObject json) {
+		CheerfulVo cheerfulVo = null;
+		ObjectMapper mapper = new ObjectMapper();
+
+		String filePath = "photo/cheerful/";
+		String savePath = "C:/Users/user/Desktop/springwork/Hangang/src/main/webapp/photo/cheerful/";
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		String time = dateFormat.format(calendar.getTime()).toString();
+		String ch_photo = null;
+		try {
+			cheerfulVo = mapper.readValue(json.toString(), CheerfulVo.class);
+			if (!cheerfulVo.getCh_photourl().equalsIgnoreCase("empty")) {
+				writeFile(cheerfulVo.getCh_photourl(), savePath, cheerfulVo.getT_num(), time);
+				ch_photo = filePath + cheerfulVo.getT_num() + "_" + time + ".jpg";
+			}
+			cheerfulDao.registcheerful(cheerfulVo.getU_id(), cheerfulVo.getT_num(), cheerfulVo.getCh_content(),
+					ch_photo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Failed";
+		}
+		return "Success";
+	}
+
+	public String writeFile(String file, String savePath, int t_num, String time) throws Exception {
+		String n_photo_url = t_num + "_" + time + ".jpg";
+		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(savePath + n_photo_url));
+		bos.write(Base64.decodeBase64(file));
+		bos.flush();
+		bos.close();
+		return n_photo_url;
+	}
+}

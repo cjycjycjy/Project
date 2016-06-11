@@ -1,0 +1,51 @@
+package ddoraemi.joining.view;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
+import ddoraemi.dialog.Dialog_BaseDialog;
+import ddoraemi.start.R;
+
+public class FindPasswordAcitivity extends Activity implements OnClickListener {
+	EditText phonenum;
+	ImageView sendbt, back;
+	private String phoneregex = "^[0-9]{10,11}$";// �빖�뱶�룿議곌굔
+
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_findpassword);
+		init();
+	}
+
+	public void init() {
+		phonenum = (EditText) findViewById(R.id.FindPasswordAcitivity_EditPhone);
+		sendbt = (ImageView) findViewById(R.id.FindPasswordAcitivity_Imgfind);
+		sendbt.setOnClickListener(this);
+		back = (ImageView) findViewById(R.id.FindPasswordAcitivity_ImgBack);
+		back.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.FindPasswordAcitivity_Imgfind) {
+			String str_phone = phonenum.getText().toString();
+			if (str_phone.matches(phoneregex)) {
+				// //�꽌踰꾨옉 �넻�떊�빐�꽌 �빖�뱶�룿�쑝濡� �엫�떆鍮꾨쾲 蹂대궡湲�
+				Intent intent = new Intent(FindPasswordAcitivity.this, FindPasswordDoneAcitvity.class);
+				startActivity(intent);
+				finish();
+			} else {
+				Dialog_BaseDialog dialog = new Dialog_BaseDialog(FindPasswordAcitivity.this,
+						"�옒紐삳맂 �엯�젰�엯�땲�떎.\n�쟾�솕踰덊샇瑜� �솗�씤�빐二쇱꽭�슂.");
+				dialog.show();
+			}
+		} else {
+			finish();
+		}
+	}
+
+}

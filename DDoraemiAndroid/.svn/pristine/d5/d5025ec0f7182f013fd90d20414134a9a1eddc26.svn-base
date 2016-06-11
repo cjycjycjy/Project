@@ -1,0 +1,31 @@
+package ddoraemi.detailediteminfo.view;
+
+
+import com.androidquery.AQuery;
+
+import ddoraemi.detailediteminfo.model.ChallengePicture;
+import ddoraemi.start.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ImageView;
+
+public class DetailedItemInfo_PopupImage_View extends Activity{
+
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_image_popup);
+		
+		Intent intent = getIntent();
+		ChallengePicture pic = (ChallengePicture)intent.getSerializableExtra("picture");
+		
+		AQuery aq = new AQuery(this);
+	
+		
+		aq.id(R.id.iv_clickphoto).image(pic.getPhoto_url(), true, true, 200, 0, null, 0, 0.75f);
+		
+	}
+}

@@ -1,0 +1,15 @@
+package com.myserver.skp.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.myserver.skp.vo.QuestionVo;
+
+@Repository
+public interface QuestionMapper {
+	public List<QuestionVo> selectAllofQuestion(@Param("g_id") int g_id);
+	public void updateQuestionReplyNum(@Param("q_id") int q_id);
+	public void insertQuestion(QuestionVo questionVo);
+}

@@ -1,0 +1,44 @@
+package com.fuck.hangang.controller;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fuck.hangang.dao.QnaDao;
+import com.fuck.hangang.vo.QnaVo;
+
+@Controller
+public class QnaController {
+	@Resource
+	private QnaDao qnaDao;
+	
+	@RequestMapping(value = "/getqna", method = RequestMethod.GET)
+	public @ResponseBody <T> HashMap<String, T> getQna() {
+
+		HashMap<String, T> resultHashMap = new HashMap<String, T>();
+
+		List<QnaVo> resultQnaVo = qnaDao.getqna();
+
+		if (resultQnaVo != null) {
+			resultHashMap.put("result", (T) "Success");
+			resultHashMap.put("noticelist", (T) resultQnaVo);
+			return resultHashMap;
+
+		} else {
+			resultHashMap.put("result", (T) "Error");
+			return resultHashMap;
+		}
+
+	}
+	
+	
+	
+
+}

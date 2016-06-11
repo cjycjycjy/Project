@@ -1,0 +1,35 @@
+package com.myserver.skp.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.myserver.skp.dao.ProgramDao;
+import com.myserver.skp.vo.ProgramVo;
+
+@Controller
+public class GatheringController {
+	private static final Logger logger = LoggerFactory.getLogger(ProgramController.class);
+
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+
+	@Resource
+	private ProgramDao programDao;
+
+	@RequestMapping(value = "/getgathering", method = RequestMethod.GET)
+	public @ResponseBody List<ProgramVo> home(HttpServletRequest req) {
+		logger.info("This is Test");
+        List<ProgramVo> list = this.programDao.getSelectAll();
+        return list;
+	}
+}

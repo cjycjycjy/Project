@@ -1,0 +1,139 @@
+package ddoraemi.home;
+
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.astuetz.PagerSlidingTabStrip;
+import com.google.gson.JsonArray;
+
+import ddoraemi.retrofit.Retrofit;
+import ddoraemi.start.R;
+
+public class Home_MainView extends Fragment {
+	private PagerSlidingTabStrip tabs;
+	private ViewPager pager;
+	private PagerAdapter adapter;
+	private ArrayList list;//통신으로 체험 활동 받아온 리스트
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_home, null);
+		init(v);
+		return v;
+	}
+
+	public void asdasd()
+	{
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					RestAdapter restAdapter = new RestAdapter.Builder()
+							.setEndpoint(Retrofit.ROOT) // call your base url
+							.build();
+					Retrofit retrofit = restAdapter.create(Retrofit.class); 
+					retrofit.login(new Callback<JsonArray>() {
+						@Override
+						public void success(JsonArray result//통신결과
+								,Response response) {
+							if (getActivity() != null) {
+								
+							}
+						}
+
+						@Override
+						public void failure(RetrofitError retrofitError) {
+							new AlertDialog.Builder(getActivity())
+									.setMessage("데이터를 받아오는데 실패하였습니다.")
+									.setPositiveButton(
+											"확인",
+											new DialogInterface.OnClickListener() {
+												@Override
+												public void onClick(
+														DialogInterface dia,
+														int which) {
+													dia.dismiss();
+												}
+											}).show();
+						}
+					});
+
+				} catch (Throwable ex) {
+					ex.printStackTrace();
+					new AlertDialog.Builder(getActivity())
+							.setMessage("데이터를 받아오는데 실패하였습니다.")
+							.setPositiveButton("확인",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dia, int which) {
+											dia.dismiss();
+										}
+									}).show();
+				}
+			}
+		}).start();
+	}
+	public void init(View v) {
+		pager=(ViewPager)v.findViewById(R.id.fragment_home_pager);
+		tabs=(PagerSlidingTabStrip)v.findViewById(R.id.fragment_home_tabs);
+		adapter = new PagerAdapter(getChildFragmentManager());
+		pager.setAdapter(adapter);
+		pager.setOffscreenPageLimit(2);
+		final int pageMargin = (int) TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+						.getDisplayMetrics());
+		pager.setPageMargin(pageMargin);
+		tabs.setViewPager(pager);
+		list=new ArrayList();
+
+	}
+
+	public class PagerAdapter extends FragmentPagerAdapter {
+		private String[] Title = { "추천 체험활동", "진행중인 모임" };
+
+		public PagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public int getItemPosition(Object object) {
+			return POSITION_NONE;
+		}
+
+		@Override
+		public int getCount() {
+			return Title.length;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+
+			return Title[position];
+		};
+
+		@Override
+		public Fragment getItem(int position) {
+			if (position == 0) {
+				return new Home_RecommendView(list);
+			} else {
+				return new Home_AvailableGroupView(list);
+			}
+
+		}
+	}
+}

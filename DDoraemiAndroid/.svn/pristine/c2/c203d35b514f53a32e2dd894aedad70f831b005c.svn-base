@@ -1,0 +1,8 @@
+package ddoraemi.detailediteminfo.view;
+
+import android.support.v4.app.Fragment;
+
+
+public class DetailedItemInfo_MainView extends Fragment implements DetailedItemInfo_MainView_Interface{
+
+}

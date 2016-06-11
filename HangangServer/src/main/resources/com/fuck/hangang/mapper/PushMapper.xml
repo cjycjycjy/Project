@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.PushMapper">
+
+	<resultMap id="pushMap" type="com.fuck.hangang.vo.PushVo">
+		<id property="pm_num" column="pm_num" />
+		<result property="u_id"  column="u_id"/>
+		<result property="reply_writer" column="reply_writer" />
+		<result property="flag" column="flag" />
+		<result property="num" column="num" />
+		<result property="reply_num" column="reply_num" />
+		<result property="isChecked" column="isChecked" />
+		<result property="pm_time" column="pm_time" />
+		<result property="reply_writer_permission" column="u_permission" />
+		<result property="reply_writer_photo" column="u_photo" />
+	</resultMap>
+
+	<select id="getuserpushPermission1First" resultMap="pushMap">
+		select push_list.*, u_photo, u_permission
+		from push_list
+        left outer join user on push_list.reply_writer = user.u_id
+		where push_list.u_id = #{u_id} or flag = 1
+		order by pm_num DESC LIMIT 0, 20
+	</select>
+	
+	<select id="getuserpushPermission2First" resultMap="pushMap">
+		select push_list.*, u_photo, u_permission
+		from push_list
+        left outer join user on push_list.reply_writer = user.u_id
+		where push_list.u_id = #{u_id} or flag = 1 or flag = 2
+		order by pm_time DESC LIMIT 0, 20
+	</select>
+	
+	<select id="getuserpushPermission3First" resultMap="pushMap">
+		select push_list.*, u_photo, u_permission
+		from push_list
+        left outer join user on push_list.reply_writer = user.u_id
+		where push_list.u_id = #{u_id}
+		order by pm_time DESC LIMIT 0, 20
+	</select>
+	
+	<select id="getuserpushPermission1Last" resultMap="pushMap">
+		select push_list.*, u_photo, u_permission
+		from push_list
+        left outer join user on push_list.reply_writer = user.u_id
+		where push_list.u_id = #{u_id} or flag = 1 and pm_num <![CDATA[<]]> #{lastnum}
+		order by pm_time DESC LIMIT 0, 20
+	</select>
+	<select id="getuserpushPermission2Last" resultMap="pushMap">
+		select push_list.*, u_photo, u_permission
+		from push_list
+        left outer join user on push_list.reply_writer = user.u_id
+		where push_list.u_id = #{u_id} or flag = 1 and pm_num <![CDATA[<]]> #{lastnum}
+		order by pm_time DESC LIMIT 0, 20
+	</select>
+	<select id="getuserpushPermission3Last" resultMap="pushMap">
+		select push_list.*, u_photo, u_permission
+		from push_list
+        left outer join user on push_list.reply_writer = user.u_id
+		where push_list.u_id = #{u_id} or flag = 1 and pm_num <![CDATA[<]]> #{lastnum}
+		order by pm_time DESC LIMIT 0, 20
+	</select>
+
+</mapper>

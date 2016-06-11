@@ -1,0 +1,8 @@
+package ddoraemi.home;
+
+import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+
+public interface Home_MainViewInteractorInterface {
+	public void getData(final FragmentActivity context, final OnHome_MainViewFinishedListener listener);
+}

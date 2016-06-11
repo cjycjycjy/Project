@@ -1,0 +1,8 @@
+package ddoraemi.adminmodehome.model;
+
+import ddoraemi.adminmodehome.presenter.OnAdminHomeMain_FinishenListener;
+
+public interface AdminHomeMainInteractorInterface {
+	public void getProgramInfo(int p_id,final OnAdminHomeMain_FinishenListener listener);
+	public void Renew(int p_id,final OnAdminHomeMain_FinishenListener listener);
+}

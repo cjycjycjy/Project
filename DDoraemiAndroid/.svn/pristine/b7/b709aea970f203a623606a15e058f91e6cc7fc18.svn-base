@@ -1,0 +1,32 @@
+package ddoraemi.home.presenter;
+
+import ddoraemi.home.model.Home_RecommendInteractor;
+import ddoraemi.home.model.Home_RecommendInteractorInterface;
+import ddoraemi.home.view.Home_RecommendView;
+
+public class Home_RecommendPresenter implements Home_RecommendPresenterInterface, OnHome_RecommendFinishedListener{
+
+	Home_RecommendView view;
+	Home_RecommendInteractorInterface interactor;
+	
+	
+	public Home_RecommendPresenter(Home_RecommendView view) {
+		// TODO Auto-generated constructor stub
+		this.view = view;
+		this.interactor = new Home_RecommendInteractor();
+		
+	}
+	@Override
+	public void validatecredential(String event, String item_name) {
+		// TODO Auto-generated method stub
+		interactor.getData(view, this);
+		
+		
+	}
+	@Override
+	public void onGetDataSuccess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

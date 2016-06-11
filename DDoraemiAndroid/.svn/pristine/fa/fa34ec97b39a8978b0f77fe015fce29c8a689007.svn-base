@@ -1,0 +1,5 @@
+package ddoraemi.detailedgroupinfo.presenter;
+
+public interface DetailedQnA_reply_Presenter_Interface {
+	public void validatecredential(int q_id, String u_id, String q_r_content);
+}

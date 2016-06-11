@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fuck.hangang.mapper.ReportMapper">
+
+	<resultMap id="reportMap" type="com.fuck.hangang.vo.ReportVo">
+		<id property="report_num" column="report_num" />
+		<result property="r_year" column="r_year" />
+		<result property="r_month" column="r_month" />
+		<result property="r_day" column="r_day" />
+		<result property="r_starthour" column="r_starthour" />
+		<result property="r_startmin" column="r_startmin" />
+		<result property="r_endhour" column="r_endhour" />
+		<result property="r_endmin" column="r_endmin" />
+		<result property="people_num" column="people_num" />
+		<result property="contents" column="contents" />
+		<result property="flag" column="flag" />
+		<result property="t_num" column="t_num" />
+		<result property="park" column="park" />
+		<result property="r_members" column="r_members" />
+		<result property="t_name" column="t_name" />
+		<result property="t_logo" column="t_logo" />
+		<collection property="r_photo" ofType="com.fuck.hangang.vo.ReportPhotoVo">
+			<result property="r_photo_url" column="r_photourl" />
+		</collection>
+	</resultMap>
+
+	<resultMap type="com.fuck.hangang.vo.ReportPhotoVo" id="reportphotoMap">
+		<result property="r_photo_url" column="r_photourl" />
+	</resultMap>
+
+
+	<insert id="registreport" parameterType="ReportVo">
+		insert into report
+		values(null,
+		#{r_year},#{r_month},#{r_day},#{r_starthour},#{r_startmin},#{r_endhour},#{r_endmin},#{people_num},#{contents},0,#{t_num},#{park},#{r_members})
+		<selectKey keyProperty="report_num" resultType="int" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<update id="updatereport" parameterType="ReportVo">
+		update report set r_year = #{r_year}, r_month = #{r_month},r_day = #{r_day}, r_starthour = #{r_starthour},
+		r_startmin = #{r_startmin}, r_endhour = #{r_endhour},
+		r_endmin =#{r_endmin},people_num = #{people_num},contents = #{contents},t_num = #{t_num},park = #{park},r_members = #{r_members}
+		where report_num = #{report_num}
+	</update>
+	
+	<insert id="registreportphoto">
+		insert into
+		report_photo values(#{report_num}, #{r_photo_url})
+	</insert>
+
+	<select id="getthismonthteamreport" resultMap="reportMap">
+		select * from(
+		select report.*, t_logo, t_name from report natural join team
+		where
+		report.r_year = #{r_year} and report.r_month = #{r_month} and t_num =
+		#{t_num})x1
+		left outer join report_photo on x1.report_num =
+		report_photo.report_num
+	</select>
+
+	<select id="getthismonthreport" resultMap="reportMap">
+		select * from(
+		select
+		report.*, t_logo, t_name from report natural join team
+		where
+		report.r_year = #{r_year} and report.r_month = #{r_month}) x1
+		left
+		outer join report_photo on x1.report_num = report_photo.report_num
+	</select>
+
+	<select id="getreportphoto" resultMap="reportphotoMap">
+		select * from report_photo where report_num = #{report_num}
+	</select>
+	
+	<delete id="deletereportphoto">
+		delete from report_photo where report_num = #{report_num}
+	</delete>
+	
+	<delete id="deletereport">
+		delete from report where report_num = #{report_num}
+	</delete>
+
+
+</mapper>

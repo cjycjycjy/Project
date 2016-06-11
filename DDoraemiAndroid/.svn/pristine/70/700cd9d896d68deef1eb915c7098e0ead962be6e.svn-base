@@ -1,0 +1,73 @@
+package ddoraemi.myinfopage.view;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.ListView;
+import ddoraemi.detailediteminfo.view.ScrollTabHolderFragment;
+import ddoraemi.home.model.ProgramData;
+import ddoraemi.start.R;
+
+public class MyPage_WishView extends ScrollTabHolderFragment implements OnScrollListener{
+	ListView listview;
+	MyPage_Wish_ListAdapter adapter;
+	ArrayList<ProgramData> items;
+	public MyPage_WishView()
+	{
+		
+	}
+	public MyPage_WishView(ArrayList<ProgramData> list)
+	{
+		items=list;
+	}
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_mypage_wishlist, null);
+		View placeHolderView = inflater.inflate(
+				R.layout.view_mypage_placeholder, listview, false);
+		init(v,placeHolderView);
+		return v;
+	}
+
+	public void init(View v, View placeHolderView) {
+		listview=(ListView)v.findViewById(R.id.lv_mypage_wishlist);
+		listview.addHeaderView(placeHolderView);
+		adapter=new MyPage_Wish_ListAdapter(getActivity(), R.layout.item_mypage_wishlist, items);
+		listview.setAdapter(adapter);
+		listview.setOnScrollListener(this);
+	}
+
+	@Override
+	public void adjustScroll(int scrollHeight) {
+		// TODO Auto-generated method stub
+		listview.setSelectionFromTop(1, listview.getMeasuredHeight());
+
+	}
+
+	@Override
+	public void onScrollViewScroll(int scrollheight, int spageCount) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		if (mScrollTabHolder != null)
+			mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount,
+					totalItemCount, 1);
+
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView arg0, int arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
